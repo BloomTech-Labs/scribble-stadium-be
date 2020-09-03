@@ -10,10 +10,8 @@ const stories = [...new Array(10)].map(() => ({
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex('Stories')
-    .del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('Stories').insert(stories);
-    });
+  return knex('Stories').then(function () {
+    // Inserts seed entries
+    return knex('Stories').insert(stories);
+  });
 };

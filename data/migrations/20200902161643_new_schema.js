@@ -3,9 +3,8 @@ exports.up = function (knex) {
     .createTable('Parents', (t) => {
       t.increments('ID');
       t.string('Name').notNullable();
-      t.string('Email').notNullable().unique();
+      t.string('Email').notNullable().unique().index();
       t.string('PIN').notNullable();
-      t.string('Auth');
     })
     .createTable('Avatars', (t) => {
       t.increments('ID');
