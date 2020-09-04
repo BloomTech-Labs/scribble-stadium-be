@@ -30,7 +30,7 @@ exports.up = function (knex) {
     .createTable('Stories', (t) => {
       t.increments('ID');
       t.string('Title').notNullable();
-      t.string('URL').notNullable().unique();
+      t.string('URL').notNullable();
       t.string('WritingPrompt').notNullable();
       t.string('DrawingPrompt').notNullable();
     });
