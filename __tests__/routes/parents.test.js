@@ -50,7 +50,7 @@ describe('parents router endpoints', () => {
       const res = await request(server).get(`/parents/${id}`);
 
       expect(res.status).toBe(200);
-      expect(res.body[0]).toEqual({ ID: id, ...parent });
+      expect(res.body).toEqual({ ID: id, ...parent });
     });
 
     it('should return a 404 when retrieving a nonexistent parent', async () => {
