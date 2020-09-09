@@ -2,10 +2,9 @@ module.exports = {
   definition: {
     openapi: '3.0.1',
     info: {
-      title: 'Lambda Labs Starter API',
+      title: 'StorySquad API',
       version: '1.0.0',
-      description:
-        'A basic API server to act as a starting point for Labs projects',
+      description: 'A companion API for our StorySquad React website',
       license: {
         name: 'MIT',
         url: 'https://en.wikipedia.org/wiki/MIT_License',
@@ -23,6 +22,10 @@ module.exports = {
       {
         name: 'data',
         description: 'Operations for data science service',
+      },
+      {
+        name: 'parent',
+        description: 'Operations for parent profiles',
       },
     ],
     externalDocs: {
@@ -43,6 +46,9 @@ module.exports = {
         },
         BadRequest: {
           description: 'Bad request. profile already exists',
+        },
+        DatabaseError: {
+          description: 'Database error. Try again.',
         },
         NotFound: {
           description: 'Not Found',
