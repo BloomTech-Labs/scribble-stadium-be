@@ -54,7 +54,7 @@ router.put('/:id', authRequired, async (req, res) => {
   try {
     const count = await Parents.update(id, changes);
     if (count > 0) {
-      res.status(202).end();
+      res.status(204).end();
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }
@@ -71,7 +71,7 @@ router.delete('/:id', authRequired, async (req, res) => {
   try {
     const count = await Parents.remove(id);
     if (count > 0) {
-      res.status(202).end();
+      res.status(204).end();
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }

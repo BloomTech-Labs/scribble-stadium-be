@@ -66,7 +66,7 @@ describe('parents router endpoints', () => {
         .put(`/parents/${id}`)
         .send({ Name: newName });
 
-      expect(res.status).toBe(202);
+      expect(res.status).toBe(204);
     });
 
     it('should return a 404 on invalid parent id', async () => {
@@ -91,7 +91,7 @@ describe('parents router endpoints', () => {
     it('should delete a parent from the database', async () => {
       const res = await request(server).delete(`/parents/${id}`);
 
-      expect(res.status).toBe(202);
+      expect(res.status).toBe(204);
     });
 
     it('should return a 404 on invalid id', async () => {
