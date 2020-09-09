@@ -5,41 +5,12 @@ name: build
 #  In this case, all pushes and pull requests
 on:
   pull_request:
-    push:
-      branches:
-        - main
-        
-        # The jobs that will be run, usually in parallel
-        jobs:
-          
-          name: 'Setup PostgreSQL'
-          description: 'Setup a PostgreSQL database'
-          author: 'Harmon'
-          branding:
-            icon: 'database'
-            color: 'blue'
-          inputs:
-            # See https://hub.docker.com/_/postgres for supported versions
-            # and further details on input environment variables
-            postgresql version:
-              description: 'Version of PostgreSQL to use'
-              required: false
-              default: 'latest'
-            postgresql db:
-              description: 'POSTGRES_DB - name for the default database that is created'
-              required: false
-              default: ''
-            postgresql user:
-              description: 'POSTGRES_USER - create the specified user with superuser power'
-              required: false
-              default: ''
-            postgresql password:
-              description: 'POSTGRES_PASSWORD - superuser password'
-              required: false
-              default: ''
-          runs:
-            using: 'docker'
-            image: 'Dockerfile'
+  push:
+    branches:
+      - main
+
+# The jobs that will be run, usually in parallel
+jobs:
   # A job to generate and publish code coverage
   coverage:
     # A more descriptive name of the job
@@ -49,14 +20,14 @@ on:
     runs-on: ubuntu-latest
 
     # The steps for the job, executed in sequence
-    steps:	
+    steps:
       # A GitHub action for checking out the current branch
       - uses: actions/checkout@v2
 
       # A GitHub action to setup Node.js
       - uses: actions/setup-node@v1
         with:
-          node-version: "12"
+          node-version: '12'
 
       # Run the NPM install command before proceeding
       - run: npm install
@@ -74,6 +45,6 @@ on:
           # Run our `coverage` script in our `package.json`
           coverageCommand: npm run coverage
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          coverageLocations: "./coverage/clover.xml:clover"
+          coverageLocations: './coverage/clover.xml:clover'
           # Great for troubleshooting
           debug: true
