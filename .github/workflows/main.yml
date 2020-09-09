@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Hello world action step
-        uses: ./docker-test # Uses an action in the root directory
+        uses: {Lambda-School-Labs}/{Labs26-StorySquad-BE-TeamB}[./docker-test] # Uses an action in the root directory
         id: hello
         with:
           who-to-greet: 'Brandon the Frustrated Programmer'
