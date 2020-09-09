@@ -50,6 +50,9 @@ module.exports = {
         DatabaseError: {
           description: 'Database error. Try again.',
         },
+        EmptySuccess: {
+          description: '',
+        },
         NotFound: {
           description: 'Not Found',
           content: {

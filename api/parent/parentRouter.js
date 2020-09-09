@@ -82,8 +82,7 @@ router.get('/', authRequired, async (req, res) => {
  *      required: true
  *      example: 1
  *      schema:
- *      type:
- *        integer
+ *        type: integer
  *
  * /parent/{id}:
  *  get:
@@ -124,7 +123,32 @@ router.get('/:id', authRequired, async (req, res) => {
 });
 
 /**
- *
+ * @swagger
+ * /parent:
+ *  post:
+ *    summary: Add a new parent account
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - parent
+ *    requestBody:
+ *      description: Parent object to be added
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Parent'
+ *    responses:
+ *      201:
+ *        description: The ID of the newly created profile
+ *        content:
+ *          application/json:
+ *            example: 1
+ *            schema:
+ *              type: integer
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, async (req, res) => {
   const parent = req.body;
@@ -137,7 +161,29 @@ router.post('/', authRequired, async (req, res) => {
 });
 
 /**
- *
+ * @swagger
+ * /parent:
+ *  put:
+ *    summary: Update a parent's info
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - parent
+ *    requestBody:
+ *      description: Parent object to be updated
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#components/schemas/Parent'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
@@ -155,7 +201,25 @@ router.put('/:id', authRequired, async (req, res) => {
 });
 
 /**
- *
+ * @swagger
+ * /parent/{id}:
+ *  delete:
+ *    summary: Remove a parent account
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - parent
+ *    parameters:
+ *      - $ref: '#/components/parameters/parentId'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
