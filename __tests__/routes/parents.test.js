@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../app');
+const server = require('../../api/app');
 const db = require('../../data/db-config');
 
 // mock the auth middleware for now
