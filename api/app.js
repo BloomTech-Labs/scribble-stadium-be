@@ -51,7 +51,7 @@ app.use(cookieParser());
 // application routes
 app.use('/', indexRouter);
 app.use(['/profile', '/profiles'], profileRouter);
-app.use('/parents', parentRouter);
+app.use(['/parent', '/parents'], parentRouter);
 app.use('/data', dsRouter);
 
 // catch 404 and forward to error handler
