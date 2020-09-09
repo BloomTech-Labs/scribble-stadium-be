@@ -11,6 +11,8 @@
     "lint:fix": "npx eslint --fix .",
     "format": "npx prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md)\"",
     "knex": "npx knex --knexfile config/knexfile.js",
+    "knex:test": "cross-env NODE_ENV=test npx knex --knexfile config/knexfile.js",
+    "test": "cross-env NODE_ENV=test npx jest --watch --runInBand",
     "tests": "npx jest --forceExit",
     "coverage": "CI=true npx jest --coverage --detectOpenHandles --forceExit"
   },
@@ -57,6 +59,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
+    "@types/jest": "^26.0.13",
     "eslint": "^7.3.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
