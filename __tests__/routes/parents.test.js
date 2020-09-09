@@ -1,19 +1,22 @@
 const request = require('supertest');
-const express = require('express');
-const Parents = require('../../api/parent/parentModel');
-const parentRouter = require('../../api/parent/parentRouter');
-const server = express();
-server.use(express.json());
+const server = require('../../api/app');
+const db = require('../../data/db-config');
 
-jest.mock('../../api/parent/parentModel');
 // mock the auth middleware
 jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
 );
 
 describe('parents router endpoints', () => {
-  beforeAll(() => {
-    server.use('/parents', parentRouter);
-    jest.clearAllMocks();
+  beforeAll(async () => {
+    await db.raw('TRUNCATE TABLE public."Parents" CASCADE');
+  });
+  describe('GET /parents', () => {
+    it('returns a 200 on success', async () => {
+      const res = await request(server).get('/parents');
+
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(0);
+    });
   });
 });
