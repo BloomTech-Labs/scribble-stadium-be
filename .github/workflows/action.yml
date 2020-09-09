@@ -1,5 +1,8 @@
 name: 'Setup PostgreSQL'
 description: 'Setup a PostgreSQL database'
+on:
+  pull_request:
+  push:
 author: 'Harmon'
 branding:
   icon: 'database'
