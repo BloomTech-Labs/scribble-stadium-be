@@ -220,12 +220,12 @@ router.get('/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id/profiles', async (req, res) => {
+router.get('/:id/profiles', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
     const parent = await Parents.findById(id);
     if (parent.length === 0) {
-      res.status(404).json({ error: 'ParentNotFound' });
+      return res.status(404).json({ error: 'ParentNotFound' });
     }
 
     // If we find a parent, then look for the children
