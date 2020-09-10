@@ -19,6 +19,9 @@ describe('parents router endpoints', () => {
   beforeAll(async () => {
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
   });
+  afterAll(async () => {
+    await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
+  });
 
   describe('GET /parents', () => {
     it('returns a 200 and empty array on success', async () => {
@@ -57,6 +60,24 @@ describe('parents router endpoints', () => {
       const res = await request(server).get('/parents/2');
 
       expect(res.status).toBe(404);
+    });
+  });
+
+  describe('GET /parents/:id/profiles', () => {
+    it('should pull all profiles related to a parent account', async () => {
+      const res = await request(server).get(`/parents/${id}/profiles`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(1);
+      expect(res.body[0].type).toBe('Parent');
+    });
+
+    it('should pull all profiles related to a parent account', async () => {
+      const res = await request(server).get(`/parents/2/profiles`);
+
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty('error');
+      expect(res.body.error).toBe('ParentNotFound');
     });
   });
 

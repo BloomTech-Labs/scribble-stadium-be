@@ -51,10 +51,23 @@ const remove = (ID) => {
   return db('Parents').where({ ID }).del();
 };
 
+/**
+ * Returns a list of all children profiles for an account
+ * @param {number} ID unique ID of the parent
+ * @returns {Promise} promise that resolves to an array of children
+ */
+const getChildren = (ID) => {
+  return db('Parents AS P')
+    .fullOuterJoin('Children AS C', 'P.ID', 'C.ParentID')
+    .where('C.ParentID', ID)
+    .select(['C.*']);
+};
+
 module.exports = {
   findAll,
   findById,
   add,
   update,
   remove,
+  getChildren,
 };

@@ -30,7 +30,21 @@ const router = express.Router();
  *        Name: 'Danny Pudi'
  *        Email: 'danny@pu.di'
  *        PIN: '00uhjfrwdWAQvD8JV4x6'
- *
+ *    TypedParent:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Parent'
+ *        - type: object
+ *          required:
+ *            - type
+ *          properties:
+ *            type:
+ *              type: string
+ *      example:
+ *        ID: '1'
+ *        Name: 'Danny Pudi'
+ *        Email: 'danny@pu.di'
+ *        PIN: '00uhjfrwdWAQvD8JV4x6'
+ *        type: 'Parent'
  * /parents:
  *  get:
  *    description: Returns a list of parents
@@ -54,8 +68,8 @@ const router = express.Router();
  *                  Email: 'danny@pu.di'
  *                  PIN: '00uhjfrwdWAQvD8JV4x6'
  *                - ID: '2'
- *                  Name: 'Alison Brie'
- *                  Email: 'allison@br.ie'
+ *                  Name: 'Yvette Nicole-Brown'
+ *                  Email: 'yvette@nic.brn'
  *                  PIN: '00uhjfrwdWAQv34JV4x6'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
@@ -84,7 +98,7 @@ router.get('/', authRequired, async (req, res) => {
  *      schema:
  *        type: integer
  *
- * /parent/{id}:
+ * /parents/{id}:
  *  get:
  *    description: Find parents by ID
  *    summary: Returns a single parent object
@@ -117,6 +131,111 @@ router.get('/:id', authRequired, async (req, res) => {
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Child:
+ *      type: object
+ *      required:
+ *        ID
+ *        Name
+ *        PIN
+ *        AvatarID
+ *        ParentID
+ *      properties:
+ *        ID:
+ *          type: integer
+ *          description: Auto-incrementing primary key
+ *        Name:
+ *          type: string
+ *        PIN:
+ *          type: string
+ *        AvatarID:
+ *          type: integer
+ *          description: Foreign key to the Avatars table
+ *        ParentID:
+ *          type: integer
+ *          description: Foreign key to the Parents table
+ *      example:
+ *        ID: '1'
+ *        Name: 'Alison Brie'
+ *        Email: 'allison@br.ie'
+ *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *    TypedChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Child'
+ *        - type: object
+ *          required:
+ *            - type
+ *          properties:
+ *            type:
+ *              type: string
+ *      example:
+ *        ID: '1'
+ *        Name: 'Alison Brie'
+ *        Email: 'allison@br.ie'
+ *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        type: 'Child'
+ *
+ * /parents/{id}/profiles:
+ *  get:
+ *    description: Return a list of parents and children
+ *    summary: Get a list of all profiles for a given parent account
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - parent
+ *    responses:
+ *      200:
+ *        description: array of all profiles
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                anyOf:
+ *                  - $ref: '#/components/schemas/TypedParent'
+ *                  - $ref: '#/components/schemas/TypedChild'
+ *              example:
+ *                - ID: '1'
+ *                  Name: 'Danny Pudi'
+ *                  Email: 'danny@pu.di'
+ *                  PIN: '00uhjfrwdWAQvD8JV4x6'
+ *                  type: 'Parent'
+ *                - ID: '1'
+ *                  Name: 'Alison Brie'
+ *                  Email: 'allison@br.ie'
+ *                  PIN: '00uhjfrwdWAQv10JV4x6'
+ *                  type: 'Child'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/:id/profiles', authRequired, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const parent = await Parents.findById(id);
+    if (parent.length === 0) {
+      return res.status(404).json({ error: 'ParentNotFound' });
+    }
+
+    // If we find a parent, then look for the children
+    const children = await Parents.getChildren(id);
+    res
+      .status(200)
+      .json([
+        { ...parent[0], type: 'Parent' },
+        ...children.map((child) => ({ ...child, type: 'Child' })),
+      ]);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
