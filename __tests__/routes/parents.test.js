@@ -2,8 +2,6 @@ const request = require('supertest');
 const server = require('../../api/app');
 const db = require('../../data/db-config');
 
-console.log(process.env.DATABASE_URL);
-
 // mock the auth middleware for now
 jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
@@ -19,6 +17,9 @@ let id;
 
 describe('parents router endpoints', () => {
   beforeAll(async () => {
+    await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
+  });
+  afterAll(async () => {
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
   });
 
@@ -59,6 +60,24 @@ describe('parents router endpoints', () => {
       const res = await request(server).get('/parents/2');
 
       expect(res.status).toBe(404);
+    });
+  });
+
+  describe('GET /parents/:id/profiles', () => {
+    it('should pull all profiles related to a parent account', async () => {
+      const res = await request(server).get(`/parents/${id}/profiles`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(1);
+      expect(res.body[0].type).toBe('Parent');
+    });
+
+    it('should pull all profiles related to a parent account', async () => {
+      const res = await request(server).get(`/parents/2/profiles`);
+
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty('error');
+      expect(res.body.error).toBe('ParentNotFound');
     });
   });
 
