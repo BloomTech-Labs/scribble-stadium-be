@@ -122,6 +122,23 @@ router.get('/:id', authRequired, async (req, res) => {
   }
 });
 
+// router.get('/:id/profiles', authRequired, async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const parent = await Parents.findById(id);
+//     const children = await Parents.getProfiles(id);
+
+//     // const profiles = data.map((child) => ({
+//     //   Name: child.Name,
+//     //   PIN: child.PIN,
+//     // }));
+//     // profiles.push({})
+//     res.status(200).json(data);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
 /**
  * @swagger
  * /parent:

@@ -51,10 +51,19 @@ const remove = (ID) => {
   return db('Parents').where({ ID }).del();
 };
 
+const getProfiles = (ID) => {
+  return db('Parents AS P')
+    .join('Children AS C', 'C.ParentID', 'P.ID')
+    .where('C.ParentID', ID)
+    .select(['C.PIN AS PIN', 'C.Name AS Name'])
+    .orderBy('C.ID');
+};
+
 module.exports = {
   findAll,
   findById,
   add,
   update,
   remove,
+  getProfiles,
 };
