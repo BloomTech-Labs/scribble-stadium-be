@@ -2,6 +2,8 @@ const request = require('supertest');
 const server = require('../../api/app');
 const db = require('../../data/db-config');
 
+console.log(process.env.TEST_DATABASE_URL);
+
 // mock the auth middleware for now
 jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
