@@ -51,16 +51,16 @@ const remove = (ID) => {
   return db('Parents').where({ ID }).del();
 };
 
-const getProfiles = (ID) => {
+/**
+ * Returns a list of all children profiles for an account
+ * @param {number} ID unique ID of the parent
+ * @returns {Promise} promise that resolves to an array of children
+ */
+const getChildren = (ID) => {
   return db('Parents AS P')
-    .fullOuterJoin('Children AS C', 'C.ParentID', 'P.ID')
+    .fullOuterJoin('Children AS C', 'P.ID', 'C.ParentID')
     .where('C.ParentID', ID)
-    .select([
-      'C.PIN AS PIN',
-      'C.Name AS Name',
-      'P.PIN AS ParentPIN',
-      'P.Name AS ParentName',
-    ]);
+    .select(['C.*']);
 };
 
 module.exports = {
@@ -69,5 +69,5 @@ module.exports = {
   add,
   update,
   remove,
-  getProfiles,
+  getChildren,
 };
