@@ -53,10 +53,14 @@ const remove = (ID) => {
 
 const getProfiles = (ID) => {
   return db('Parents AS P')
-    .join('Children AS C', 'C.ParentID', 'P.ID')
+    .fullOuterJoin('Children AS C', 'C.ParentID', 'P.ID')
     .where('C.ParentID', ID)
-    .select(['C.PIN AS PIN', 'C.Name AS Name'])
-    .orderBy('C.ID');
+    .select([
+      'C.PIN AS PIN',
+      'C.Name AS Name',
+      'P.PIN AS ParentPIN',
+      'P.Name AS ParentName',
+    ]);
 };
 
 module.exports = {
