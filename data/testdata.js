@@ -26,4 +26,13 @@ module.exports = {
   ],
   newParentName: 'Abed Nadir',
   newChildName: 'Annie Edison',
+  story: {
+    Title: 'Studies in Modern Movement',
+    URL:
+      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    WritingPrompt:
+      "Explain the symbolism of the juxtaposition of Kiss From a Rose with Pierce's Hallucination and Annie and Shirley's hitchhiker.",
+    DrawingPrompt:
+      "Draw your favorite background image from Jeff and the Dean's karaoke session.",
+  },
 };
