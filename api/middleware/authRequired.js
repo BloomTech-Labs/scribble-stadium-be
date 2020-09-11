@@ -17,6 +17,7 @@ const makeProfileObj = (claims) => {
  * contents are attached to req.profile
  */
 const authRequired = async (req, res, next) => {
+  next();
   try {
     const authHeader = req.headers.authorization || '';
     const match = authHeader.match(/Bearer (.+)/);

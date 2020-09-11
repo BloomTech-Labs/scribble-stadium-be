@@ -7,12 +7,8 @@ jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
 );
 
-const parent = {
-  Name: 'Danny Pudi',
-  Email: 'danny@pu.di',
-  PIN: '1jkkj0f89n2083n9fnq23rbn',
-};
-const newName = 'Abed Nadir';
+// Import test data
+const { parent, newParentName: newName } = require('../../data/testdata');
 let id;
 
 describe('parents router endpoints', () => {
