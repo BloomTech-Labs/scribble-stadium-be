@@ -35,4 +35,33 @@ router.post('/', authRequired, async (req, res) => {
   }
 });
 
+router.put('/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  try {
+    const count = await Children.update(id, changes);
+    if (count > 0) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: 'ChildNotFound' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.delete('/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const count = await Children.remove(id);
+    if (count > 0) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: 'ChildNotFound' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
