@@ -1,7 +1,6 @@
-const express = require('express');
+const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Parents = require('./parentModel');
-const router = express.Router();
 
 /**
  * @swagger
@@ -142,15 +141,10 @@ router.get('/:id', authRequired, async (req, res) => {
  *  schemas:
  *    Child:
  *      type: object
- *      required:
- *        ID
- *        Name
- *        PIN
- *        AvatarID
- *        ParentID
  *      properties:
  *        ID:
  *          type: integer
+ *          readOnly: true
  *          description: Auto-incrementing primary key
  *        Name:
  *          type: string
@@ -161,17 +155,23 @@ router.get('/:id', authRequired, async (req, res) => {
  *          description: Foreign key to the Avatars table
  *        ParentID:
  *          type: integer
- *          description: Foreign key to the Parents table
+ *          readOnly: true
+ *          description: Foreign key to the Parents table. Can't be updated!
  *      example:
  *        ID: '1'
  *        Name: 'Alison Brie'
- *        Email: 'allison@br.ie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        AvatarID: 1
+ *        ParentID: 1
  *    TypedChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
  *        - type: object
  *          required:
+ *            - Name
+ *            - PIN
+ *            - AvatarID
+ *            - ParentID
  *            - type
  *          properties:
  *            type:
@@ -179,9 +179,31 @@ router.get('/:id', authRequired, async (req, res) => {
  *      example:
  *        ID: '1'
  *        Name: 'Alison Brie'
- *        Email: 'allison@br.ie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        AvatarID: 1
+ *        ParentID: 1
  *        type: 'Child'
+ *    PostChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Child'
+ *        - type: object
+ *          required:
+ *            - Name
+ *            - PIN
+ *            - AvatarID
+ *            - ParentID
+ *          properties:
+ *            ParentID:
+ *              type: integer
+ *              readOnly: false
+ *              description: Foreign key to the Parents table. Can't be updated!
+ *
+ *      example:
+ *        ID: 1
+ *        Name: 'Alison Brie'
+ *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        AvatarID: 1
+ *        ParentID: 1
  *
  * /parents/{id}/profiles:
  *  get:
@@ -293,7 +315,7 @@ router.post('/', authRequired, async (req, res) => {
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#components/schemas/Parent'
+ *            $ref: '#/components/schemas/Parent'
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'

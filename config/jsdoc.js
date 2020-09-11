@@ -19,6 +19,10 @@ module.exports = {
         name: 'parent',
         description: 'Operations for parent profiles',
       },
+      {
+        name: 'child',
+        description: 'Operations for child profiles',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',

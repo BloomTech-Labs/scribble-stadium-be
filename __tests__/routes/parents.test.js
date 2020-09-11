@@ -7,13 +7,8 @@ jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
 );
 
-const parent = {
-  Name: 'Danny Pudi',
-  Email: 'danny@pu.di',
-  PIN: '1jkkj0f89n2083n9fnq23rbn',
-};
-const newName = 'Abed Nadir';
-let id;
+// Import test data
+const { parent, newParentName: newName } = require('../../data/testdata');
 
 describe('parents router endpoints', () => {
   beforeAll(async () => {
@@ -35,10 +30,9 @@ describe('parents router endpoints', () => {
   describe('POST /parents', () => {
     it('should successfully post a new user', async () => {
       const res = await request(server).post('/parent').send(parent);
-      id = res.body[0];
 
       expect(res.status).toBe(201);
-      expect(res.body[0]).toBe(id);
+      expect(res.body[0]).toBe(1);
     });
 
     it('should restrict creation of parent with duplicate email', async () => {
@@ -50,10 +44,10 @@ describe('parents router endpoints', () => {
 
   describe('GET /parents/:id', () => {
     it('should have successfully added the user to the database', async () => {
-      const res = await request(server).get(`/parents/${id}`);
+      const res = await request(server).get('/parents/1');
 
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({ ID: id, ...parent });
+      expect(res.body).toEqual({ ID: 1, ...parent });
     });
 
     it('should return a 404 when retrieving a nonexistent parent', async () => {
@@ -65,7 +59,7 @@ describe('parents router endpoints', () => {
 
   describe('GET /parents/:id/profiles', () => {
     it('should pull all profiles related to a parent account', async () => {
-      const res = await request(server).get(`/parents/${id}/profiles`);
+      const res = await request(server).get('/parents/1/profiles');
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
@@ -84,25 +78,21 @@ describe('parents router endpoints', () => {
   describe('PUT /parents/:id', () => {
     it('should successfully update a parent', async () => {
       const res = await request(server)
-        .put(`/parent/${id}`)
+        .put('/parent/1')
         .send({ Name: newName });
 
       expect(res.status).toBe(204);
     });
 
     it('should return a 404 on invalid parent id', async () => {
-      const res = await request(server)
-        .put(`/parent/${id + 1}`)
-        .send(parent);
+      const res = await request(server).put('/parent/2').send(parent);
 
       expect(res.status).toBe(404);
       expect(res.body.error).toBe('ParentNotFound');
     });
 
     it('should return a 500 on poorly-formatted data', async () => {
-      const res = await request(server)
-        .put(`/parent/${id}`)
-        .send({ bad: 'field' });
+      const res = await request(server).put('/parent/1').send({ bad: 'field' });
 
       expect(res.status).toBe(500);
     });
@@ -110,13 +100,13 @@ describe('parents router endpoints', () => {
 
   describe('DELETE /parents/:id', () => {
     it('should delete a parent from the database', async () => {
-      const res = await request(server).delete(`/parent/${id}`);
+      const res = await request(server).delete('/parent/1');
 
       expect(res.status).toBe(204);
     });
 
     it('should return a 404 on invalid id', async () => {
-      const res = await request(server).delete(`/parent/${id}`);
+      const res = await request(server).delete('/parent/1');
 
       expect(res.status).toBe(404);
     });
