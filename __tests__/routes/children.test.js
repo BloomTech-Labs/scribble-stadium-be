@@ -21,6 +21,19 @@ describe('children router endpoints', () => {
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
   });
   describe('GET /children', () => {
-    it('works', () => {});
+    it('returns a 200 and empty array on success', async () => {
+      const res = await request(server).get('/children');
+
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(0);
+    });
+  });
+
+  describe('POST /child', () => {
+    it('should successfully post two new children', async () => {
+      const res = await request(server).post('/child').send(children);
+
+      console.log(res.body);
+    });
   });
 });

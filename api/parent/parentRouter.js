@@ -1,7 +1,6 @@
-const express = require('express');
+const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Parents = require('./parentModel');
-const router = express.Router();
 
 /**
  * @swagger

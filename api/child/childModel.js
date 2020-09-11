@@ -11,7 +11,12 @@ const findById = (ID) => {
   return db('Children').where({ ID });
 };
 
+const add = (child) => {
+  return db('Children').insert(child).returning('ID');
+};
+
 module.exports = {
   findAll,
   findById,
+  add,
 };
