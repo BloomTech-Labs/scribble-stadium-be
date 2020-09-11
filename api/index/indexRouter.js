@@ -9,20 +9,24 @@ var router = express.Router();
  *    tags:
  *      - status
  *    produces:
- *      - applicaiton/json
+ *      - application/json
  *    responses:
  *      200:
- *        description: status is up
+ *        description: server is up
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              required:
  *                - api
+ *                - timestamp
  *              properties:
  *                api:
  *                  type: boolean
  *                  example: true
+ *                timestamp:
+ *                  type: number
+ *                  example: 1599853832394
  */
 router.get('/', function (req, res) {
   res.status(200).json({ api: 'up', timestamp: Date.now() });

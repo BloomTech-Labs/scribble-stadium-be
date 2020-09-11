@@ -16,14 +16,6 @@ module.exports = {
         description: 'Everything about your status',
       },
       {
-        name: 'profile',
-        description: 'Operations for profile',
-      },
-      {
-        name: 'data',
-        description: 'Operations for data science service',
-      },
-      {
         name: 'parent',
         description: 'Operations for parent profiles',
       },
@@ -57,9 +49,6 @@ module.exports = {
               },
             },
           },
-        },
-        BadRequest: {
-          description: 'Bad request. profile already exists',
         },
         DatabaseError: {
           description: 'Database error. Try again.',
