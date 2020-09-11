@@ -46,7 +46,38 @@ router.get('/', authRequired, async (req, res) => {
   }
 });
 
-/** */
+/**
+ * @swagger
+ * components:
+ *  parameters:
+ *    childId:
+ *      name: ID
+ *      in: path
+ *      description: ID of child
+ * /children/{id}:
+ *  get:
+ *    description: Find children by ID
+ *    summary: Returns a single child object
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - child
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      200:
+ *        description: A child object
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/PostChild'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.get('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
@@ -61,6 +92,34 @@ router.get('/:id', authRequired, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /child:
+ *  post:
+ *    summary: Add a new child
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - child
+ *    requestBody:
+ *      description: Child object to be added
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/PostChild'
+ *    responses:
+ *      201:
+ *        description: The ID of the newly created child
+ *        content:
+ *          application/json:
+ *            example: 1
+ *            schema:
+ *              $ref: '#/components/parameters/childId'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.post('/', authRequired, async (req, res) => {
   const child = req.body;
   try {
@@ -71,6 +130,33 @@ router.post('/', authRequired, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /child/{id}:
+ *  put:
+ *    summary: Update a child's info
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - child
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    requestBody:
+ *      description: Changes to be applied to the given child
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Child'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.put('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
@@ -86,6 +172,27 @@ router.put('/:id', authRequired, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /child/{id}:
+ *  delete:
+ *    summary: Remove a child account
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - child
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.delete('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
