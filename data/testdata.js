@@ -26,8 +26,9 @@ module.exports = {
   ],
   newParentName: 'Abed Nadir',
   newChildName: 'Annie Edison',
+  newStoryTitle: 'Studies in Modern Movement',
   story: {
-    Title: 'Studies in Modern Movement',
+    Title: 'The Karaoke Episode',
     URL:
       'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
     WritingPrompt:
