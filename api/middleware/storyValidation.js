@@ -2,7 +2,6 @@ const _has = require('lodash.has');
 
 const storyValidation = (req, res, next) => {
   // Pull the task sent in the request body
-  console.log('HERE I AM');
   const story = req.body;
   if (
     _has(story, 'Title') &&
@@ -11,11 +10,10 @@ const storyValidation = (req, res, next) => {
     _has(story, 'DrawingPrompt')
   ) {
     // If it's valid, continue
-    console.log('FOUIND ME');
     next();
   } else {
     // Otherwise, return a 400 w/ error message
-    res.status(400).json({ message: 'InvalidStory' });
+    res.status(400).json({ error: 'InvalidStory' });
   }
 };
 
@@ -31,7 +29,7 @@ const storyUpdateValidation = (req, res, next) => {
     // If it contains at least one valid field
     next();
   } else {
-    res.status(400).json({ message: 'InvalidChanges' });
+    res.status(400).json({ error: 'InvalidChanges' });
   }
 };
 

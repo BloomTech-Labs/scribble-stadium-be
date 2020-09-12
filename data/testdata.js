@@ -36,4 +36,5 @@ module.exports = {
     DrawingPrompt:
       "Draw your favorite background image from Jeff and the Dean's karaoke session.",
   },
+  badRequest: { bad: 'field' },
 };

@@ -2,7 +2,7 @@ const db = require('../../data/db-config');
 
 /**
  * Queries database for a list of all stories
- * @returns {Promise} that resolves into an array of stories
+ * @returns {Promise} a promise that resolves into an array of stories
  */
 const getAll = () => {
   return db('Stories');
@@ -30,8 +30,33 @@ const add = (story) => {
   return db('Stories').insert(story).returning('ID');
 };
 
+/**
+ * Queries the database to update row amtching ID with the given changes
+ * @param {number} ID the unique row ID to update
+ * @param {Object} changes an object containing the changes
+ * @param {string} [changes.Title] new story title (optional)
+ * @param {string} [changes.URL] new URL of story PDF (optional)
+ * @param {string} [changes.WritingPrompt] new writing prompt (optional)
+ * @param {string} [changes.WritingPrompt] new reading prompt (optional)
+ * @returns {Promise} a promise that resolves to number of rows updated
+ */
+const update = (ID, changes) => {
+  return db('Stories').where({ ID }).update(changes);
+};
+
+/**
+ * Queries the database to remove a row
+ * @param {number} ID the ID of the row to delete
+ * @returns {Promise} a promise that resolves to the number of rows deleted
+ */
+const remove = (ID) => {
+  return db('Stories').where({ ID }).del();
+};
+
 module.exports = {
   getAll,
   getById,
   add,
+  update,
+  remove,
 };
