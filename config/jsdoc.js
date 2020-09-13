@@ -23,6 +23,10 @@ module.exports = {
         name: 'child',
         description: 'Operations for child profiles',
       },
+      {
+        name: 'story',
+        description: 'Operations for story data',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',
@@ -38,7 +42,7 @@ module.exports = {
       },
       responses: {
         UnauthorizedError: {
-          description: 'Access token is missing or invalid',
+          description: 'Error: Access token is missing or invalid',
           content: {
             'application/json': {
               schema: {
@@ -46,8 +50,16 @@ module.exports = {
                 properties: {
                   message: {
                     type: 'string',
-                    description: 'A message about the result',
-                    example: 'missing idToken',
+                    example: 'Missing idToken',
+                  },
+                  error: {
+                    type: 'object',
+                    properties: {
+                      message: {
+                        type: 'string',
+                        example: 'Missing idToken',
+                      },
+                    },
                   },
                 },
               },
@@ -63,7 +75,6 @@ module.exports = {
                 properties: {
                   message: {
                     type: 'string',
-                    description: 'A message about the result',
                     example: 'Could not access database',
                   },
                 },
@@ -89,10 +100,25 @@ module.exports = {
               schema: {
                 type: 'object',
                 properties: {
-                  message: {
+                  error: {
                     type: 'string',
-                    description: 'A message about the result',
                     example: 'DataNotFound',
+                  },
+                },
+              },
+            },
+          },
+        },
+        InvalidFormat: {
+          description: 'Error: Poorly Formatted Data',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'InvalidData',
                   },
                 },
               },
