@@ -33,9 +33,9 @@ const storyValidation = (req, res, next) => {
  * to be sent back to the client by resolving the API call to a 400 if the data
  * passed in doesn't contain any valid fields for Story data. If the data is
  * correct, the server will move on to the actual PUT router.
- * @param {*} req the server request object
- * @param {*} res the server response object
- * @param {*} next a function that will continue to the next middleware
+ * @param {Object} req the server request object
+ * @param {Object} res the server response object
+ * @param {Function} next a function that will continue to the next middleware
  */
 const storyUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
