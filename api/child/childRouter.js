@@ -3,35 +3,87 @@ const authRequired = require('../middleware/authRequired');
 const Children = require('./childModel');
 
 /**
+ * Schemas for child data types.
+ * @swagger
+ * components:
+ *  schemas:
+ *    Child:
+ *      type: object
+ *      properties:
+ *        Name:
+ *          type: string
+ *        PIN:
+ *          type: string
+ *        AvatarID:
+ *          type: integer
+ *          description: Foreign key to the Avatars table
+ *      example:
+ *        Name: 'Alison Brie'
+ *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        AvatarID: 1
+ *    TypedChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetChild'
+ *        - type: object
+ *          properties:
+ *            type:
+ *              type: string
+ *      example:
+ *        type: 'Child'
+ *    PostChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Child'
+ *        - type: object
+ *          required:
+ *            - Name
+ *            - PIN
+ *            - AvatarID
+ *            - ParentID
+ *          properties:
+ *            ParentID:
+ *              type: integer
+ *              description: Foreign key to the Parents table.
+ *          example:
+ *            ParentID: 1
+ *    GetChild:
+ *      allOf:
+ *        - type: object
+ *          required:
+ *            - ID
+ *          properties:
+ *            ID:
+ *              type: integer
+ *              readOnly: true
+ *              description: Auto-incrementing primary key
+ *          example:
+ *            ID: '1'
+ *        - $ref: '#/components/schemas/PostChild'
+ *
+ *  parameters:
+ *    childId:
+ *      name: ID
+ *      in: path
+ *      description: ID of child
+ */
+
+/**
  * @swagger
  * /children:
  *  get:
- *    description: Returns a list of children
- *    summary: Get a list of all child profiles
+ *    summary: Attempts to query the database for a list of all children.
  *    security:
  *      - okta: []
  *    tags:
- *      - child
+ *      - Children
  *    responses:
  *      200:
- *        description: array of all children
+ *        description: Returns an array of all children in the database.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Child'
- *              example:
- *                - ID: 1
- *                  Name: 'Alison Brie'
- *                  PIN: '1jkkj0f89n2083n9fnq23rbf'
- *                  AvatarID: 1
- *                  ParentID: 1
- *                - ID: 2
- *                  Name: 'Gillian Jacobs'
- *                  PIN: '1jkkj0f89n2083n9fnq23rba'
- *                  AvatarID: 2
- *                  ParentID: 1
+ *                $ref: '#/components/schemas/GetChild'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
@@ -48,25 +100,18 @@ router.get('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * components:
- *  parameters:
- *    childId:
- *      name: ID
- *      in: path
- *      description: ID of child
  * /children/{id}:
  *  get:
- *    description: Find children by ID
- *    summary: Returns a single child object
+ *    summary: Attempts to query the database for a child with the given ID.
  *    security:
  *      - okta: []
  *    tags:
- *      - child
+ *      - Children
  *    parameters:
  *      - $ref: '#/components/parameters/childId'
  *    responses:
  *      200:
- *        description: A child object
+ *        description: Returns the requested child object.
  *        content:
  *          application/json:
  *            schema:
@@ -96,25 +141,25 @@ router.get('/:id', authRequired, async (req, res) => {
  * @swagger
  * /child:
  *  post:
- *    summary: Add a new child
+ *    summary: Attempts to add a new child to the database.
  *    security:
  *      - okta: []
  *    tags:
- *      - child
+ *      - Children
  *    requestBody:
- *      description: Child object to be added
+ *      description: Object to be added to the Children table.
  *      content:
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/PostChild'
  *    responses:
  *      201:
- *        description: The ID of the newly created child
+ *        description: Returns the ID of the newly created child.
  *        content:
  *          application/json:
  *            example: 1
  *            schema:
- *              $ref: '#/components/parameters/childId'
+ *              type: integer
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
@@ -134,15 +179,15 @@ router.post('/', authRequired, async (req, res) => {
  * @swagger
  * /child/{id}:
  *  put:
- *    summary: Update a child's info
+ *    summary: Attempts to update the child with the given ID parameter.
  *    security:
  *      - okta: []
  *    tags:
- *      - child
+ *      - Children
  *    parameters:
  *      - $ref: '#/components/parameters/childId'
  *    requestBody:
- *      description: Changes to be applied to the given child
+ *      description: Changes to be applied to the specified child.
  *      content:
  *        application/json:
  *          schema:
@@ -176,11 +221,11 @@ router.put('/:id', authRequired, async (req, res) => {
  * @swagger
  * /child/{id}:
  *  delete:
- *    summary: Remove a child account
+ *    summary: Attempts to delete the child with the specified ID.
  *    security:
  *      - okta: []
  *    tags:
- *      - child
+ *      - Children
  *    parameters:
  *      - $ref: '#/components/parameters/childId'
  *    responses:
