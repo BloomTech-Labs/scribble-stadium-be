@@ -3,35 +3,47 @@ const authRequired = require('../middleware/authRequired');
 const Parents = require('./parentModel');
 
 /**
+ * Schemas for parent data types.
  * @swagger
  * components:
  *  schemas:
  *    Parent:
  *      type: object
- *      required:
- *        - ID
- *        - Name
- *        - Email
- *        - PIN
  *      properties:
- *        ID:
- *          type: integer
- *          description: This is an auto-incrementing primary key
  *        Name:
  *          type: string
  *        Email:
  *          type: string
  *        PIN:
  *          type: string
- *          description: This is a hashed 4-digit PIN
  *      example:
- *        ID: '1'
  *        Name: 'Danny Pudi'
  *        Email: 'danny@pu.di'
  *        PIN: '00uhjfrwdWAQvD8JV4x6'
- *    TypedParent:
+ *    PostParent:
  *      allOf:
  *        - $ref: '#/components/schemas/Parent'
+ *        - type: object
+ *          required:
+ *            - Name
+ *            - Email
+ *            - PIN
+ *    GetParent:
+ *      allOf:
+ *        - type: object
+ *          required:
+ *            - ID
+ *          properties:
+ *            ID:
+ *              type: integer
+ *              readOnly: true
+ *              description: This is an auto-incrementing primary key
+ *          example:
+ *            ID: 1
+ *        - $ref: '#/components/schemas/PostParent'
+ *    TypedParent:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetParent'
  *        - type: object
  *          required:
  *            - type
@@ -39,37 +51,37 @@ const Parents = require('./parentModel');
  *            type:
  *              type: string
  *      example:
- *        ID: '1'
- *        Name: 'Danny Pudi'
- *        Email: 'danny@pu.di'
- *        PIN: '00uhjfrwdWAQvD8JV4x6'
  *        type: 'Parent'
+ *
+ *  parameters:
+ *    parentId:
+ *      name: ID
+ *      in: path
+ *      description: ID of the desired parent
+ *      required: true
+ *      example: 1
+ *      schema:
+ *        type: integer
+ */
+
+/**
+ * @swagger
  * /parents:
  *  get:
- *    description: Returns a list of parents
- *    summary: Get a list of all registered parents
+ *    summary: Attempts to query the database for a list of all parents.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
  *    responses:
  *      200:
- *        description: array of all parents
+ *        description: Returns an array of all parents in the database.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Parent'
- *              example:
- *                - ID: '1'
- *                  Name: 'Danny Pudi'
- *                  Email: 'danny@pu.di'
- *                  PIN: '00uhjfrwdWAQvD8JV4x6'
- *                - ID: '2'
- *                  Name: 'Yvette Nicole-Brown'
- *                  Email: 'yvette@nic.brn'
- *                  PIN: '00uhjfrwdWAQv34JV4x6'
+ *                $ref: '#/components/schemas/GetParent'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  *      401:
@@ -86,34 +98,22 @@ router.get('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * components:
- *  parameters:
- *    parentId:
- *      name: ID
- *      in: path
- *      description: ID of the desired parent
- *      required: true
- *      example: 1
- *      schema:
- *        type: integer
- *
  * /parents/{id}:
  *  get:
- *    description: Find parents by ID
- *    summary: Returns a single parent object
+ *    summary: Attempts to query the database for a parent with the given ID.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
  *    parameters:
  *      - $ref: '#/components/parameters/parentId'
  *    responses:
  *      200:
- *        description: A parent object
+ *        description: Returns the requested parent object.
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Parent'
+ *              $ref: '#/components/schemas/GetParent'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -137,103 +137,38 @@ router.get('/:id', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * components:
- *  schemas:
- *    Child:
- *      type: object
- *      properties:
- *        ID:
- *          type: integer
- *          readOnly: true
- *          description: Auto-incrementing primary key
- *        Name:
- *          type: string
- *        PIN:
- *          type: string
- *        AvatarID:
- *          type: integer
- *          description: Foreign key to the Avatars table
- *        ParentID:
- *          type: integer
- *          readOnly: true
- *          description: Foreign key to the Parents table. Can't be updated!
- *      example:
- *        ID: '1'
- *        Name: 'Alison Brie'
- *        PIN: '00uhjfrwdWAQv10JV4x6'
- *        AvatarID: 1
- *        ParentID: 1
- *    TypedChild:
- *      allOf:
- *        - $ref: '#/components/schemas/Child'
- *        - type: object
- *          required:
- *            - Name
- *            - PIN
- *            - AvatarID
- *            - ParentID
- *            - type
- *          properties:
- *            type:
- *              type: string
- *      example:
- *        ID: '1'
- *        Name: 'Alison Brie'
- *        PIN: '00uhjfrwdWAQv10JV4x6'
- *        AvatarID: 1
- *        ParentID: 1
- *        type: 'Child'
- *    PostChild:
- *      allOf:
- *        - $ref: '#/components/schemas/Child'
- *        - type: object
- *          required:
- *            - Name
- *            - PIN
- *            - AvatarID
- *            - ParentID
- *          properties:
- *            ParentID:
- *              type: integer
- *              readOnly: false
- *              description: Foreign key to the Parents table. Can't be updated!
- *
- *      example:
- *        ID: 1
- *        Name: 'Alison Brie'
- *        PIN: '00uhjfrwdWAQv10JV4x6'
- *        AvatarID: 1
- *        ParentID: 1
- *
  * /parents/{id}/profiles:
  *  get:
- *    description: Return a list of parents and children
- *    summary: Get a list of all profiles for a given parent account
+ *    summary: Attempts to query the database for all profiles connected to a parent account.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
+ *    parameters:
+ *      - $ref: '#/components/parameters/parentId'
  *    responses:
  *      200:
- *        description: array of all profiles
+ *        description: Returns an array of all relevant profiles.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
+ *              description: Schema view is bugged on this endpoint. Please see example view for correct structure.
  *              items:
  *                anyOf:
  *                  - $ref: '#/components/schemas/TypedParent'
  *                  - $ref: '#/components/schemas/TypedChild'
  *              example:
- *                - ID: '1'
+ *                - ID: 1
  *                  Name: 'Danny Pudi'
  *                  Email: 'danny@pu.di'
  *                  PIN: '00uhjfrwdWAQvD8JV4x6'
  *                  type: 'Parent'
- *                - ID: '1'
+ *                - ID: 1
  *                  Name: 'Alison Brie'
- *                  Email: 'allison@br.ie'
  *                  PIN: '00uhjfrwdWAQv10JV4x6'
+ *                  AvatarID: 1
+ *                  ParentID: 1
  *                  type: 'Child'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
@@ -267,20 +202,20 @@ router.get('/:id/profiles', authRequired, async (req, res) => {
  * @swagger
  * /parent:
  *  post:
- *    summary: Add a new parent account
+ *    summary: Attempts to add a new parent to the database.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
  *    requestBody:
- *      description: Parent object to be added
+ *      description: Object to be added to the Parents table.
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Parent'
+ *            $ref: '#/components/schemas/PostParent'
  *    responses:
  *      201:
- *        description: The ID of the newly created profile
+ *        description: Returns the ID of the newly created parent.
  *        content:
  *          application/json:
  *            example: 1
@@ -303,15 +238,17 @@ router.post('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * /parent:
+ * /parent/{id}:
  *  put:
- *    summary: Update a parent's info
+ *    summary: Attempts to update the parent with the given ID parameter.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
+ *    parameters:
+ *      - $ref: '#/components/parameters/parentId'
  *    requestBody:
- *      description: Parent object to be updated
+ *      description: Changes to be applied to the specified parent.
  *      content:
  *        application/json:
  *          schema:
@@ -345,11 +282,11 @@ router.put('/:id', authRequired, async (req, res) => {
  * @swagger
  * /parent/{id}:
  *  delete:
- *    summary: Remove a parent account
+ *    summary: Attempts to delete the child with the specified ID.
  *    security:
  *      - okta: []
  *    tags:
- *      - parent
+ *      - Parents
  *    parameters:
  *      - $ref: '#/components/parameters/parentId'
  *    responses:

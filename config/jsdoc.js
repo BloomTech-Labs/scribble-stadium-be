@@ -12,16 +12,16 @@ module.exports = {
     },
     tags: [
       {
-        name: 'status',
-        description: 'Everything about your status',
+        name: 'Status',
+        description: 'API status test.',
       },
       {
-        name: 'parent',
-        description: 'Operations for parent profiles',
+        name: 'Parents',
+        description: 'Operations for parent profiles.',
       },
       {
-        name: 'child',
-        description: 'Operations for child profiles',
+        name: 'Children',
+        description: 'Operations for child profiles.',
       },
     ],
     externalDocs: {
