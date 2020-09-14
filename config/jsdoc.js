@@ -42,7 +42,7 @@ module.exports = {
       },
       responses: {
         UnauthorizedError: {
-          description: 'Error: Access token is missing or invalid',
+          description: 'Error: Access token is missing or invalid.',
           content: {
             'application/json': {
               schema: {
@@ -67,7 +67,7 @@ module.exports = {
           },
         },
         DatabaseError: {
-          description: 'Database error. Try again.',
+          description: 'Error: Database issue.',
           content: {
             'application/json': {
               schema: {
@@ -75,7 +75,7 @@ module.exports = {
                 properties: {
                   message: {
                     type: 'string',
-                    example: 'Could not access database',
+                    example: 'PostgreSQL error message.',
                   },
                 },
               },
@@ -83,7 +83,7 @@ module.exports = {
           },
         },
         EmptySuccess: {
-          description: '',
+          description: 'Returns an empty body on success.',
           content: {
             'application/json': {
               schema: {
@@ -94,7 +94,7 @@ module.exports = {
           },
         },
         NotFound: {
-          description: 'Not Found',
+          description: 'Error: ID not found in table.',
           content: {
             'application/json': {
               schema: {
@@ -110,7 +110,7 @@ module.exports = {
           },
         },
         InvalidFormat: {
-          description: 'Error: Poorly Formatted Data',
+          description: 'Error: Poorly formatted data.',
           content: {
             'application/json': {
               schema: {

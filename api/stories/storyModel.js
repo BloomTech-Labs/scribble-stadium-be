@@ -24,7 +24,7 @@ const getById = (ID) => {
  * @param {string} story.URL the title of the story
  * @param {string} story.WritingPrompt the title of the story
  * @param {string} story.ReadingPrompt the title of the story
- * @retuns {Promise} a promise that resolves to the ID of the new story
+ * @returns {Promise} a promise that resolves to the ID of the new story
  */
 const add = (story) => {
   return db('Stories').insert(story).returning('ID');

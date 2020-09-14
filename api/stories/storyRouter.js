@@ -13,10 +13,6 @@ const {
  *    Story:
  *      type: object
  *      properties:
- *        ID:
- *          type: integer
- *          readOnly: true
- *          description: Auto-incrementing primary key
  *        Title:
  *          type: string
  *          decription: Title of the story
@@ -30,14 +26,24 @@ const {
  *          type: string
  *          description: Short 1-3 sentence drawing prompt
  *      example:
- *        ID: 1
  *        Title: 'Studies in Modern Movement'
  *        URL: 'http://www.someurl.com'
  *        WritingPrompt: 'Write something about the story you just read.'
  *        DrawingPrompt: 'Draw something that happened in the story you just read.'
- *    PostStory:
+ *    GetStory:
  *      allOf:
  *        - $ref: '#/components/schemas/Story'
+ *        - type: object
+ *          required:
+ *            - ID
+ *          properties:
+ *            ID:
+ *              type: integer
+ *              readOnly: true
+ *              description: Auto-incrementing primary key
+ *    PostStory:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetStory'
  *        - type: object
  *          required:
  *            - Title
@@ -46,32 +52,20 @@ const {
  *            - DrawingPrompt
  * /stories:
  *  get:
- *    description: Get a list of all stories in the database
- *    summary: Returns a list of all stories from the database
+ *    summary: Attempts to query the database for a list of all stories.
  *    security:
  *      - okta: []
  *    tags:
  *      - story
  *    responses:
  *      200:
- *        description: array of all stories
+ *        description: Returns an array of all stories in the database.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Story'
- *              example:
- *                - ID: 1
- *                  Title: 'Studies in Modern Movement'
- *                  URL: 'http://www.someurl.com'
- *                  WritingPrompt: 'Write something about the story you just read.'
- *                  DrawingPrompt: 'Draw something that happened in the story you just read.'
- *                - ID: 2
- *                  Title: 'Advanced Documentary Filmmaking'
- *                  URL: 'http://www.someurl.com'
- *                  WritingPrompt: 'Write something about the story you just read.'
- *                  DrawingPrompt: 'Draw something that happened in the story you just read.'
+ *                $ref: '#/components/schemas/GetStory'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
@@ -93,15 +87,14 @@ router.get('/', authRequired, async (req, res) => {
  *    storyId:
  *      name: ID
  *      in: path
- *      description: The unique ID of a story object
+ *      description: The unique ID of a story object.
  *      example: 1
  *      schema:
  *        type: integer
  *
  * /stories/{id}:
  *  get:
- *    description: Searches the database for a specific story
- *    summary: Query the database for a story with the given ID
+ *    summary: Attempts to query the database for a story with the given ID.
  *    security:
  *      - okta: []
  *    tags:
@@ -110,11 +103,11 @@ router.get('/', authRequired, async (req, res) => {
  *      - $ref: '#/components/parameters/storyId'
  *    responses:
  *      200:
- *        description: A story object
+ *        description: Returns the requested story object.
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Story'
+ *              $ref: '#/components/schemas/GetStory'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -140,21 +133,20 @@ router.get('/:id', authRequired, async (req, res) => {
  * @swagger
  * /story:
  *  post:
- *    description: Add a story to the database
- *    summary: Attempts to post a new story and returns the new ID on success
+ *    summary: Attempts to add a new story to the database.
  *    security:
  *      - okta: []
  *    tags:
  *      - story
  *    requestBody:
- *      description:  Story object to be added
+ *      description: Object to be added to the Stories table.
  *      content:
  *        application/json:
  *          schema:
  *            $ref: '#/components/schemas/PostStory'
  *    responses:
  *      201:
- *        description: The ID of the newly created story
+ *        description: Returns the ID of the newly created story.
  *        content:
  *          application/json:
  *            example: 1
@@ -179,10 +171,9 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
 
 /**
  * @swagger
- * /story:
+ * /story/{id}:
  *  put:
- *    description: Updates the story in the database with the given ID
- *    summary: Attempts to update the story with the given ID
+ *    summary: Attempts to update the story with the given ID parameter.
  *    security:
  *      - okta: []
  *    tags:
@@ -190,7 +181,7 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *    parameters:
  *      - $ref: '#/components/parameters/storyId'
  *    requestBody:
- *      description: Changes to be applied to the given story
+ *      description: Changes to be applied to the specified story.
  *      content:
  *        application/json:
  *          schema:
@@ -224,10 +215,9 @@ router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
 
 /**
  * @swagger
- * /story:
+ * /story/{id}:
  *  delete:
- *    description: Deletes the story in the database with the given ID
- *    summary: Attempts to delete the story with the given ID
+ *    summary: Attempts to delete the story with the specified ID.
  *    security:
  *      - okta: []
  *    tags:
