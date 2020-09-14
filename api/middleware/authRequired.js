@@ -3,13 +3,11 @@ const OktaJwtVerifier = require('@okta/jwt-verifier');
 const oktaVerifierConfig = require('../../config/okta');
 const Parents = require('../parent/parentModel');
 const oktaJwtVerifier = new OktaJwtVerifier(oktaVerifierConfig.config);
-const bc = require('bcryptjs');
 
 const makeParentObject = (claims) => {
   return {
     Email: claims.email,
     Name: claims.name,
-    PIN: bc.hashSync('0002', process.env.BCRYPT_ROUNDS || 6),
   };
 };
 /**
