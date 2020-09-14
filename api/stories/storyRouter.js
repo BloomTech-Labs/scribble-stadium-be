@@ -7,6 +7,7 @@ const {
 } = require('../middleware/storyValidation');
 
 /**
+ * Schemas for story data types.
  * @swagger
  * components:
  *  schemas:
@@ -32,7 +33,6 @@ const {
  *        DrawingPrompt: 'Draw something that happened in the story you just read.'
  *    GetStory:
  *      allOf:
- *        - $ref: '#/components/schemas/Story'
  *        - type: object
  *          required:
  *            - ID
@@ -41,6 +41,9 @@ const {
  *              type: integer
  *              readOnly: true
  *              description: Auto-incrementing primary key
+ *          example:
+ *            ID: 1
+ *        - $ref: '#/components/schemas/Story'
  *    PostStory:
  *      allOf:
  *        - $ref: '#/components/schemas/GetStory'
@@ -50,6 +53,19 @@ const {
  *            - URL
  *            - WritingPrompt
  *            - DrawingPrompt
+ *
+ *  parameters:
+ *    storyId:
+ *      name: ID
+ *      in: path
+ *      description: The unique ID of a story object.
+ *      example: 1
+ *      schema:
+ *        type: integer
+ */
+
+/**
+ * @swagger
  * /stories:
  *  get:
  *    summary: Attempts to query the database for a list of all stories.
@@ -82,16 +98,6 @@ router.get('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * components:
- *  parameters:
- *    storyId:
- *      name: ID
- *      in: path
- *      description: The unique ID of a story object.
- *      example: 1
- *      schema:
- *        type: integer
- *
  * /stories/{id}:
  *  get:
  *    summary: Attempts to query the database for a story with the given ID.
