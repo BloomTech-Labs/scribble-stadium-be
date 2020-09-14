@@ -56,7 +56,7 @@ const {
  *    security:
  *      - okta: []
  *    tags:
- *      - story
+ *      - Stories
  *    responses:
  *      200:
  *        description: Returns an array of all stories in the database.
@@ -98,7 +98,7 @@ router.get('/', authRequired, async (req, res) => {
  *    security:
  *      - okta: []
  *    tags:
- *      - story
+ *      - Stories
  *    parameters:
  *      - $ref: '#/components/parameters/storyId'
  *    responses:
@@ -137,7 +137,7 @@ router.get('/:id', authRequired, async (req, res) => {
  *    security:
  *      - okta: []
  *    tags:
- *      - story
+ *      - Stories
  *    requestBody:
  *      description: Object to be added to the Stories table.
  *      content:
@@ -177,7 +177,7 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *    security:
  *      - okta: []
  *    tags:
- *      - story
+ *      - Stories
  *    parameters:
  *      - $ref: '#/components/parameters/storyId'
  *    requestBody:
@@ -221,7 +221,7 @@ router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
  *    security:
  *      - okta: []
  *    tags:
- *      - story
+ *      - Stories
  *    parameters:
  *      - $ref: '#/components/parameters/storyId'
  *    responses:
