@@ -11,6 +11,7 @@ const {
   children,
   parent,
   avatars,
+  gradeLevels,
   newChildName: newName,
 } = require('../../data/testdata');
 
@@ -18,12 +19,19 @@ describe('children router endpoints', () => {
   beforeAll(async () => {
     await db.raw('TRUNCATE TABLE public."Avatars" RESTART IDENTITY CASCADE');
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
+    await db.raw(
+      'TRUNCATE TABLE public."GradeLevels" RESTART IDENTITY CASCADE'
+    );
     await db('Parents').insert(parent);
-    await db('Avatars').insert(avatars).returning('ID');
+    await db('Avatars').insert(avatars);
+    await db('GradeLevels').insert(gradeLevels);
   });
   afterAll(async () => {
     await db.raw('TRUNCATE TABLE public."Avatars" RESTART IDENTITY CASCADE');
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
+    await db.raw(
+      'TRUNCATE TABLE public."GradeLevels" RESTART IDENTITY CASCADE'
+    );
   });
   describe('GET /children', () => {
     it('returns a 200 and empty array on success', async () => {

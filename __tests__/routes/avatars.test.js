@@ -43,10 +43,12 @@ describe('avatar router endpoints', () => {
   });
 
   describe('GET /avatars', () => {
-    it('should return a 200 and empty array on success', async () => {
+    it('should return the newly added avatar', async () => {
       const res = await request(server).get('/avatars');
 
       expect(res.status).toBe(200);
+      expect(res.body.length).toBe(1);
+      expect(res.body[0]).toEqual({ ...avatar, ID: 1 });
     });
   });
 });
