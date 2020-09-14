@@ -24,8 +24,8 @@ module.exports = {
         description: 'Operations for child profiles',
       },
       {
-        name: 'story',
-        description: 'Operations for story data',
+        name: 'Stories',
+        description: 'Operations for story data.',
       },
     ],
     externalDocs: {
