@@ -31,6 +31,15 @@ const {
  *        URL: 'http://www.someurl.com'
  *        WritingPrompt: 'Write something about the story you just read.'
  *        DrawingPrompt: 'Draw something that happened in the story you just read.'
+ *    PostStory:
+ *      allOf:
+ *        - $ref: '#/components/schemas/Story'
+ *        - type: object
+ *          required:
+ *            - Title
+ *            - URL
+ *            - WritingPrompt
+ *            - DrawingPrompt
  *    GetStory:
  *      allOf:
  *        - type: object
@@ -43,16 +52,7 @@ const {
  *              description: Auto-incrementing primary key
  *          example:
  *            ID: 1
- *        - $ref: '#/components/schemas/Story'
- *    PostStory:
- *      allOf:
- *        - $ref: '#/components/schemas/GetStory'
- *        - type: object
- *          required:
- *            - Title
- *            - URL
- *            - WritingPrompt
- *            - DrawingPrompt
+ *        - $ref: '#/components/schemas/PostStory'
  *
  *  parameters:
  *    storyId:
