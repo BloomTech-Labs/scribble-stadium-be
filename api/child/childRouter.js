@@ -21,15 +21,6 @@ const Children = require('./childModel');
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
  *        AvatarID: 1
- *    TypedChild:
- *      allOf:
- *        - $ref: '#/components/schemas/GetChild'
- *        - type: object
- *          properties:
- *            type:
- *              type: string
- *      example:
- *        type: 'Child'
  *    PostChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
@@ -58,12 +49,27 @@ const Children = require('./childModel');
  *          example:
  *            ID: '1'
  *        - $ref: '#/components/schemas/PostChild'
+ *    TypedChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetChild'
+ *        - type: object
+ *          required:
+ *            - type
+ *          properties:
+ *            type:
+ *              type: string
+ *      example:
+ *        type: 'Child'
  *
  *  parameters:
  *    childId:
  *      name: ID
  *      in: path
  *      description: ID of child
+ *      required: true
+ *      example: 1
+ *      schema:
+ *        type: integer
  */
 
 /**
@@ -115,7 +121,7 @@ router.get('/', authRequired, async (req, res) => {
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/PostChild'
+ *              $ref: '#/components/schemas/GetChild'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
