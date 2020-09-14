@@ -31,6 +31,10 @@ module.exports = {
         name: 'Avatars',
         description: 'Operations for avatar data.',
       },
+      {
+        name: 'Grade Levels',
+        description: 'Operations for grade level data.',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',

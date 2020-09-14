@@ -14,13 +14,20 @@ const Children = require('./childModel');
  *          type: string
  *        PIN:
  *          type: string
+ *        IsDyslexic:
+ *          type: boolean
  *        AvatarID:
  *          type: integer
  *          description: Foreign key to the Avatars table
+ *        GradeLevelID:
+ *          type: integer
+ *          description: Foreign key to the GradeLevels table
  *      example:
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
+ *        IsDyslexic: false
  *        AvatarID: 1
+ *        GradeLevelID: 1
  *    PostChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
@@ -28,7 +35,9 @@ const Children = require('./childModel');
  *          required:
  *            - Name
  *            - PIN
+ *            - IsDyslexic
  *            - AvatarID
+ *            - GradeLevelID
  *            - ParentID
  *          properties:
  *            ParentID:
