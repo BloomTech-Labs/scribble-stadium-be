@@ -49,13 +49,13 @@ describe('avatar router endpoints', () => {
     });
   });
 
-  // describe('GET /avatars', () => {
-  //   it('should return the newly added avatar', async () => {
-  //     const res = await request(server).get('/avatars');
+  describe('GET /avatars', () => {
+    it('should return the newly added avatar', async () => {
+      const res = await request(server).get('/avatars');
 
-  //     expect(res.status).toBe(200);
-  //     expect(res.body.length).toBe(1);
-  //     expect(res.body[0]).toEqual({ ...avatar, ID: 1 });
-  //   });
-  // });
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(3);
+      expect(res.body).toEqual(avatars.map((a, i) => ({ ...a, ID: i + 1 })));
+    });
+  });
 });
