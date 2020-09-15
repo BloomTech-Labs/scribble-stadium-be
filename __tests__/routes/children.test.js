@@ -1,6 +1,7 @@
 const request = require('supertest');
 const server = require('../../api/app');
 const db = require('../../data/db-config');
+const _omit = require('lodash.omit');
 
 // mock auth middleware
 jest.mock('../../api/middleware/authRequired', () =>
@@ -63,7 +64,9 @@ describe('children router endpoints', () => {
       const res = await request(server).get('/child/1');
 
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({ ID: 1, ...children[0] });
+      expect(_omit(res.body, ['AvatarURL', 'GradeLevel'])).toEqual(
+        _omit({ ID: 1, ...children[0] }, ['AvatarID', 'GradeLevelID'])
+      );
     });
 
     it('should return a 404 on invalid child id', async () => {

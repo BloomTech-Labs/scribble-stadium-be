@@ -5,7 +5,18 @@ const db = require('../../data/db-config');
  * @returns {Promise} promise that resolves to array of all children
  */
 const getAll = () => {
-  return db('Children');
+  return db('Children AS C')
+    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
+    .select([
+      'C.ID',
+      'C.Name',
+      'C.PIN',
+      'C.IsDyslexic',
+      'C.ParentID',
+      'G.GradeLevel',
+      'A.AvatarURL',
+    ]);
 };
 
 /**
@@ -14,7 +25,19 @@ const getAll = () => {
  * @returns {Promise} promise that resolves to array of users with matching ID, empty if none found
  */
 const getById = (ID) => {
-  return db('Children').where({ ID });
+  return db('Children AS C')
+    .where('C.ID', ID)
+    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
+    .select([
+      'C.ID',
+      'C.Name',
+      'C.PIN',
+      'C.IsDyslexic',
+      'C.ParentID',
+      'G.GradeLevel',
+      'A.AvatarURL',
+    ]);
 };
 
 /**
