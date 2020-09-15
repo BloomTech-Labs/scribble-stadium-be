@@ -4,7 +4,7 @@ const db = require('../../data/db-config');
  * A method to get all children from the database
  * @returns {Promise} promise that resolves to array of all children
  */
-const findAll = () => {
+const getAll = () => {
   return db('Children');
 };
 
@@ -13,17 +13,8 @@ const findAll = () => {
  * @param {number} ID the unique ID to search the database on
  * @returns {Promise} promise that resolves to array of users with matching ID, empty if none found
  */
-const findById = (ID) => {
+const getById = (ID) => {
   return db('Children').where({ ID });
-};
-
-/**
- * Find all children based off parent's account
- * @param {number} ParentID the ID of the parent whose children you want returned
- * @returns {Promise} promise that resolves to array of relevant children
- */
-const findByParentId = (ParentID) => {
-  return db('Children').where({ ParentID });
 };
 
 /**
@@ -62,9 +53,8 @@ const remove = (ID) => {
 };
 
 module.exports = {
-  findAll,
-  findById,
-  findByParentId,
+  getAll,
+  getById,
   add,
   update,
   remove,

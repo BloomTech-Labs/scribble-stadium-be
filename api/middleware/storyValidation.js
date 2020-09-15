@@ -49,7 +49,7 @@ const storyUpdateValidation = (req, res, next) => {
     // If it contains at least one valid field
     next();
   } else {
-    res.status(400).json({ error: 'InvalidChanges' });
+    res.status(400).json({ error: 'InvalidStoryChanges' });
   }
 };
 

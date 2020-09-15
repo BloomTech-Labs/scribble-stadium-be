@@ -10,7 +10,7 @@ jest.mock('../../api/middleware/authRequired', () =>
 // Import test data
 const {
   parent,
-  newParentName: newName,
+  newParentName: Name,
   badRequest,
 } = require('../../data/testdata');
 
@@ -45,7 +45,7 @@ describe('parents router endpoints', () => {
       expect(res.status).toBe(500);
     });
 
-    it('should return a 500 on poorly-formatted parent', async () => {
+    it('should return a 400 on poorly-formatted parent', async () => {
       const res = await request(server).post('/parent').send(badRequest);
 
       expect(res.status).toBe(400);
@@ -87,9 +87,7 @@ describe('parents router endpoints', () => {
 
   describe('PUT /parents/:id', () => {
     it('should successfully update a parent', async () => {
-      const res = await request(server)
-        .put('/parent/1')
-        .send({ Name: newName });
+      const res = await request(server).put('/parent/1').send({ Name });
 
       expect(res.status).toBe(204);
     });
