@@ -1,6 +1,10 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Parents = require('./parentModel');
+const {
+  parentValidation,
+  parentUpdateValidation,
+} = require('../middleware/parentValidation');
 
 /**
  * Schemas for parent data types.
@@ -82,17 +86,17 @@ const Parents = require('./parentModel');
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/GetParent'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
   try {
-    const parents = await Parents.findAll();
+    const parents = await Parents.getAll();
     res.status(200).json(parents);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -124,14 +128,14 @@ router.get('/', authRequired, async (req, res) => {
 router.get('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
-    const parent = await Parents.findById(id);
+    const parent = await Parents.getById(id);
     if (parent.length > 0) {
       res.status(200).json(parent[0]);
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -170,6 +174,8 @@ router.get('/:id', authRequired, async (req, res) => {
  *                  AvatarID: 1
  *                  ParentID: 1
  *                  type: 'Child'
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -180,11 +186,10 @@ router.get('/:id', authRequired, async (req, res) => {
 router.get('/:id/profiles', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
-    const parent = await Parents.findById(id);
+    const parent = await Parents.getById(id);
     if (parent.length === 0) {
       return res.status(404).json({ error: 'ParentNotFound' });
     }
-
     // If we find a parent, then look for the children
     const children = await Parents.getChildren(id);
     res
@@ -193,8 +198,8 @@ router.get('/:id/profiles', authRequired, async (req, res) => {
         { ...parent[0], type: 'Parent' },
         ...children.map((child) => ({ ...child, type: 'Child' })),
       ]);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -221,18 +226,20 @@ router.get('/:id/profiles', authRequired, async (req, res) => {
  *            example: 1
  *            schema:
  *              type: integer
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, async (req, res) => {
+router.post('/', authRequired, parentValidation, async (req, res) => {
   const parent = req.body;
   try {
-    const data = await Parents.add(parent);
-    res.status(201).json(data);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const [ID] = await Parents.add(parent);
+    res.status(201).json({ ID });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -256,6 +263,8 @@ router.post('/', authRequired, async (req, res) => {
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -263,7 +272,7 @@ router.post('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, async (req, res) => {
+router.put('/:id', authRequired, parentUpdateValidation, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   try {
@@ -273,8 +282,8 @@ router.put('/:id', authRequired, async (req, res) => {
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -308,8 +317,8 @@ router.delete('/:id', authRequired, async (req, res) => {
     } else {
       res.status(404).json({ error: 'ParentNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 

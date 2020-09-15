@@ -8,7 +8,11 @@ jest.mock('../../api/middleware/authRequired', () =>
 );
 
 // Import test data
-const { parent, newParentName: newName } = require('../../data/testdata');
+const {
+  parent,
+  newParentName: newName,
+  badRequest,
+} = require('../../data/testdata');
 
 describe('parents router endpoints', () => {
   beforeAll(async () => {
@@ -32,13 +36,19 @@ describe('parents router endpoints', () => {
       const res = await request(server).post('/parent').send(parent);
 
       expect(res.status).toBe(201);
-      expect(res.body[0]).toBe(1);
+      expect(res.body.ID).toBe(1);
     });
 
     it('should restrict creation of parent with duplicate email', async () => {
       const res = await request(server).post('/parent').send(parent);
 
       expect(res.status).toBe(500);
+    });
+
+    it('should return a 500 on poorly-formatted parent', async () => {
+      const res = await request(server).post('/parent').send(badRequest);
+
+      expect(res.status).toBe(400);
     });
   });
 
@@ -91,10 +101,10 @@ describe('parents router endpoints', () => {
       expect(res.body.error).toBe('ParentNotFound');
     });
 
-    it('should return a 500 on poorly-formatted data', async () => {
-      const res = await request(server).put('/parent/1').send({ bad: 'field' });
+    it('should return a 400 on poorly-formatted data', async () => {
+      const res = await request(server).put('/parent/1').send(badRequest);
 
-      expect(res.status).toBe(500);
+      expect(res.status).toBe(400);
     });
   });
 
