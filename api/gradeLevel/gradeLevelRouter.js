@@ -79,7 +79,7 @@ router.get('/', authRequired, async (req, res) => {
  *    tags:
  *      - Grade Levels
  *    requestBody:
- *      description: Object to be added to the GradeLevels table.
+ *      description: Object to be added to the GradeLevels table. An array of gradeLevel objects can also be sent.
  *      content:
  *        application/json:
  *          schema:
@@ -102,8 +102,8 @@ router.get('/', authRequired, async (req, res) => {
 router.post('/', authRequired, gradeLevelValidation, async (req, res) => {
   const gradeLevel = req.body;
   try {
-    const [ID] = await GradeLevels.add(gradeLevel);
-    res.status(201).json({ ID });
+    const IDs = await GradeLevels.add(gradeLevel);
+    res.status(201).json(IDs);
   } catch ({ message }) {
     res.status(500).json({ message });
   }

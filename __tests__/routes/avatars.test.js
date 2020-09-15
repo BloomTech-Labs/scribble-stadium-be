@@ -55,7 +55,7 @@ describe('avatar router endpoints', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
-      expect(res.body).toEqual(avatars.map((a, i) => ({ ...a, ID: i + 1 })));
+      expect(res.body).toEqual(avatars.map((x, i) => ({ ...x, ID: i + 1 })));
     });
   });
 });
