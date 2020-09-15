@@ -20,10 +20,10 @@ router.post('/', async (req, res) => {
         },
       },
     };
-    const user = oktaClient.createUser(newUser);
-    res.status(201).json({ user });
-  } catch ({ message }) {
-    res.status(400).json({ message });
+    const data = await oktaClient.createUser(newUser);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
   }
 });
 
