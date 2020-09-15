@@ -20,18 +20,18 @@ const {
  *          type: string
  *        IsDyslexic:
  *          type: boolean
- *        AvatarID:
- *          type: integer
- *          description: Foreign key to the Avatars table
- *        GradeLevelID:
- *          type: integer
- *          description: Foreign key to the GradeLevels table
+ *        AvatarURL:
+ *          type: string
+ *          description: URL pulled from from foreign Avatars table
+ *        GradeLevel:
+ *          type: string
+ *          description: Grade level pulled from foreign GradeLevels table
  *      example:
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
  *        IsDyslexic: false
- *        AvatarID: 1
- *        GradeLevelID: 1
+ *        AvatarURL: 'http://www.someurl.com'
+ *        GradeLevelID: '3'
  *    PostChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
@@ -40,8 +40,8 @@ const {
  *            - Name
  *            - PIN
  *            - IsDyslexic
- *            - AvatarID
- *            - GradeLevelID
+ *            - AvatarURL
+ *            - GradeLevel
  *            - ParentID
  *          properties:
  *            ParentID:
