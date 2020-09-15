@@ -1,9 +1,17 @@
 const faker = require('faker');
 
 module.exports = {
+  // enumerated data types
   avatars: [
     { AvatarURL: faker.internet.avatar() },
     { AvatarURL: faker.internet.avatar() },
+    { AvatarURL: faker.internet.avatar() },
+  ],
+  gradeLevels: [
+    { GradeLevel: '3' },
+    { GradeLevel: '4' },
+    { GradeLevel: '5' },
+    { GradeLevel: '6' },
   ],
   parent: {
     Name: 'Danny Pudi',
@@ -16,12 +24,16 @@ module.exports = {
       PIN: '1jkkj0f89n2083n9fnq23rbf',
       AvatarID: 1,
       ParentID: 1,
+      GradeLevelID: 1,
+      IsDyslexic: true,
     },
     {
       Name: 'Gillian Jacobs',
       PIN: '1jkkj0f89n2083n9fnq23rba',
       AvatarID: 2,
       ParentID: 1,
+      GradeLevelID: 2,
+      IsDyslexic: false,
     },
   ],
   newParentName: 'Abed Nadir',

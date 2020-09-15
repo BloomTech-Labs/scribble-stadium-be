@@ -4,7 +4,7 @@ const db = require('../../data/db-config');
  * A method to get all parents from the database
  * @returns {Promise} promise that resolves to array of all parents in the database
  */
-const findAll = () => {
+const getAll = () => {
   return db('Parents');
 };
 
@@ -13,7 +13,7 @@ const findAll = () => {
  * @param {number} ID the unique ID to search for
  * @returns {Promise} promise that resolves to an array of users with matching ID, empty if none found
  */
-const findById = (ID) => {
+const getById = (ID) => {
   return db('Parents').where({ ID });
 };
 
@@ -63,11 +63,24 @@ const getChildren = (ID) => {
     .select(['C.*']);
 };
 
+const findOrCreate = async (parent) => {
+  const foundParent = await db('Parents')
+    .where({ Email: parent.Email })
+    .then((parent) => parent);
+  if (foundParent.length > 0) {
+    return foundParent;
+  } else {
+    const newParent = await db('Parents').insert(parent).returning('*');
+    return newParent ? newParent[0] : newParent;
+  }
+};
+
 module.exports = {
-  findAll,
-  findById,
+  getAll,
+  getById,
   add,
   update,
   remove,
   getChildren,
+  findOrCreate,
 };

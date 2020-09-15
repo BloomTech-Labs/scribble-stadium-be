@@ -1,28 +1,28 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
-const Avatars = require('./avatarModel');
-const { avatarValidation } = require('../middleware/avatarValidation');
+const GradeLevels = require('./gradeLevelModel');
+const { gradeLevelValidation } = require('../middleware/gradeLevelValidation');
 
 /**
- * Schemas for avatar types.
+ * Schemas for grade level types.
  * @swagger
  * components:
  *  schemas:
- *    Avatar:
+ *    GradeLevel:
  *      type: object
  *      properties:
- *        AvatarURL:
+ *        GradeLevel:
  *          type: string
- *          description: URL pointing to the hosted location of avatar SVG file.
+ *          description: String containing current student grade level
  *      example:
- *        AvatarURL: 'http://www.someurl.com'
- *    PostAvatar:
+ *        GradeLevel: '3'
+ *    PostGradeLevel:
  *      allOf:
- *        - $ref: '#/components/schemas/Avatar'
+ *        - $ref: '#/components/schemas/GradeLevel'
  *        - type: object
  *          required:
- *            - AvatarURL
- *    GetAvatar:
+ *            - GradeLevel
+ *    GetGradeLevel:
  *      allOf:
  *        - type: object
  *          required:
@@ -34,27 +34,27 @@ const { avatarValidation } = require('../middleware/avatarValidation');
  *              description: Auto-incrementing primary key
  *          example:
  *            ID: '1'
- *        - $ref: '#/components/schemas/PostAvatar'
+ *        - $ref: '#/components/schemas/PostGradeLevel'
  */
 
 /**
  * @swagger
- * /avatars:
+ * /gradelevels:
  *  get:
- *    summary: Attempts to query the database for a list of all avatars.
+ *    summary: Attempts to query the database for a list of all grade levels.
  *    security:
  *      - okta: []
  *    tags:
- *      - Avatars
+ *      - Grade Levels
  *    responses:
  *      200:
- *        description: Returns an array of all avatars in the database.
+ *        description: Returns an array of all grade levels in the database.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/GetAvatar'
+ *                $ref: '#/components/schemas/GetGradeLevel'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
@@ -62,8 +62,8 @@ const { avatarValidation } = require('../middleware/avatarValidation');
  */
 router.get('/', authRequired, async (req, res) => {
   try {
-    const avatars = await Avatars.getAvatars();
-    res.status(200).json(avatars);
+    const gradeLevels = await GradeLevels.getAll();
+    res.status(200).json(gradeLevels);
   } catch ({ message }) {
     res.status(500).json({ message });
   }
@@ -71,22 +71,22 @@ router.get('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * /avatar:
+ * /gradelevel:
  *  post:
- *    summary: Attempts to add a new avatar to the database.
+ *    summary: Attempts to add a new grade level to the database.
  *    security:
  *      - okta: []
  *    tags:
- *      - Avatars
+ *      - Grade Levels
  *    requestBody:
- *      description: Object to be added to the Avatars table. An array of avatar objects can also be sent.
+ *      description: Object to be added to the GradeLevels table. An array of gradeLevel objects can also be sent.
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/PostAvatar'
+ *            $ref: '#/components/schemas/PostGradeLevel'
  *    responses:
  *      201:
- *        description: Returns the ID of the newly created avatar.
+ *        description: Returns the ID of the newly created grade level.
  *        content:
  *          application/json:
  *            example: 1
@@ -99,10 +99,10 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, avatarValidation, async (req, res) => {
-  const avatar = req.body;
+router.post('/', authRequired, gradeLevelValidation, async (req, res) => {
+  const gradeLevel = req.body;
   try {
-    const IDs = await Avatars.add(avatar);
+    const IDs = await GradeLevels.add(gradeLevel);
     res.status(201).json(IDs);
   } catch ({ message }) {
     res.status(500).json({ message });

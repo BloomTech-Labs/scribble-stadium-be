@@ -54,6 +54,7 @@
     "http-errors": "~1.6.3",
     "knex": "^0.21.1",
     "lodash.has": "^4.5.2",
+    "lodash.omit": "^4.5.0",
     "morgan": "~1.9.1",
     "pg": "^8.2.1",
     "swagger-jsdoc": "^4.0.0",

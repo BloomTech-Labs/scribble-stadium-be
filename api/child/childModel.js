@@ -4,8 +4,19 @@ const db = require('../../data/db-config');
  * A method to get all children from the database
  * @returns {Promise} promise that resolves to array of all children
  */
-const findAll = () => {
-  return db('Children');
+const getAll = () => {
+  return db('Children AS C')
+    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
+    .select([
+      'C.ID',
+      'C.Name',
+      'C.PIN',
+      'C.IsDyslexic',
+      'C.ParentID',
+      'G.GradeLevel',
+      'A.AvatarURL',
+    ]);
 };
 
 /**
@@ -13,17 +24,20 @@ const findAll = () => {
  * @param {number} ID the unique ID to search the database on
  * @returns {Promise} promise that resolves to array of users with matching ID, empty if none found
  */
-const findById = (ID) => {
-  return db('Children').where({ ID });
-};
-
-/**
- * Find all children based off parent's account
- * @param {number} ParentID the ID of the parent whose children you want returned
- * @returns {Promise} promise that resolves to array of relevant children
- */
-const findByParentId = (ParentID) => {
-  return db('Children').where({ ParentID });
+const getById = (ID) => {
+  return db('Children AS C')
+    .where('C.ID', ID)
+    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
+    .select([
+      'C.ID',
+      'C.Name',
+      'C.PIN',
+      'C.IsDyslexic',
+      'C.ParentID',
+      'G.GradeLevel',
+      'A.AvatarURL',
+    ]);
 };
 
 /**
@@ -62,9 +76,8 @@ const remove = (ID) => {
 };
 
 module.exports = {
-  findAll,
-  findById,
-  findByParentId,
+  getAll,
+  getById,
   add,
   update,
   remove,

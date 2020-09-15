@@ -1,6 +1,10 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Children = require('./childModel');
+const {
+  childValidation,
+  childUpdateValidation,
+} = require('../middleware/childValidation');
 
 /**
  * Schemas for child data types.
@@ -14,13 +18,20 @@ const Children = require('./childModel');
  *          type: string
  *        PIN:
  *          type: string
- *        AvatarID:
- *          type: integer
- *          description: Foreign key to the Avatars table
+ *        IsDyslexic:
+ *          type: boolean
+ *        AvatarURL:
+ *          type: string
+ *          description: URL pulled from from foreign Avatars table
+ *        GradeLevel:
+ *          type: string
+ *          description: Grade level pulled from foreign GradeLevels table
  *      example:
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
- *        AvatarID: 1
+ *        IsDyslexic: false
+ *        AvatarURL: 'http://www.someurl.com'
+ *        GradeLevelID: '3'
  *    PostChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
@@ -28,7 +39,9 @@ const Children = require('./childModel');
  *          required:
  *            - Name
  *            - PIN
- *            - AvatarID
+ *            - IsDyslexic
+ *            - AvatarURL
+ *            - GradeLevel
  *            - ParentID
  *          properties:
  *            ParentID:
@@ -97,10 +110,10 @@ const Children = require('./childModel');
  */
 router.get('/', authRequired, async (req, res) => {
   try {
-    const children = await Children.findAll();
+    const children = await Children.getAll();
     res.status(200).json(children);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -132,14 +145,14 @@ router.get('/', authRequired, async (req, res) => {
 router.get('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
-    const child = await Children.findById(id);
+    const child = await Children.getById(id);
     if (child.length > 0) {
       res.status(200).json(child[0]);
     } else {
       res.status(404).json({ error: 'ChildNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -166,18 +179,20 @@ router.get('/:id', authRequired, async (req, res) => {
  *            example: 1
  *            schema:
  *              type: integer
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, async (req, res) => {
+router.post('/', authRequired, childValidation, async (req, res) => {
   const child = req.body;
   try {
-    const data = await Children.add(child);
-    res.status(201).json(data);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const [ID] = await Children.add(child);
+    res.status(201).json(ID);
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -201,6 +216,8 @@ router.post('/', authRequired, async (req, res) => {
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -208,7 +225,7 @@ router.post('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, async (req, res) => {
+router.put('/:id', authRequired, childUpdateValidation, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   try {
@@ -218,8 +235,8 @@ router.put('/:id', authRequired, async (req, res) => {
     } else {
       res.status(404).json({ error: 'ChildNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
@@ -253,8 +270,8 @@ router.delete('/:id', authRequired, async (req, res) => {
     } else {
       res.status(404).json({ error: 'ChildNotFound' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 
