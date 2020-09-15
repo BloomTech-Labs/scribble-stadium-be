@@ -79,7 +79,7 @@ router.get('/', authRequired, async (req, res) => {
  *    tags:
  *      - Avatars
  *    requestBody:
- *      description: Object to be added to the Avatars table.
+ *      description: Object to be added to the Avatars table. An array of avatar objects can also be sent.
  *      content:
  *        application/json:
  *          schema:
@@ -102,8 +102,8 @@ router.get('/', authRequired, async (req, res) => {
 router.post('/', authRequired, avatarValidation, async (req, res) => {
   const avatar = req.body;
   try {
-    const [ID] = await Avatars.add(avatar);
-    res.status(201).json({ ID });
+    const IDs = await Avatars.add(avatar);
+    res.status(201).json(IDs);
   } catch ({ message }) {
     res.status(500).json({ message });
   }

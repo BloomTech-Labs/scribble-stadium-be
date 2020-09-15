@@ -6,25 +6,32 @@ jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
 );
 
-const {
-  avatars: [avatar],
-  badRequest,
-} = require('../../data/testdata');
+const { avatars, badRequest } = require('../../data/testdata');
 
 describe('avatar router endpoints', () => {
   beforeAll(async () => {
     await db.raw('TRUNCATE TABLE public."Avatars" RESTART IDENTITY CASCADE');
   });
+
   afterAll(async () => {
     await db.raw('TRUNCATE TABLE public."Avatars" RESTART IDENTITY CASCADE');
   });
 
   describe('POST /avatar', () => {
-    it('should successfully add an avatar to the database', async () => {
-      const res = await request(server).post('/avatar').send(avatar);
+    it('should successfully add a single avatar to the table', async () => {
+      const res = await request(server).post('/avatar').send(avatars[0]);
 
       expect(res.status).toBe(201);
-      expect(res.body.ID).toBe(1);
+      expect(res.body).toEqual([1]);
+    });
+
+    it('should successfully add two avatars to the database', async () => {
+      const res = await request(server)
+        .post('/avatar')
+        .send(avatars.slice(1, 3));
+
+      expect(res.status).toBe(201);
+      expect(res.body).toEqual([2, 3]);
     });
 
     it('should return a 400 on poorly formatted avatar', async () => {
@@ -35,7 +42,7 @@ describe('avatar router endpoints', () => {
     });
 
     it('should restrict the addition of redundant avatars', async () => {
-      const res = await request(server).post('/avatar').send(avatar);
+      const res = await request(server).post('/avatar').send(avatars[0]);
 
       expect(res.status).toBe(500);
       expect(res.body.message).toContain('unique');
@@ -47,8 +54,8 @@ describe('avatar router endpoints', () => {
       const res = await request(server).get('/avatars');
 
       expect(res.status).toBe(200);
-      expect(res.body.length).toBe(1);
-      expect(res.body[0]).toEqual({ ...avatar, ID: 1 });
+      expect(res.body.length).toBe(3);
+      expect(res.body).toEqual(avatars.map((x, i) => ({ ...x, ID: i + 1 })));
     });
   });
 });
