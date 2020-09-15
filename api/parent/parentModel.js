@@ -63,6 +63,18 @@ const getChildren = (ID) => {
     .select(['C.*']);
 };
 
+const findOrCreate = async (parent) => {
+  const foundParent = await db('Parents')
+    .where({ Email: parent.Email })
+    .then((parent) => parent);
+  if (foundParent.length > 0) {
+    return foundParent;
+  } else {
+    const newParent = await db('Parents').insert(parent).returning('*');
+    return newParent ? newParent[0] : newParent;
+  }
+};
+
 module.exports = {
   findAll,
   findById,
@@ -70,4 +82,5 @@ module.exports = {
   update,
   remove,
   getChildren,
+  findOrCreate,
 };

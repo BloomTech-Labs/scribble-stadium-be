@@ -1,14 +1,13 @@
 const createError = require('http-errors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 const oktaVerifierConfig = require('../../config/okta');
-const Profiles = require('../profile/profileModel');
+const Parents = require('../parent/parentModel');
 const oktaJwtVerifier = new OktaJwtVerifier(oktaVerifierConfig.config);
 
-const makeProfileObj = (claims) => {
+const makeParentObject = (claims) => {
   return {
-    id: claims.sub,
-    email: claims.email,
-    name: claims.name,
+    Email: claims.email,
+    Name: claims.name,
   };
 };
 /**
@@ -24,18 +23,20 @@ const authRequired = async (req, res, next) => {
     if (!match) throw new Error('Missing idToken');
 
     const idToken = match[1];
-    oktaJwtVerifier
-      .verifyAccessToken(idToken, oktaVerifierConfig.expectedAudience)
-      .then(async (data) => {
-        const jwtUserObj = makeProfileObj(data.claims);
-        const profile = await Profiles.findOrCreateProfile(jwtUserObj);
-        if (profile) {
-          req.profile = profile;
-        } else {
-          throw new Error('Unable to process idToken');
-        }
-        next();
-      });
+
+    const data = await oktaJwtVerifier.verifyAccessToken(
+      idToken,
+      oktaVerifierConfig.expectedAudience
+    );
+
+    const jwtUserObj = makeParentObject(data.claims);
+    const parent = await Parents.findOrCreate(jwtUserObj);
+    if (parent) {
+      req.profile = parent;
+    } else {
+      throw new Error('Unable to process idToken');
+    }
+    next();
   } catch (err) {
     next(createError(401, err.message));
   }
