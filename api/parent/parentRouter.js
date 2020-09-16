@@ -102,46 +102,7 @@ router.get('/', authRequired, async (req, res) => {
 
 /**
  * @swagger
- * /parents/{id}:
- *  get:
- *    summary: Attempts to query the database for a parent with the given ID.
- *    security:
- *      - okta: []
- *    tags:
- *      - Parents
- *    parameters:
- *      - $ref: '#/components/parameters/parentId'
- *    responses:
- *      200:
- *        description: Returns the requested parent object.
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/GetParent'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.get('/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const parent = await Parents.getById(id);
-    if (parent.length > 0) {
-      res.status(200).json(parent[0]);
-    } else {
-      res.status(404).json({ error: 'ParentNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
-});
-
-/**
- * @swagger
- * /parents/{id}/profiles:
+ * /parents/profiles:
  *  get:
  *    summary: Attempts to query the database for all profiles connected to a parent account.
  *    security:
@@ -183,15 +144,15 @@ router.get('/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id/profiles', authRequired, async (req, res) => {
-  const { id } = req.params;
+router.get('/profiles', authRequired, async (req, res) => {
+  const { Email } = req.profile;
   try {
-    const parent = await Parents.getById(id);
+    const parent = await Parents.getByEmail(Email);
     if (parent.length === 0) {
       return res.status(404).json({ error: 'ParentNotFound' });
     }
     // If we find a parent, then look for the children
-    const children = await Parents.getChildren(id);
+    const children = await Parents.getChildren(parent[0].ID);
     res
       .status(200)
       .json([
