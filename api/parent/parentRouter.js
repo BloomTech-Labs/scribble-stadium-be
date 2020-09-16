@@ -77,9 +77,16 @@ const {
  *      - okta: []
  *    tags:
  *      - Parents
+ *    parameters:
+ *      - name: id
+ *        in: query
+ *        description: Optional query string that pulls a single parent instead of all
+ *        example: ?id=1
+ *        schema:
+ *          type: integer
  *    responses:
  *      200:
- *        description: Returns an array of all parents in the database.
+ *        description: Returns an array of all parents in the database. If an id is passed as a query parameter, instead returns a single parent object.
  *        content:
  *          application/json:
  *            schema:
@@ -92,9 +99,24 @@ const {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
+  const ID = req.query.id;
   try {
-    const parents = await Parents.getAll();
-    res.status(200).json(parents);
+    // Initialize the response varaible
+    let p;
+    if (ID) {
+      // If the ID query parameter was given, search for a single parent by ID
+      p = await Parents.getById(ID);
+      if (p.length === 0) {
+        // If you don't find any matching the ID, end the response with a 404
+        return res.status(404).json({ error: 'ParentNotFound' });
+      }
+    } else {
+      // If no query string was passed in, get all parents
+      p = await Parents.getAll();
+    }
+    // Return the first element if you're looking based on ID,
+    // otherwise return the whole array
+    res.status(200).json(ID ? p[0] : p);
   } catch ({ message }) {
     res.status(500).json({ message });
   }
@@ -109,8 +131,6 @@ router.get('/', authRequired, async (req, res) => {
  *      - okta: []
  *    tags:
  *      - Parents
- *    parameters:
- *      - $ref: '#/components/parameters/parentId'
  *    responses:
  *      200:
  *        description: Returns an array of all relevant profiles.
