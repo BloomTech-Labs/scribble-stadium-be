@@ -86,13 +86,19 @@ const {
  *          type: integer
  *    responses:
  *      200:
- *        description: Returns an array of all parents in the database. If an id is passed as a query parameter, instead returns a single parent object.
+ *        description: Returns an array of all parents in the database if no id query is passed.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/GetParent'
+ *      200 (Alt):
+ *        description: Returns a single parent object when an id is passed as a query.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/GetParent'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
