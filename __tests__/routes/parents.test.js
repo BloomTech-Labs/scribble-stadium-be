@@ -73,7 +73,7 @@ describe('parents router endpoints', () => {
 
   describe('GET /parents/profiles', () => {
     it('should pull all profiles related to a parent account', async () => {
-      const res = await request(server).get('/parents/profiles');
+      const res = await request(server).get('/profiles');
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);

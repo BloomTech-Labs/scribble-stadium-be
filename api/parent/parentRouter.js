@@ -45,17 +45,6 @@ const {
  *          example:
  *            ID: 1
  *        - $ref: '#/components/schemas/PostParent'
- *    TypedParent:
- *      allOf:
- *        - $ref: '#/components/schemas/GetParent'
- *        - type: object
- *          required:
- *            - type
- *          properties:
- *            type:
- *              type: string
- *      example:
- *        type: 'Parent'
  *
  *  parameters:
  *    parentId:
@@ -123,68 +112,6 @@ router.get('/', authRequired, async (req, res) => {
     // Return the first element if you're looking based on ID,
     // otherwise return the whole array
     res.status(200).json(ID ? p[0] : p);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
-});
-
-/**
- * @swagger
- * /parents/profiles:
- *  get:
- *    summary: Attempts to query the database for all profiles connected to a parent account.
- *    security:
- *      - okta: []
- *    tags:
- *      - Parents
- *    responses:
- *      200:
- *        description: Returns an array of all relevant profiles.
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              description: Schema view is bugged on this endpoint. Please see example view for correct structure.
- *              items:
- *                anyOf:
- *                  - $ref: '#/components/schemas/TypedParent'
- *                  - $ref: '#/components/schemas/TypedChild'
- *              example:
- *                - ID: 1
- *                  Name: 'Danny Pudi'
- *                  Email: 'danny@pu.di'
- *                  PIN: '00uhjfrwdWAQvD8JV4x6'
- *                  type: 'Parent'
- *                - ID: 1
- *                  Name: 'Alison Brie'
- *                  PIN: '00uhjfrwdWAQv10JV4x6'
- *                  AvatarID: 1
- *                  ParentID: 1
- *                  type: 'Child'
- *      400:
- *        $ref: '#/components/responses/InvalidFormat'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.get('/profiles', authRequired, async (req, res) => {
-  const { Email } = req.profile;
-  try {
-    const parent = await Parents.getByEmail(Email);
-    if (parent.length === 0) {
-      return res.status(404).json({ error: 'ParentNotFound' });
-    }
-    // If we find a parent, then look for the children
-    const children = await Parents.getChildren(parent[0].ID);
-    res
-      .status(200)
-      .json([
-        { ...parent[0], type: 'Parent' },
-        ...children.map((child) => ({ ...child, type: 'Child' })),
-      ]);
   } catch ({ message }) {
     res.status(500).json({ message });
   }

@@ -20,6 +20,11 @@ module.exports = {
         description: 'Operations for parent profiles.',
       },
       {
+        name: 'Profiles',
+        description:
+          'Endpoint to load all profiles related to a user account at login.',
+      },
+      {
         name: 'Children',
         description: 'Operations for child profiles.',
       },
