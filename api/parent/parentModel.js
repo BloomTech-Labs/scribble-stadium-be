@@ -72,6 +72,16 @@ const getChildren = (ID) => {
     .select(['C.*']);
 };
 
+/**
+ * This is a specialized query used only in the authMiddleware. It attempts to find a user in the database,
+ * and will return the user if found. Otherwise, it will attempt to create that user in the database first,
+ * and then will return it.
+ * @param {Object} parent contains the parent's info
+ * @param {string} parent.Name parent's name stored in a string
+ * @param {string} parent.Email parent's email in a string
+ * @param {string} parent.PIN hashed string of parent's 4-digit PIN
+ * @returns {Object} returns a parent object
+ */
 const findOrCreate = async (parent) => {
   const foundParent = await getByEmail(parent.Email).then((res) => res);
   if (foundParent.length > 0) {
