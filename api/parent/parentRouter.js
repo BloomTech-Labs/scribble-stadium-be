@@ -45,6 +45,17 @@ const {
  *          example:
  *            ID: 1
  *        - $ref: '#/components/schemas/PostParent'
+ *    TypedParent:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetParent'
+ *        - type: object
+ *          required:
+ *            - type
+ *          properties:
+ *            type:
+ *              type: string
+ *      example:
+ *        type: 'Parent'
  *
  *  parameters:
  *    parentId:
@@ -66,52 +77,63 @@ const {
  *      - okta: []
  *    tags:
  *      - Parents
- *    parameters:
- *      - name: id
- *        in: query
- *        description: Optional query string that pulls a single parent instead of all
- *        example: ?id=1
- *        schema:
- *          type: integer
  *    responses:
  *      200:
- *        description: Returns an array of all parents in the database if no id query is passed.
+ *        description: Returns an array of all parents in the database.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/GetParent'
- *      200 (Alt):
- *        description: Returns a single parent object when an id is passed as a query.
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/GetParent'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
-  const ID = req.query.id;
   try {
-    // Initialize the response varaible
-    let p;
-    if (ID) {
-      // If the ID query parameter was given, search for a single parent by ID
-      p = await Parents.getById(ID);
-      if (p.length === 0) {
-        // If you don't find any matching the ID, end the response with a 404
-        return res.status(404).json({ error: 'ParentNotFound' });
-      }
+    const parents = await Parents.getAll();
+    res.status(200).json(parents);
+  } catch ({ message }) {
+    res.status(500).json({ message });
+  }
+});
+
+/**
+ * @swagger
+ * /parents/{id}:
+ *  get:
+ *    summary: Attempts to query the database for a parent with the given ID.
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Parents
+ *    parameters:
+ *      - $ref: '#/components/parameters/parentId'
+ *    responses:
+ *      200:
+ *        description: Returns the requested parent object.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/GetParent'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const parent = await Parents.getById(id);
+    if (parent.length > 0) {
+      res.status(200).json(parent[0]);
     } else {
-      // If no query string was passed in, get all parents
-      p = await Parents.getAll();
+      res.status(404).json({ error: 'ParentNotFound' });
     }
-    // Return the first element if you're looking based on ID,
-    // otherwise return the whole array
-    res.status(200).json(ID ? p[0] : p);
   } catch ({ message }) {
     res.status(500).json({ message });
   }

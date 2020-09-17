@@ -57,14 +57,14 @@ describe('parents router endpoints', () => {
 
   describe('GET /parents?id=:id', () => {
     it('should have successfully added the user to the database', async () => {
-      const res = await request(server).get('/parents?id=1');
+      const res = await request(server).get('/parents/1');
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ ID: 1, ...parent });
     });
 
     it('should return a 404 when retrieving a nonexistent parent', async () => {
-      const res = await request(server).get('/parents?id=2');
+      const res = await request(server).get('/parents/2');
 
       expect(res.status).toBe(404);
       expect(res.body.error).toBe('ParentNotFound');
