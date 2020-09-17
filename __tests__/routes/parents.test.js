@@ -4,7 +4,10 @@ const db = require('../../data/db-config');
 
 // mock the auth middleware for now
 jest.mock('../../api/middleware/authRequired', () =>
-  jest.fn((req, res, next) => next())
+  jest.fn((req, res, next) => {
+    req.profile = require('../../data/testdata').parent;
+    next();
+  })
 );
 
 // Import test data
@@ -52,7 +55,7 @@ describe('parents router endpoints', () => {
     });
   });
 
-  describe('GET /parents/:id', () => {
+  describe('GET /parents?id=:id', () => {
     it('should have successfully added the user to the database', async () => {
       const res = await request(server).get('/parents/1');
 
@@ -64,24 +67,17 @@ describe('parents router endpoints', () => {
       const res = await request(server).get('/parents/2');
 
       expect(res.status).toBe(404);
+      expect(res.body.error).toBe('ParentNotFound');
     });
   });
 
-  describe('GET /parents/:id/profiles', () => {
+  describe('GET /parents/profiles', () => {
     it('should pull all profiles related to a parent account', async () => {
-      const res = await request(server).get('/parents/1/profiles');
+      const res = await request(server).get('/profiles');
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
       expect(res.body[0].type).toBe('Parent');
-    });
-
-    it('should pull all profiles related to a parent account', async () => {
-      const res = await request(server).get(`/parents/2/profiles`);
-
-      expect(res.status).toBe(404);
-      expect(res.body).toHaveProperty('error');
-      expect(res.body.error).toBe('ParentNotFound');
     });
   });
 
