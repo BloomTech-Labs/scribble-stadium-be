@@ -62,17 +62,6 @@ const {
  *          example:
  *            ID: '1'
  *        - $ref: '#/components/schemas/PostChild'
- *    TypedChild:
- *      allOf:
- *        - $ref: '#/components/schemas/GetChild'
- *        - type: object
- *          required:
- *            - type
- *          properties:
- *            type:
- *              type: string
- *      example:
- *        type: 'Child'
  *
  *  parameters:
  *    childId:
