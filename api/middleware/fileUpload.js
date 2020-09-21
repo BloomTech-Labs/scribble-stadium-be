@@ -10,6 +10,12 @@ const fileUploadHandler = (req, res, next) => {
     if (error) throw new Error(error);
     if (files.length === 0) res.status(400).json({ error: 'NoFileGiven' });
 
+    // Pull all standard form fields into
+    const formInputs = {};
+    Object.keys(fields).forEach((x) => {
+      formInputs[x] = fields[x][0];
+    });
+
     try {
       const fileNames = Object.keys(files);
       const fileList = fileNames.map(async (f) => {
@@ -28,8 +34,12 @@ const fileUploadHandler = (req, res, next) => {
         fileObjects[fileNames[idx]] = url;
       });
 
-      console.log(fileObjects);
-      req.files = fileObjects;
+      // console.log(fileObjects);
+      req.body = {
+        ...req.body,
+        ...formInputs,
+        ...fileObjects,
+      };
 
       // Continue if all things pass
       next();
