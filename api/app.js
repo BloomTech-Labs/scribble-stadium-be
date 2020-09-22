@@ -28,7 +28,6 @@ const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const oktaRouter = require('./okta/oktaRouter');
 const dsRouter = require('./dsService/dsRouter');
-const uploadRouter = require('./upload/uploadRouter');
 
 const app = express();
 
@@ -64,7 +63,6 @@ app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use('/register', oktaRouter);
 app.use('/data', dsRouter);
-app.use('/upload', uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
