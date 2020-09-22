@@ -103,7 +103,6 @@ router.post('/', authRequired, fileUploadHandler, async (req, res) => {
   const avatars = req.body.avatars.map((x) => ({
     AvatarURL: x.Location,
   }));
-  console.log(avatars);
   try {
     const IDs = await Avatars.add(avatars);
     res.status(201).json(IDs);
