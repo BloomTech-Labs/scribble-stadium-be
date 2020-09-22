@@ -100,7 +100,7 @@ router.get('/', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, fileUploadHandler, async (req, res) => {
-  const avatars = req.body.files.map((x) => ({
+  const avatars = req.body.avatars.map((x) => ({
     AvatarURL: x.Location,
   }));
   console.log(avatars);
