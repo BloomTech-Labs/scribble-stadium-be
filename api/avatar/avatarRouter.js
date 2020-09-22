@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Avatars = require('./avatarModel');
-const _omit = require('lodash.omit');
-const { avatarValidation } = require('../middleware/avatarValidation');
 const { fileUploadHandler } = require('../middleware/fileUpload');
 
 /**
