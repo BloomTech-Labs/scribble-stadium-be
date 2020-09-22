@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Avatars = require('./avatarModel');
+const _omit = require('lodash.omit');
 const { avatarValidation } = require('../middleware/avatarValidation');
+const { fileUploadHandler } = require('../middleware/fileUpload');
 
 /**
  * Schemas for avatar types.
@@ -99,12 +101,16 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, avatarValidation, async (req, res) => {
-  const avatar = req.body;
+router.post('/', authRequired, fileUploadHandler, async (req, res) => {
+  const avatars = req.body.files.map((x) => ({
+    AvatarURL: x.Location,
+  }));
+  console.log(avatars);
   try {
-    const IDs = await Avatars.add(avatar);
+    const IDs = await Avatars.add(avatars);
     res.status(201).json(IDs);
   } catch ({ message }) {
+    console.log({ message });
     res.status(500).json({ message });
   }
 });

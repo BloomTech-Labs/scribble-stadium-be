@@ -14,8 +14,8 @@ const getAvatars = () => {
  * @param {string} avatar.AvatarURL the URL of the hosted SVG
  * @returns {Promise} promise that resolves to the ID of the new avatar
  */
-const add = (avatar) => {
-  return db('Avatars').insert(avatar).returning('ID');
+const add = (avatars) => {
+  return db('Avatars').insert(avatars).returning('ID');
 };
 
 module.exports = {
