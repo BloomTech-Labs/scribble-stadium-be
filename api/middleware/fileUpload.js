@@ -7,69 +7,84 @@ const fs = require('fs');
 
 const { uploadFile } = require('../../lib/awsBucket');
 
-const fileUploadHandler = (req, res, next) => {
+/**
+ * This middleware is here to handle file upload to our S3 bucket. It reads form data
+ * from the body of the reques, parses it into readable file data, stores that data in
+ * the S3 bucket defined in your ENV variables, and then adds the uploaded file data
+ * as well as any other form data into the body of your request. Each line is commented
+ * to provide a better overview of what is happening line-by-line, as well as the role
+ * that each external library is playing in the process.
+ * @param {Object} req the server request object
+ * @param {Object} req.body should be a JavaScript FormData() instance
+ * @param {Object} res the server response object
+ * @param {Function} next a function that will continue to the next middleware
+ */
+const fileUploadHandler = async (req, res, next) => {
   // Create a new instance of a multiparty form object
   const form = new multiparty.Form();
   // Parse the form data from the request body into multiparty
   form.parse(req, async (error, fields, files) => {
     // Check for basic error cases
     if (error) throw new Error(error);
-    if (files.length === 0) throw new Error('NoFileGiven');
 
     // Iterate over the request body and parse all form data
     try {
-      // Get a list of all uploaded files
+      // Get a list of all form fields that had file uploads
       const fileNames = Object.keys(files);
-      // Iterate over the filenames, and parse them into an array of promises
-      const fileList = fileNames.map(async (f) => {
-        // Get the path out of each file from the multiparty files object
-        const path = files[f][0].path;
-        // Read all of those file paths into a buffer
-        const buffer = fs.readFileSync(path);
-        // Get the type out of the buffer (async)
-        const type = await fileType.fromBuffer(buffer);
-        // Create a timestamp to be used in naming the file for storage
-        const timestamp = Date.now().toString();
-        // Create a name to store the file under
-        const fileName = `bucketFolder/${timestamp}-lg`;
-        // Return a promise that uploads each given file into an s3 bucket and
-        // resolves to an object containing the data for the new upload
-        return uploadFile(buffer, fileName, type);
-      });
 
-      // Use Promise.all() to execute ALL promises that were stored in the fileList
-      const fileURLs = await Promise.all(fileList);
-      // Create a hash table to store the file upload data into
-      const fileObjects = {};
-      // Iterate over all of the uploaded file objects
-      fileURLs.forEach((data, idx) => {
-        // Store them in the hash table with the key being the form field name
-        fileObjects[fileNames[idx]] = data;
-      });
+      // Initiate a hash table to store resolved file upload values
+      const resolvedFiles = {};
 
-      // Read ALL standard form fields into their own object
+      // Check each field, and upload however many files were in each input
+      for await (const f of fileNames) {
+        // Get the path of each file
+        const paths = files[f].map((x) => x.path);
+
+        // Read each file into a buffer
+        const buffers = paths.map((path) => fs.readFileSync(path));
+
+        // Create a list of promises to find each file type and resolve them
+        const typePromises = buffers.map((buffer) =>
+          fileType.fromBuffer(buffer)
+        );
+        const types = await Promise.all(typePromises);
+
+        // Generate unique names for each file
+        const uploadFileNames = paths.map((path) => {
+          const timestamp = Date.now().toString();
+          return `bucketFolder/${timestamp}-lg-${path}`;
+        });
+
+        // Create a list of promises that upload files to the S3 bucket
+        const promiseList = files[f].map((_, i) => {
+          return uploadFile(buffers[i], uploadFileNames[i], types[i]);
+        });
+
+        // Resolve those promises and store them in the hash table with key being the form input value
+        const resolved = await Promise.all(promiseList);
+        resolvedFiles[f] = resolved;
+      }
+
+      // Pull the non-file form inputs into a hash table
       const formInputs = {};
       Object.keys(fields).forEach((x) => {
         formInputs[x] = fields[x][0];
       });
 
-      // Spread all of the file objects and standard field objects into the
-      // req.body to mirror the expected behavior of a standard form upload
+      // Add the resolved file objects and the standard inputs into the request body
       req.body = {
         ...req.body,
         ...formInputs,
-        ...fileObjects,
+        ...resolvedFiles,
       };
 
-      // If everything up to this point was successful, continue to the router
+      // Continue to router
       next();
-    } catch (error) {
-      // There was an error somewhere along the way with the file upload
-      res.status(500).json({ error: 'FileUploadFailed' });
+    } catch (err) {
+      // There was an error with the S3 upload
+      res.status(409).json({ message: 'File upload failed.' });
     }
   });
 };
 
-module.exports = {
-  fileUploadHandler,
-};
+module.exports = fileUploadHandler;
