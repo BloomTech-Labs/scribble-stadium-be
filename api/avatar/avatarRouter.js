@@ -17,12 +17,6 @@ const { avatarValidation } = require('../middleware/avatarValidation');
  *          description: URL pointing to the hosted location of avatar SVG file.
  *      example:
  *        AvatarURL: 'http://www.someurl.com'
- *    PostAvatar:
- *      allOf:
- *        - $ref: '#/components/schemas/Avatar'
- *        - type: object
- *          required:
- *            - AvatarURL
  *    GetAvatar:
  *      allOf:
  *        - type: object
@@ -79,15 +73,16 @@ router.get('/', authRequired, async (req, res) => {
  *      - okta: []
  *    tags:
  *      - Avatars
- *    requestBody:
- *      description: Object to be added to the Avatars table. An array of avatar objects can also be sent.
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/PostAvatar'
+ *    consumes:
+ *      - multipart/form-data
+ *    parameters:
+ *      - in: formData
+ *        name: avatars
+ *        type: file
+ *        description: The avatar file to upload, or an array of avatar files
  *    responses:
  *      201:
- *        description: Returns the ID of the newly created avatar.
+ *        description: Returns the ID(s) of the newly created avatar(s).
  *        content:
  *          application/json:
  *            example: 1
@@ -97,6 +92,8 @@ router.get('/', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      409:
+ *        $ref: '#/components/responses/UploadFailed'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */

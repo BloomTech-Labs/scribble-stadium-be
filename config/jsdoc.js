@@ -95,6 +95,22 @@ module.exports = {
             },
           },
         },
+        UploadFailed: {
+          description: 'Error while uploading to S3 bucket.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: {
+                    type: 'string',
+                    example: 'File upload failed.',
+                  },
+                },
+              },
+            },
+          },
+        },
         EmptySuccess: {
           description: 'Returns an empty body on success.',
           content: {
