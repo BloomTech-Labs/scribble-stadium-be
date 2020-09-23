@@ -7,6 +7,18 @@ const fs = require('fs');
 
 const { uploadFile } = require('../../lib/awsBucket');
 
+/**
+ * This middleware is here to handle file upload to our S3 bucket. It reads form data
+ * from the body of the reques, parses it into readable file data, stores that data in
+ * the S3 bucket defined in your ENV variables, and then adds the uploaded file data
+ * as well as any other form data into the body of your request. Each line is commented
+ * to provide a better overview of what is happening line-by-line, as well as the role
+ * that each external library is playing in the process.
+ * @param {Object} req the server request object
+ * @param {Object} req.body should be a JavaScript FormData() instance
+ * @param {Object} res the server response object
+ * @param {Function} next a function that will continue to the next middleware
+ */
 const fileUploadHandler = async (req, res, next) => {
   // Create a new instance of a multiparty form object
   const form = new multiparty.Form();
