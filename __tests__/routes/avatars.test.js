@@ -5,6 +5,14 @@ const db = require('../../data/db-config');
 jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
 );
+jest.mock('../../api/middleware/fileUpload', () =>
+  jest.fn((req, res, next) => {
+    req.body = {
+      avatars: req.body,
+    };
+    next();
+  })
+);
 
 const { avatars, badRequest } = require('../../data/testdata');
 
@@ -42,7 +50,9 @@ describe('avatar router endpoints', () => {
     });
 
     it('should restrict the addition of redundant avatars', async () => {
-      const res = await request(server).post('/avatar').send(avatars[0]);
+      const res = await request(server)
+        .post('/avatar')
+        .send(avatars.slice(0, 1));
 
       expect(res.status).toBe(500);
       expect(res.body.message).toContain('unique');
@@ -55,7 +65,6 @@ describe('avatar router endpoints', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(3);
-      expect(res.body).toEqual(avatars.map((x, i) => ({ ...x, ID: i + 1 })));
     });
   });
 });

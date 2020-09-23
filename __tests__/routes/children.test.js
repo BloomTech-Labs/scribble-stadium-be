@@ -25,7 +25,7 @@ describe('children router endpoints', () => {
       'TRUNCATE TABLE public."GradeLevels" RESTART IDENTITY CASCADE'
     );
     await db('Parents').insert(parent);
-    await db('Avatars').insert(avatars);
+    await db('Avatars').insert(avatars.map((x) => ({ AvatarURL: x.Location })));
     await db('GradeLevels').insert(gradeLevels);
   });
   afterAll(async () => {

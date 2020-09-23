@@ -75,6 +75,4 @@ const fileUploadHandler = async (req, res, next) => {
   });
 };
 
-module.exports = {
-  fileUploadHandler,
-};
+module.exports = fileUploadHandler;

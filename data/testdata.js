@@ -3,9 +3,9 @@ const faker = require('faker');
 module.exports = {
   // enumerated data types
   avatars: [
-    { AvatarURL: faker.internet.avatar() },
-    { AvatarURL: faker.internet.avatar() },
-    { AvatarURL: faker.internet.avatar() },
+    { Location: faker.internet.avatar() },
+    { Location: faker.internet.avatar() },
+    { Location: faker.internet.avatar() },
   ],
   gradeLevels: [
     { GradeLevel: '3' },

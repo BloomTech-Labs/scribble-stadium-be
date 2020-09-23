@@ -6,7 +6,7 @@ const _has = require('lodash.has');
  * @returns {boolean} simple true or false
  */
 const isValidAvatar = (avatar) => {
-  return _has(avatar, 'AvatarURL');
+  return _has(avatar, 'Location');
 };
 
 /**
@@ -21,18 +21,20 @@ const isValidAvatar = (avatar) => {
  * @param {Function} next a function that will continue to the next middleware
  */
 const avatarValidation = (req, res, next) => {
-  const { body } = req;
-  if (Array.isArray(body)) {
+  const { avatars } = req.body;
+  if (Array.isArray(avatars)) {
     // if request is an array of avatars
-    body.forEach((avatar) => {
+    avatars.forEach((avatar) => {
       // check each avatar and resolve the request to an error if any are invalid
       if (!isValidAvatar(avatar)) {
         return res.status(400).json({ error: 'InvalidAvatar' });
       }
     });
   } else {
-    if (!isValidAvatar(body)) {
+    if (!isValidAvatar(avatars)) {
       return res.status(400).json({ error: 'InvalidAvatar' });
+    } else {
+      req.body.avatars = [req.body.avatars];
     }
   }
   // if it passes all tests, continue to the next middleware
