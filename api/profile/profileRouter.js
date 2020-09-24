@@ -80,7 +80,8 @@ const Parents = require('../parent/parentModel');
  *                - ID: 1
  *                  Name: 'Alison Brie'
  *                  PIN: '00uhjfrwdWAQv10JV4x6'
- *                  AvatarID: 1
+ *                  AvatarURL: 'http://someurl.com'
+ *                  GradeLevel: 3
  *                  ParentID: 1
  *                  type: 'Child'
  *      401:

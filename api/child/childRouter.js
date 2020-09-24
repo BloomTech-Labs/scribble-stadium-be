@@ -31,7 +31,7 @@ const {
  *        PIN: '00uhjfrwdWAQv10JV4x6'
  *        IsDyslexic: false
  *        AvatarURL: 'http://www.someurl.com'
- *        GradeLevelID: '3'
+ *        GradeLevel: '3'
  *    PostChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
