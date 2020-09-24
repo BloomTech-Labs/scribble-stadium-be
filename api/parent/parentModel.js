@@ -67,9 +67,19 @@ const remove = (ID) => {
  */
 const getChildren = (ID) => {
   return db('Parents AS P')
-    .fullOuterJoin('Children AS C', 'P.ID', 'C.ParentID')
+    .join('Children AS C', 'P.ID', 'C.ParentID')
+    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
     .where('C.ParentID', ID)
-    .select(['C.*']);
+    .select([
+      'C.ID',
+      'C.Name',
+      'C.ParentID',
+      'C.PIN',
+      'C.IsDyslexic',
+      'G.GradeLevel',
+      'A.AvatarURL',
+    ]);
 };
 
 /**
