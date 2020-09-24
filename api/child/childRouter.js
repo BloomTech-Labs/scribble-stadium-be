@@ -20,35 +20,33 @@ const {
  *          type: string
  *        IsDyslexic:
  *          type: boolean
- *        AvatarURL:
- *          type: string
- *          description: URL pulled from from foreign Avatars table
- *        GradeLevel:
- *          type: string
- *          description: Grade level pulled from foreign GradeLevels table
  *      example:
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
  *        IsDyslexic: false
- *        AvatarURL: 'http://www.someurl.com'
- *        GradeLevelID: '3'
- *    PostChild:
+ *    PutChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'
  *        - type: object
- *          required:
- *            - Name
- *            - PIN
- *            - IsDyslexic
- *            - AvatarURL
- *            - GradeLevel
- *            - ParentID
  *          properties:
  *            ParentID:
  *              type: integer
  *              description: Foreign key to the Parents table.
  *          example:
  *            ParentID: 1
+ *            AvatarID: 1
+ *            GradeLevelID: 1
+ *    PostChild:
+ *      allOf:
+ *        - $ref: '#/components/schemas/PutChild'
+ *        - type: object
+ *          required:
+ *            - Name
+ *            - PIN
+ *            - IsDyslexic
+ *            - AvatarID
+ *            - GradeLevelID
+ *            - ParentID
  *    GetChild:
  *      allOf:
  *        - type: object
@@ -59,8 +57,16 @@ const {
  *              type: integer
  *              readOnly: true
  *              description: Auto-incrementing primary key
+ *            AvatarURL:
+ *              type: string
+ *              description: URL pulled from from foreign Avatars table
+ *            GradeLevel:
+ *              type: string
+ *              description: Grade level pulled from foreign GradeLevels table
  *          example:
  *            ID: '1'
+ *            AvatarURL: 'http://www.someurl.com'
+ *            GradeLevel: '3'
  *        - $ref: '#/components/schemas/PostChild'
  *
  *  parameters:
@@ -201,7 +207,7 @@ router.post('/', authRequired, childValidation, async (req, res) => {
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Child'
+ *            $ref: '#/components/schemas/PutChild'
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
