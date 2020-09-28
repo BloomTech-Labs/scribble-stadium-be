@@ -2,13 +2,13 @@ exports.up = function (knex) {
   return knex.schema
     .createTable('Submissions', (t) => {
       t.increments('ID');
-      t.integer('ChildId')
+      t.integer('ChildID')
         .notNullable()
         .unsigned()
         .references('Children.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');
-      t.integer('StoryId')
+      t.integer('StoryID')
         .notNullable()
         .unsigned()
         .references('Stories.ID')
@@ -18,7 +18,7 @@ exports.up = function (knex) {
       t.boolean('HasWritten').defaultTo(false);
       t.boolean('HadDrawn').defaultTo(false);
       t.integer('Complexity');
-      t.unique(['ChildId', 'StoryId']);
+      t.unique(['ChildID', 'StoryID']);
     })
     .createTable('Writing', (t) => {
       t.increments('ID');
