@@ -8,7 +8,7 @@ const getOrInitSubmission = async (ChildID, StoryID) => {
     const newSubmission = await db('Submissions')
       .insert({ ChildID, StoryID })
       .returning('*');
-    return newSubmission;
+    return newSubmission[0];
   }
 };
 

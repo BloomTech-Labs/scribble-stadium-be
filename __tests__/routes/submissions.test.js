@@ -11,6 +11,7 @@ const {
   avatars,
   gradeLevels,
   children,
+  story,
 } = require('../../data/testdata');
 
 describe('submission router endpoints', () => {
@@ -22,6 +23,7 @@ describe('submission router endpoints', () => {
     await db('Avatars').insert(avatars.map((x) => ({ AvatarURL: x.Location })));
     await db('GradeLevels').insert(gradeLevels);
     await db('Children').insert(children);
+    await db('Stories').insert(story);
   });
   afterAll(async () => {
     await db.raw('TRUNCATE TABLE public."Drawing" RESTART IDENTITY CASCADE');
@@ -38,8 +40,18 @@ describe('submission router endpoints', () => {
     await db.raw('TRUNCATE TABLE public."Parents" RESTART IDENTITY CASCADE');
   });
   describe('GET /submission', () => {
-    it('runs', () => {
-      expect(25).toBe(25);
+    it('creates an initial state when none exists', async () => {
+      const res = await request(server).get('/submission?childId=1&storyId=1');
+
+      expect(res.body).toEqual({
+        ID: 1,
+        ChildID: 1,
+        StoryID: 1,
+        HasRead: false,
+        HasWritten: false,
+        HasDrawn: false,
+        Complexity: null,
+      });
     });
   });
 });
