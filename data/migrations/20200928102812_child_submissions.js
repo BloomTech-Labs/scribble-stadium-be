@@ -16,7 +16,7 @@ exports.up = function (knex) {
         .onDelete('RESTRICT');
       t.boolean('HasRead').defaultTo(false);
       t.boolean('HasWritten').defaultTo(false);
-      t.boolean('HadDrawn').defaultTo(false);
+      t.boolean('HasDrawn').defaultTo(false);
       t.integer('Complexity');
       t.unique(['ChildID', 'StoryID']);
     })
