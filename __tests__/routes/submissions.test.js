@@ -50,25 +50,39 @@ describe('submission router endpoints', () => {
       expect(res.body).toEqual(submission);
     });
 
+    it('should pass back a 400 if IDs are not given', async () => {
+      const res = await request(server).get('/submission');
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Missing parameters.');
+    });
+
+    it('should pass back a 400 if one ID is missing', async () => {
+      const res = await request(server).get('/submission?childId=1');
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Missing parameters.');
+    });
+
     it('should restrict creation of submission with invalid IDs', async () => {
       const res = await request(server).get('/submission?childId=3&storyId=2');
 
-      expect(res.status).toBe(500);
-      expect(res.body).toHaveProperty('message');
-      expect(res.body.message).toContain('violates foreign key constraint');
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty('error');
+      expect(res.body.error).toBe('InvalidID');
     });
   });
 
-  describe('POST /submit/read', () => {
+  describe('PUT /submit/read/:id', () => {
     it('should return a 204 on success', async () => {
-      const res = await request(server).post('/submit/read/1');
+      const res = await request(server).put('/submit/read/1');
 
       expect(res.status).toBe(204);
       expect(res.body).toEqual({});
     });
 
     it('should return a 404 on invalid submission ID', async () => {
-      const res = await request(server).post('/submit/read/2');
+      const res = await request(server).put('/submit/read/2');
 
       expect(res.status).toBe(404);
       expect(res.body.error).toBe('SubmissionNotFound');
