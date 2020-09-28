@@ -49,4 +49,13 @@ module.exports = {
       "Draw your favorite background image from Jeff and the Dean's karaoke session.",
   },
   badRequest: { bad: 'field' },
+  submission: {
+    ID: 1,
+    ChildID: 1,
+    StoryID: 1,
+    HasRead: false,
+    HasWritten: false,
+    HasDrawn: false,
+    Complexity: null,
+  },
 };

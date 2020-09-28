@@ -12,9 +12,18 @@ router.get('/', authRequired, async (req, res) => {
   }
 });
 
-// router.post('/read', authRequired, async (req, res) => {
-//   const { SubmissionID } = req.body;
-//   await Submissions.markAsRead()
-// });
+router.post('/read/:ID', authRequired, async (req, res) => {
+  const { ID } = req.params;
+  try {
+    const count = await Submissions.markAsRead(ID);
+    if (count > 0) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: 'SubmissionNotFound' });
+    }
+  } catch ({ message }) {
+    res.status(500).json({ message });
+  }
+});
 
 module.exports = router;

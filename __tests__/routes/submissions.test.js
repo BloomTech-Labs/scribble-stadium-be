@@ -12,6 +12,7 @@ const {
   gradeLevels,
   children,
   story,
+  submission,
 } = require('../../data/testdata');
 
 describe('submission router endpoints', () => {
@@ -41,16 +42,47 @@ describe('submission router endpoints', () => {
   });
   describe('GET /submission', () => {
     it('creates an initial state when none exists', async () => {
+      const res = await request(server).get(
+        `/submission?childId=${submission.ChildID}&storyId=${submission.StoryID}`
+      );
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(submission);
+    });
+
+    it('should restrict creation of submission with invalid IDs', async () => {
+      const res = await request(server).get('/submission?childId=3&storyId=2');
+
+      expect(res.status).toBe(500);
+      expect(res.body).toHaveProperty('message');
+      expect(res.body.message).toContain('violates foreign key constraint');
+    });
+  });
+
+  describe('POST /submit/read', () => {
+    it('should return a 204 on success', async () => {
+      const res = await request(server).post('/submit/read/1');
+
+      expect(res.status).toBe(204);
+      expect(res.body).toEqual({});
+    });
+
+    it('should return a 404 on invalid submission ID', async () => {
+      const res = await request(server).post('/submit/read/2');
+
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('SubmissionNotFound');
+    });
+  });
+
+  describe('GET /submission', () => {
+    it('should show the updates to the submission', async () => {
       const res = await request(server).get('/submission?childId=1&storyId=1');
 
+      expect(res.status).toBe(200);
       expect(res.body).toEqual({
-        ID: 1,
-        ChildID: 1,
-        StoryID: 1,
-        HasRead: false,
-        HasWritten: false,
-        HasDrawn: false,
-        Complexity: null,
+        ...submission,
+        HasRead: true,
       });
     });
   });
