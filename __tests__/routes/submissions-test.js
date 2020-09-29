@@ -1,7 +1,7 @@
 const request = require('supertest');
 const server = require('../../api/app');
 
-const { submission } = require('../../data/testdata');
+const { submission, pages, drawing } = require('../../data/testdata');
 
 module.exports = () => {
   describe('submission router endpoints', () => {
@@ -29,7 +29,7 @@ module.exports = () => {
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('should restrict creation of submission with invalid IDs', async () => {
+      it('should return a 404 on submission with invalid IDs', async () => {
         const res = await request(server).get(
           '/submission?childId=3&storyId=2'
         );
@@ -46,6 +46,7 @@ module.exports = () => {
 
         expect(res.status).toBe(204);
         expect(res.body).toEqual({});
+        submission.HasRead = true;
       });
 
       it('should return a 404 on invalid submission ID', async () => {
@@ -63,10 +64,98 @@ module.exports = () => {
         );
 
         expect(res.status).toBe(200);
+        expect(res.body).toEqual(submission);
+      });
+    });
+
+    describe('POST /submit/write/:id', () => {
+      it('successfully posts written pages for a user', async () => {
+        const res = await request(server)
+          .post('/submit/write/1')
+          .send({ pages: pages[0] });
+
+        expect(res.status).toBe(201);
+        expect(res.body).toEqual(
+          pages[0].map((x, i) => ({
+            ID: i + 1,
+            URL: x.Location,
+            PageNum: i + 1,
+          }))
+        );
+        submission.HasWritten = true;
+      });
+
+      it('should restrict a second written submission from a user', async () => {
+        const res = await request(server)
+          .post('/submit/write/1')
+          .send({ pages: pages[1] });
+
+        expect(res.status).toBe(403);
+        expect(res.body.error).toBe('Only one submission allowed.');
+      });
+
+      it('should pass a 404 on invalid submission ID', async () => {
+        const res = await request(server)
+          .post('/submit/write/3')
+          .send({ pages: pages[1] });
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('InvalidSubmissionID');
+      });
+    });
+
+    describe('GET /submission', () => {
+      it('should show the updates to the submission', async () => {
+        const res = await request(server).get(
+          '/submission?childId=1&storyId=1'
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(submission);
+      });
+    });
+
+    describe('POST /submit/draw/:id', () => {
+      it('successfully posts a drawing for a user', async () => {
+        const res = await request(server)
+          .post('/submit/draw/1')
+          .send({ drawing: [drawing[0]] });
+
+        expect(res.status).toBe(201);
         expect(res.body).toEqual({
-          ...submission,
-          HasRead: true,
+          ID: 1,
+          URL: drawing[0].Location,
         });
+        submission.HasDrawn = true;
+      });
+
+      it('should restrict a second written submission from a user', async () => {
+        const res = await request(server)
+          .post('/submit/draw/1')
+          .send({ drawing: [drawing[1]] });
+
+        expect(res.status).toBe(403);
+        expect(res.body.error).toBe('Only one submission allowed.');
+      });
+
+      it('should pass a 404 on invalid submission ID', async () => {
+        const res = await request(server)
+          .post('/submit/draw/3')
+          .send({ drawing: [drawing[1]] });
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('InvalidSubmissionID');
+      });
+    });
+
+    describe('GET /submission', () => {
+      it('should show the updates to the submission', async () => {
+        const res = await request(server).get(
+          '/submission?childId=1&storyId=1'
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(submission);
       });
     });
   });

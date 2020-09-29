@@ -3,9 +3,25 @@ const faker = require('faker');
 module.exports = {
   // enumerated data types
   avatars: [
-    { Location: faker.internet.avatar() },
-    { Location: faker.internet.avatar() },
-    { Location: faker.internet.avatar() },
+    { Location: faker.image.abstract() },
+    { Location: faker.image.animals() },
+    { Location: faker.image.business() },
+  ],
+  pages: [
+    [
+      { Location: faker.image.abstract() },
+      { Location: faker.image.animals() },
+      { Location: faker.image.business() },
+    ],
+    [
+      { Location: faker.image.cats() },
+      { Location: faker.image.city() },
+      { Location: faker.image.fashion() },
+    ],
+  ],
+  drawing: [
+    { Location: faker.image.abstract() },
+    { Location: faker.image.animals() },
   ],
   gradeLevels: [
     { GradeLevel: '3' },

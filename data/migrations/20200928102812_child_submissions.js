@@ -38,6 +38,7 @@ exports.up = function (knex) {
       t.integer('SubmissionID')
         .notNullable()
         .unsigned()
+        .unique()
         .references('Submissions.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');

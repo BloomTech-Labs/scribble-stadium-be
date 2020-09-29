@@ -7,7 +7,9 @@ module.exports = () => {
   describe('avatar router endpoints', () => {
     describe('POST /avatar', () => {
       it('should successfully add a single avatar to the table', async () => {
-        const res = await request(server).post('/avatar').send(avatars[0]);
+        const res = await request(server)
+          .post('/avatar')
+          .send({ avatars: avatars[0] });
 
         expect(res.status).toBe(201);
         expect(res.body).toEqual([1]);
@@ -16,7 +18,7 @@ module.exports = () => {
       it('should successfully add two avatars to the database', async () => {
         const res = await request(server)
           .post('/avatar')
-          .send(avatars.slice(1, 3));
+          .send({ avatars: avatars.slice(1, 3) });
 
         expect(res.status).toBe(201);
         expect(res.body).toEqual([2, 3]);
@@ -32,7 +34,7 @@ module.exports = () => {
       it('should restrict the addition of redundant avatars', async () => {
         const res = await request(server)
           .post('/avatar')
-          .send(avatars.slice(0, 1));
+          .send({ avatars: avatars.slice(0, 1) });
 
         expect(res.status).toBe(500);
         expect(res.body.message).toContain('unique');

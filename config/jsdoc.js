@@ -174,6 +174,22 @@ module.exports = {
             },
           },
         },
+        OneSubmission: {
+          description: 'Error: Can only submit once per story.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'Only one submission allowed.',
+                  },
+                },
+              },
+            },
+          },
+        },
         MissingParameters: {
           description: 'Error: Missing parameters.',
           content: {

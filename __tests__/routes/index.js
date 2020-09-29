@@ -16,12 +16,7 @@ jest.mock('../../api/middleware/authRequired', () =>
   })
 );
 jest.mock('../../api/middleware/fileUpload', () =>
-  jest.fn((req, res, next) => {
-    req.body = {
-      avatars: req.body,
-    };
-    next();
-  })
+  jest.fn((req, res, next) => next())
 );
 
 const TestStorySquadAPI = () => {

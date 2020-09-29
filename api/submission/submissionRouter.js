@@ -105,7 +105,7 @@ const fileUploadHandler = require('../middleware/fileUpload');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', async (req, res) => {
+router.get('/', authRequired, async (req, res) => {
   const { childId, storyId } = req.query;
 
   // Check to make sure both IDs are given
@@ -146,7 +146,7 @@ router.get('/', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', async (req, res) => {
+router.put('/read/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
     const count = await Submissions.markAsRead(id);
@@ -186,6 +186,8 @@ router.put('/read/:id', async (req, res) => {
  *                $ref: '#/components/schemas/WrittenSubmission'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      403:
+ *        $ref: '#/components/responses/OneSubmission'
  *      404:
  *        $ref: '#/components/responses/NotFound'
  *      409:
@@ -193,7 +195,7 @@ router.put('/read/:id', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', fileUploadHandler, async (req, res) => {
+router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const pages = req.body.pages.map((x, i) => ({
     URL: x.Location,
@@ -212,6 +214,8 @@ router.post('/write/:id', fileUploadHandler, async (req, res) => {
   } catch ({ message }) {
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
+    } else if (message.includes('violates unique constraint')) {
+      res.status(403).json({ error: 'Only one submission allowed.' });
     } else {
       res.status(500).json({ message });
     }
@@ -249,7 +253,7 @@ router.post('/write/:id', fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const drawing = req.body.drawing.map((x) => ({
     URL: x.Location,
@@ -267,6 +271,8 @@ router.post('/draw/:id', fileUploadHandler, async (req, res) => {
   } catch ({ message }) {
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
+    } else if (message.includes('violates unique constraint')) {
+      res.status(403).json({ error: 'Only one submission allowed.' });
     } else {
       res.status(500).json({ message });
     }
