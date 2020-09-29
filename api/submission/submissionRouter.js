@@ -66,7 +66,7 @@ const fileUploadHandler = require('../middleware/fileUpload');
 
 /**
  * @swagger
- * /submission:
+ * /submission?childId={childId}&storyId={storyId}:
  *  get:
  *    summary: Queries the database for information for the given submission.
  *    description: Attempts to query the database to find a submission entry at the intersection
@@ -105,7 +105,7 @@ const fileUploadHandler = require('../middleware/fileUpload');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
+router.get('/', async (req, res) => {
   const { childId, storyId } = req.query;
 
   // Check to make sure both IDs are given
@@ -146,7 +146,7 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', authRequired, async (req, res) => {
+router.put('/read/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const count = await Submissions.markAsRead(id);
@@ -193,7 +193,7 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/write/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const pages = req.body.pages.map((x, i) => ({
     URL: x.Location,
@@ -239,9 +239,7 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
  *        content:
  *          application/json:
  *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/DrawnSubmission'
+ *              $ref: '#/components/schemas/DrawnSubmission'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
@@ -251,7 +249,7 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const drawing = req.body.drawing.map((x) => ({
     URL: x.Location,
