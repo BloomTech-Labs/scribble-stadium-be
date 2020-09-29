@@ -18,6 +18,7 @@ module.exports = {
     connection: process.env.TEST_DATABASE_URL,
     migrations: { directory: '../data/migrations' },
     seeds: { directory: '../data/seeds' },
+    pool: { min: 0, max: 5 },
   },
 
   ci: {
@@ -25,6 +26,7 @@ module.exports = {
     connection: process.env.CI_DATABASE_URL,
     migrations: { directory: '../data/migrations' },
     seeds: { directory: '../data/seeds' },
+    pool: { min: 0, max: 5 },
   },
 
   production: {
