@@ -16,6 +16,10 @@ module.exports = {
         description: 'API status test.',
       },
       {
+        name: 'Submissions',
+        description: 'Operations related to child mission status.',
+      },
+      {
         name: 'Parents',
         description: 'Operations for parent profiles.',
       },
@@ -95,6 +99,22 @@ module.exports = {
             },
           },
         },
+        InvalidID: {
+          description: 'Error: Incorrect ID(s) passed in.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'InvalidID.',
+                  },
+                },
+              },
+            },
+          },
+        },
         UploadFailed: {
           description: 'Error while uploading to S3 bucket.',
           content: {
@@ -148,6 +168,38 @@ module.exports = {
                   error: {
                     type: 'string',
                     example: 'InvalidData',
+                  },
+                },
+              },
+            },
+          },
+        },
+        OneSubmission: {
+          description: 'Error: Can only submit once per story.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'Only one submission allowed.',
+                  },
+                },
+              },
+            },
+          },
+        },
+        MissingParameters: {
+          description: 'Error: Missing parameters.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'Missing parameters.',
                   },
                 },
               },

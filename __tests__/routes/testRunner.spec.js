@@ -1,0 +1,3 @@
+const TestRunner = require('./');
+
+TestRunner();
