@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
+const fileUploadHandler = require('../middleware/fileUpload');
 
 /**
  * Schemas for submission data types.
@@ -32,6 +33,25 @@ const authRequired = require('../middleware/authRequired');
  *        HasWritten: false
  *        HasDrawn: false
  *        Complexity: null
+ *    DrawnSubmission:
+ *      type: object
+ *      properties:
+ *        ID:
+ *          type: integer
+ *        URL:
+ *          type: string
+ *      example:
+ *        ID: 1
+ *        URL: http://someurl.com
+ *    WrittenSubmission:
+ *      allOf:
+ *        - $ref: '#/components/schemas/DrawnSubmission'
+ *        - type: object
+ *          properties:
+ *            PageNum:
+ *              type: integer
+ *          example:
+ *            PageNum: 1
  *
  *  parameters:
  *    submissionId:
@@ -137,6 +157,121 @@ router.put('/read/:id', authRequired, async (req, res) => {
     }
   } catch ({ message }) {
     res.status(500).json({ message });
+  }
+});
+
+/**
+ * @swagger
+ * /submit/write/{id}:
+ *  post:
+ *    summary: Attempts to upload pages for the submission with the given ID
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Submissions
+ *    parameters:
+ *      - $ref: '#/components/parameters/submissionId'
+ *      - in: formData
+ *        name: pages
+ *        type: file
+ *        description: Image of the written page(s) to upload
+ *    responses:
+ *      201:
+ *        description: Returns an array of all uploaded pages.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/WrittenSubmission'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      409:
+ *        $ref: '#/components/responses/UploadFailed'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
+  const { id } = req.params;
+  const pages = req.body.pages.map((x, i) => ({
+    URL: x.Location,
+    PageNum: i + 1,
+    SubmissionID: id,
+  }));
+  try {
+    // Upload the files AND mark them as written correctly at the same time
+    const [submitted] = await Promise.all([
+      Submissions.submitWriting(pages),
+      Submissions.markAsWritten(id),
+    ]);
+    // SEND TO DS FOR METRICS!!
+
+    res.status(201).json(submitted);
+  } catch ({ message }) {
+    if (message.includes('violates foreign key constraint')) {
+      res.status(404).json({ error: 'InvalidSubmissionID' });
+    } else {
+      res.status(500).json({ message });
+    }
+  }
+});
+
+/**
+ * @swagger
+ * /submit/draw/{id}:
+ *  post:
+ *    summary: Attempts to upload a drawing for the submission with the given ID
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Submissions
+ *    parameters:
+ *      - $ref: '#/components/parameters/submissionId'
+ *      - in: formData
+ *        name: drawing
+ *        type: file
+ *        description: Image of the drawing to upload
+ *    responses:
+ *      201:
+ *        description: Returns the newly uploaded drawing.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/DrawnSubmission'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      409:
+ *        $ref: '#/components/responses/UploadFailed'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
+  const { id } = req.params;
+  const drawing = req.body.drawing.map((x) => ({
+    URL: x.Location,
+    SubmissionID: id,
+  }));
+  try {
+    // Upload the files AND mark them as written correctly at the same time
+    const [[submitted]] = await Promise.all([
+      Submissions.submitDrawing(drawing),
+      Submissions.markAsDrawn(id),
+    ]);
+    // SEND TO DS FOR METRICS!!
+
+    res.status(201).json(submitted);
+  } catch ({ message }) {
+    if (message.includes('violates foreign key constraint')) {
+      res.status(404).json({ error: 'InvalidSubmissionID' });
+    } else {
+      res.status(500).json({ message });
+    }
   }
 });
 
