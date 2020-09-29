@@ -13,9 +13,9 @@
     "knex": "npx knex --knexfile config/knexfile.js",
     "knex:test": "cross-env NODE_ENV=test npx knex --knexfile config/knexfile.js",
     "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile config/knexfile.js",
-    "test": "cross-env NODE_ENV=test npx jest --watch --runInBand",
-    "tests": "cross-env NODE_ENV=test npx jest --forceExit --runInBand",
-    "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit"
+    "test": "cross-env NODE_ENV=test npx jest --watch --runInBand -- testRunner",
+    "tests": "cross-env NODE_ENV=test npx jest --forceExit --runInBand -- testRunner",
+    "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit -- testRunner"
   },
   "jest": {
     "testEnvironment": "node",
