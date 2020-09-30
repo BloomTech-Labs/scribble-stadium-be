@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // multiparty does the heavy lifting for up parsing form data from the request
 const multiparty = require('multiparty');
 // file-type reads the file type from any files uploaded into the form

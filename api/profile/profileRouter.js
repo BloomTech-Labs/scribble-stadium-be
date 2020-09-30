@@ -95,6 +95,7 @@ router.get('/', authRequired, async (req, res) => {
   const { Email } = req.profile;
   try {
     const parent = await Parents.getByEmail(Email);
+    /* istanbul ignore next */
     if (parent.length === 0) {
       return res.status(404).json({ error: 'ParentNotFound' });
     }
