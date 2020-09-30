@@ -67,7 +67,10 @@ const fileUploadHandler = async (req, res, next) => {
 
         // Resolve those promises and store them in the hash table with key being the form input value
         const resolved = await Promise.all(promiseList);
-        resolvedFiles[f] = resolved;
+        resolvedFiles[f] = resolved.map((x, i) => ({
+          ...x,
+          Checksum: checksums[f][i],
+        }));
       }
 
       // Pull the non-file form inputs into a hash table
@@ -81,7 +84,6 @@ const fileUploadHandler = async (req, res, next) => {
         ...req.body,
         ...formInputs,
         ...resolvedFiles,
-        checksums,
       };
 
       // Continue to router
