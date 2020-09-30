@@ -10,11 +10,11 @@ const {
 module.exports = () => {
   describe('story router endpoints', () => {
     describe('GET /stories', () => {
-      it('should return a 200 and empty array on success', async () => {
+      it('should return a 200 and a story ID', async () => {
         const res = await request(server).get('/stories');
 
         expect(res.status).toBe(200);
-        expect(res.body.length).toBe(0);
+        expect(res.body).toBe(1);
       });
     });
 

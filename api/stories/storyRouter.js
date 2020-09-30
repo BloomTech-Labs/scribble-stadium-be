@@ -68,32 +68,24 @@ const {
  * @swagger
  * /stories:
  *  get:
- *    summary: Attempts to query the database for a list of all stories.
+ *    summary: Returns the current week's story ID.
  *    security:
  *      - okta: []
  *    tags:
  *      - Stories
  *    responses:
  *      200:
- *        description: Returns an array of all stories in the database.
+ *        description: Returns the ID of the current week's story.
  *        content:
  *          application/json:
  *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/GetStory'
+ *              type: integer
+ *              example: 1
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
-  try {
-    const stories = await Stories.getAll();
-    res.status(200).json(stories);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  res.status(200).json(1);
 });
 
 /**
