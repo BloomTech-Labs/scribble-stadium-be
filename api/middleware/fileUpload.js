@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // multiparty does the heavy lifting for up parsing form data from the request
 const multiparty = require('multiparty');
 // file-type reads the file type from any files uploaded into the form
@@ -5,7 +6,7 @@ const fileType = require('file-type');
 // fs reads the file data out of the body into a "buffer" stream
 const fs = require('fs');
 
-const { uploadFile } = require('../../lib/awsBucket');
+const { uploadFile, generateChecksum } = require('../../lib/uploadHelpers');
 
 /**
  * This middleware is here to handle file upload to our S3 bucket. It reads form data
@@ -24,9 +25,6 @@ const fileUploadHandler = async (req, res, next) => {
   const form = new multiparty.Form();
   // Parse the form data from the request body into multiparty
   form.parse(req, async (error, fields, files) => {
-    // Check for basic error cases
-    if (error) throw new Error(error);
-
     // Iterate over the request body and parse all form data
     try {
       // Get a list of all form fields that had file uploads
@@ -34,6 +32,7 @@ const fileUploadHandler = async (req, res, next) => {
 
       // Initiate a hash table to store resolved file upload values
       const resolvedFiles = {};
+      const checksums = {};
 
       // Check each field, and upload however many files were in each input
       for await (const f of fileNames) {
@@ -43,6 +42,13 @@ const fileUploadHandler = async (req, res, next) => {
         // Read each file into a buffer
         const buffers = paths.map((path) => fs.readFileSync(path));
 
+        buffers.forEach((s) => {
+          if (!checksums[f]) {
+            checksums[f] = [];
+          }
+          checksums[f].push(generateChecksum(s));
+        });
+
         // Create a list of promises to find each file type and resolve them
         const typePromises = buffers.map((buffer) =>
           fileType.fromBuffer(buffer)
@@ -50,9 +56,9 @@ const fileUploadHandler = async (req, res, next) => {
         const types = await Promise.all(typePromises);
 
         // Generate unique names for each file
-        const uploadFileNames = paths.map((path) => {
+        const uploadFileNames = paths.map((path, i) => {
           const timestamp = Date.now().toString();
-          return `bucketFolder/${timestamp}-lg-${path}`;
+          return `bucketFolder/${timestamp}-lg-${path}-${i + 1}`;
         });
 
         // Create a list of promises that upload files to the S3 bucket
@@ -62,7 +68,10 @@ const fileUploadHandler = async (req, res, next) => {
 
         // Resolve those promises and store them in the hash table with key being the form input value
         const resolved = await Promise.all(promiseList);
-        resolvedFiles[f] = resolved;
+        resolvedFiles[f] = resolved.map((x, i) => ({
+          ...x,
+          Checksum: checksums[f][i],
+        }));
       }
 
       // Pull the non-file form inputs into a hash table
@@ -81,6 +90,7 @@ const fileUploadHandler = async (req, res, next) => {
       // Continue to router
       next();
     } catch (err) {
+      console.log(err);
       // There was an error with the S3 upload
       res.status(409).json({ message: 'File upload failed.' });
     }

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const createError = require('http-errors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 const oktaVerifierConfig = require('../../config/okta');

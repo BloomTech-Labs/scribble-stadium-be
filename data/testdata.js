@@ -9,19 +9,43 @@ module.exports = {
   ],
   pages: [
     [
-      { Location: faker.image.abstract() },
-      { Location: faker.image.animals() },
-      { Location: faker.image.business() },
+      {
+        Location: faker.image.abstract(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+      {
+        Location: faker.image.animals(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+      {
+        Location: faker.image.business(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
     ],
     [
-      { Location: faker.image.cats() },
-      { Location: faker.image.city() },
-      { Location: faker.image.fashion() },
+      {
+        Location: faker.image.cats(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+      {
+        Location: faker.image.city(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+      {
+        Location: faker.image.fashion(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
     ],
   ],
   drawing: [
-    { Location: faker.image.abstract() },
-    { Location: faker.image.animals() },
+    {
+      Location: faker.image.abstract(),
+      Checksum: faker.random.alphaNumeric(20),
+    },
+    {
+      Location: faker.image.animals(),
+      Checksum: faker.random.alphaNumeric(20),
+    },
   ],
   gradeLevels: [
     { GradeLevel: '3' },

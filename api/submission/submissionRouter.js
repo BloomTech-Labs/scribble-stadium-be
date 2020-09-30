@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
+const _omit = require('lodash.omit');
 
 /**
  * Schemas for submission data types.
@@ -201,11 +202,12 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
     URL: x.Location,
     PageNum: i + 1,
     SubmissionID: id,
+    checksum: x.Checksum,
   }));
   try {
     // Upload the files AND mark them as written correctly at the same time
     const [submitted] = await Promise.all([
-      Submissions.submitWriting(pages),
+      Submissions.submitWriting(pages.map((x) => _omit(x, 'checksum'))),
       Submissions.markAsWritten(id),
     ]);
     // SEND TO DS FOR METRICS!!
@@ -258,11 +260,12 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   const drawing = req.body.drawing.map((x) => ({
     URL: x.Location,
     SubmissionID: id,
+    checksum: x.Checksum,
   }));
   try {
     // Upload the files AND mark them as written correctly at the same time
     const [[submitted]] = await Promise.all([
-      Submissions.submitDrawing(drawing),
+      Submissions.submitDrawing(drawing.map((x) => _omit(x, 'checksum'))),
       Submissions.markAsDrawn(id),
     ]);
     // SEND TO DS FOR METRICS!!

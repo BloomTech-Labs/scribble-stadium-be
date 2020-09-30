@@ -14,18 +14,22 @@
     "knex:test": "cross-env NODE_ENV=test npx knex --knexfile config/knexfile.js",
     "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile config/knexfile.js",
     "test": "cross-env NODE_ENV=test npx jest --watch --runInBand -- testRunner",
-    "tests": "cross-env NODE_ENV=test npx jest --forceExit --runInBand -- testRunner",
+    "tests": "cross-env NODE_ENV=test npx jest --forceExit --coverage --runInBand -- testRunner",
     "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit -- testRunner"
   },
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "**/*.js",
+      "!server.js",
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/__tests__/**",
       "!**/coverage/**",
-      "!**/apidoc/**"
+      "!**/apidoc/**",
+      "!**/data/**",
+      "!**/api/dsService/**",
+      "!**/api/okta/**"
     ]
   },
   "nodemonConfig": {
@@ -49,6 +53,7 @@
     "bluebird": "^3.7.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",

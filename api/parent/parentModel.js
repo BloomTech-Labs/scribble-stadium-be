@@ -92,6 +92,7 @@ const getChildren = (ID) => {
  * @param {string} parent.PIN hashed string of parent's 4-digit PIN
  * @returns {Object} returns a parent object
  */
+/* istanbul ignore next */
 const findOrCreate = async (parent) => {
   const foundParent = await getByEmail(parent.Email).then((res) => res);
   if (foundParent.length > 0) {
