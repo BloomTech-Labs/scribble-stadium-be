@@ -3,10 +3,8 @@ const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
 const _omit = require('lodash.omit');
-const {
-  submitDrawingToDS,
-  submitWritingToDS,
-} = require('../../lib/dsRequests');
+
+const emitter = require('../../lib/eventDispatch');
 
 /**
  * Schemas for submission data types.
@@ -41,13 +39,14 @@ const {
  *    DrawnSubmission:
  *      type: object
  *      properties:
- *        ID:
- *          type: integer
  *        URL:
  *          type: string
+ *        checksum:
+ *          type: string
  *      example:
- *        ID: 1
  *        URL: http://someurl.com
+ *        checksum: '25ef9314704f5f68b7e04513c1ca13c9146328ee14a38e1d7c99789ab11fae31e1c0238425d58581b3ac4941884cd389b7bea3f8e658f533adc7cf934bb130f8'
+ *
  *    WrittenSubmission:
  *      allOf:
  *        - $ref: '#/components/schemas/DrawnSubmission'
@@ -110,7 +109,7 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
+router.get('/', async (req, res) => {
   const { childId, storyId } = req.query;
 
   // Check to make sure both IDs are given
@@ -151,7 +150,7 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', authRequired, async (req, res) => {
+router.put('/read/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const count = await Submissions.markAsRead(id);
@@ -200,7 +199,7 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/write/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const { storyId } = req.body;
 
@@ -212,14 +211,17 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
   }));
 
   try {
-    // Upload the files AND mark them as written correctly at the same time
-    const [submitted] = await Promise.all([
-      Submissions.submitWriting(pages.map((x) => _omit(x, 'checksum'))),
-      submitWritingToDS(storyId, id, pages),
-      Submissions.markAsWritten(id),
-    ]);
+    // Run transaction to update the database
+    await Submissions.submitWritingTransaction(
+      id,
+      pages.map((x) => _omit(x, 'checksum'))
+    );
 
-    res.status(201).json(submitted);
+    // Dispatch the upload event to Data Science
+    emitter.emit('writing_sub', storyId, pages);
+
+    // Return the pages object back to the client
+    res.status(201).json(pages);
   } catch ({ message }) {
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
@@ -262,23 +264,23 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
-  const drawing = req.body.drawing.map((x) => ({
-    URL: x.Location,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  }));
-  try {
-    // Upload the files AND mark them as written correctly at the same time
-    const [[submitted]] = await Promise.all([
-      Submissions.submitDrawing(drawing.map((x) => _omit(x, 'checksum'))),
-      submitDrawingToDS(drawing),
-      Submissions.markAsDrawn(id),
-    ]);
-    // SEND TO DS FOR METRICS!!
 
-    res.status(201).json(submitted);
+  const drawing = {
+    URL: req.body.drawing[0].Location,
+    SubmissionID: id,
+    checksum: req.body.drawing[0].Checksum,
+  };
+
+  try {
+    await Submissions.submitDrawingTransaction(id, _omit(drawing, 'checksum'));
+
+    // Dispatch the upload event to Data Science
+    emitter.emit('drawing_sub');
+
+    // Return the drawing object w/ checksum to the client
+    res.status(201).json(drawing);
   } catch ({ message }) {
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
