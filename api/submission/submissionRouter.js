@@ -3,6 +3,16 @@ const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
 
+const throwSubmissionError = (res, message) => {
+  if (message.includes('violates foreign key constraint')) {
+    res.status(404).json({ error: 'InvalidSubmissionID' });
+  } else if (message.includes('violates unique constraint')) {
+    res.status(403).json({ error: 'Only one submission allowed.' });
+  } else {
+    res.status(500).json({ message });
+  }
+};
+
 /**
  * Schemas for submission data types.
  * @swagger
@@ -211,19 +221,10 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
     // Run transaction to update the database
     await Submissions.submitWritingTransaction(storyId, id, pages);
 
-    // Dispatch the upload event to Data Science
-    // dispatchWritingSub(storyId, pages);
-
     // Return the pages object back to the client
     res.status(201).json(pages);
   } catch ({ message }) {
-    if (message.includes('violates foreign key constraint')) {
-      res.status(404).json({ error: 'InvalidSubmissionID' });
-    } else if (message.includes('violates unique constraint')) {
-      res.status(403).json({ error: 'Only one submission allowed.' });
-    } else {
-      res.status(500).json({ message });
-    }
+    throwSubmissionError(res, message);
   }
 });
 
@@ -270,19 +271,10 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   try {
     await Submissions.submitDrawingTransaction(id, drawing);
 
-    // Dispatch the upload event to Data Science
-    // dispatchDrawingSub(drawing);
-
     // Return the drawing object w/ checksum to the client
     res.status(201).json(drawing);
   } catch ({ message }) {
-    if (message.includes('violates foreign key constraint')) {
-      res.status(404).json({ error: 'InvalidSubmissionID' });
-    } else if (message.includes('violates unique constraint')) {
-      res.status(403).json({ error: 'Only one submission allowed.' });
-    } else {
-      res.status(500).json({ message });
-    }
+    throwSubmissionError(res, message);
   }
 });
 
