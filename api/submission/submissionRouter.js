@@ -2,7 +2,6 @@ const router = require('express').Router();
 const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
-const _omit = require('lodash.omit');
 
 const {
   dispatchWritingSub,
@@ -112,7 +111,7 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
+router.get('/', async (req, res) => {
   const { childId, storyId } = req.query;
 
   // Check to make sure both IDs are given
@@ -153,7 +152,7 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', authRequired, async (req, res) => {
+router.put('/read/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const count = await Submissions.markAsRead(id);
@@ -202,7 +201,7 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/write/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const { storyId } = req.body;
 
@@ -215,17 +214,15 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
 
   try {
     // Run transaction to update the database
-    await Submissions.submitWritingTransaction(
-      id,
-      pages.map((x) => _omit(x, 'checksum'))
-    );
+    await Submissions.submitWritingTransaction(storyId, id, pages);
 
     // Dispatch the upload event to Data Science
-    dispatchWritingSub(storyId, pages);
+    // dispatchWritingSub(storyId, pages);
 
     // Return the pages object back to the client
     res.status(201).json(pages);
   } catch ({ message }) {
+    console.log(message);
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {
@@ -267,7 +264,7 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', fileUploadHandler, async (req, res) => {
   const { id } = req.params;
 
   const drawing = {
@@ -277,14 +274,15 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   };
 
   try {
-    await Submissions.submitDrawingTransaction(id, _omit(drawing, 'checksum'));
+    await Submissions.submitDrawingTransaction(id, drawing);
 
     // Dispatch the upload event to Data Science
-    dispatchDrawingSub(drawing);
+    // dispatchDrawingSub(drawing);
 
     // Return the drawing object w/ checksum to the client
     res.status(201).json(drawing);
   } catch ({ message }) {
+    console.log(message);
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {

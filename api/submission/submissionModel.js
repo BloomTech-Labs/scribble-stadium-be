@@ -1,4 +1,10 @@
 const db = require('../../data/db-config');
+const _omit = require('lodash.omit');
+
+const {
+  submitWritingToDS,
+  submitDrawingToDS,
+} = require('../../lib/dsRequests');
 
 /**
  * This function checks to see if a submission exists at the given child/story intersection,
@@ -30,21 +36,38 @@ const markAsRead = (ID, flag = true) => {
 
 const submitDrawingTransaction = (ID, drawing) => {
   return db.transaction(async (trx) => {
+    console.log('UPDATING  STATE');
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    const res = await trx('Drawing').insert(drawing);
+    console.log('INSERTING DRAWING');
+    const res = await trx('Drawing').insert(_omit(drawing, 'checksum'));
     if (res.length < 1) {
       throw new Error('No file uploaded.');
+    }
+    try {
+      console.log('SUBMITTING DRAWING');
+      await submitDrawingToDS(ID, drawing);
+    } catch (err) {
+      console.log('FAILED TO SUBMIT');
+      trx.rollback();
     }
     return;
   });
 };
 
-const submitWritingTransaction = (ID, pages) => {
+const submitWritingTransaction = (storyId, ID, pages) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasWritten: true });
-    const res = await trx('Writing').insert(pages);
+    const res = await trx('Writing').insert(
+      pages.map((x) => _omit(x, 'checksum'))
+    );
     if (res.length < 1) {
       throw new Error('No file uploaded.');
+    }
+    try {
+      await submitWritingToDS(storyId, ID, pages);
+    } catch (err) {
+      console.log(err);
+      trx.rollback();
     }
     return;
   });
