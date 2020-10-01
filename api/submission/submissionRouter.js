@@ -3,6 +3,10 @@ const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
 const _omit = require('lodash.omit');
+const {
+  submitDrawingToDS,
+  submitWritingToDS,
+} = require('../../lib/dsRequests');
 
 /**
  * Schemas for submission data types.
@@ -198,19 +202,22 @@ router.put('/read/:id', authRequired, async (req, res) => {
  */
 router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
+  const { storyId } = req.body;
+
   const pages = req.body.pages.map((x, i) => ({
     URL: x.Location,
     PageNum: i + 1,
     SubmissionID: id,
     checksum: x.Checksum,
   }));
+
   try {
     // Upload the files AND mark them as written correctly at the same time
     const [submitted] = await Promise.all([
       Submissions.submitWriting(pages.map((x) => _omit(x, 'checksum'))),
+      submitWritingToDS(storyId, id, pages),
       Submissions.markAsWritten(id),
     ]);
-    // SEND TO DS FOR METRICS!!
 
     res.status(201).json(submitted);
   } catch ({ message }) {
@@ -266,6 +273,7 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
     // Upload the files AND mark them as written correctly at the same time
     const [[submitted]] = await Promise.all([
       Submissions.submitDrawing(drawing.map((x) => _omit(x, 'checksum'))),
+      submitDrawingToDS(drawing),
       Submissions.markAsDrawn(id),
     ]);
     // SEND TO DS FOR METRICS!!

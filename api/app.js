@@ -28,7 +28,7 @@ const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const submissionRouter = require('./submission/submissionRouter');
 const oktaRouter = require('./okta/oktaRouter');
-const dsRouter = require('./dsService/dsRouter');
+const dsRouter = require('./ds/dsRouter');
 
 const app = express();
 
