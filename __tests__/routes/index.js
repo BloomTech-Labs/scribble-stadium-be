@@ -19,6 +19,11 @@ jest.mock('../../api/middleware/fileUpload', () =>
   jest.fn((req, res, next) => next())
 );
 
+// Function mocking
+const dsRequests = require('../../lib/dsRequests');
+
+jest.mock('../../lib/dsRequests');
+
 const TestStorySquadAPI = () => {
   describe('StorySquad testing suite', () => {
     beforeAll(async () => {
@@ -34,6 +39,10 @@ const TestStorySquadAPI = () => {
     GradeLevelTests();
     ChildTests();
     StoryTests();
+
+    dsRequests.submitWritingToDS.mockResolvedValue([]);
+    dsRequests.submitDrawingToDS.mockResolvedValue([]);
+
     SubmissionTests();
   });
 };
