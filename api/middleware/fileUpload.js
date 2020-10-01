@@ -90,7 +90,6 @@ const fileUploadHandler = async (req, res, next) => {
       // Continue to router
       next();
     } catch (err) {
-      console.log(err);
       // There was an error with the S3 upload
       res.status(409).json({ message: 'File upload failed.' });
     }
