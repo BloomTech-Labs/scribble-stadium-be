@@ -75,7 +75,6 @@ module.exports = () => {
           .send({ pages: pages[0] });
 
         expect(res.status).toBe(201);
-        console.log(res.body);
         expect(res.body.map(({ URL }, i) => ({ URL, PageNum: i + 1 }))).toEqual(
           pages[0].map((x, i) => ({
             URL: x.Location,

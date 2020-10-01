@@ -222,7 +222,6 @@ router.post('/write/:id', fileUploadHandler, async (req, res) => {
     // Return the pages object back to the client
     res.status(201).json(pages);
   } catch ({ message }) {
-    console.log(message);
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {
@@ -282,7 +281,6 @@ router.post('/draw/:id', fileUploadHandler, async (req, res) => {
     // Return the drawing object w/ checksum to the client
     res.status(201).json(drawing);
   } catch ({ message }) {
-    console.log(message);
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {

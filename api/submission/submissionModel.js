@@ -36,18 +36,14 @@ const markAsRead = (ID, flag = true) => {
 
 const submitDrawingTransaction = (ID, drawing) => {
   return db.transaction(async (trx) => {
-    console.log('UPDATING  STATE');
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    console.log('INSERTING DRAWING');
     const res = await trx('Drawing').insert(_omit(drawing, 'checksum'));
     if (res.length < 1) {
       throw new Error('No file uploaded.');
     }
     try {
-      console.log('SUBMITTING DRAWING');
       await submitDrawingToDS(ID, drawing);
     } catch (err) {
-      console.log('FAILED TO SUBMIT');
       trx.rollback();
     }
     return;
@@ -66,7 +62,6 @@ const submitWritingTransaction = (storyId, ID, pages) => {
     try {
       await submitWritingToDS(storyId, ID, pages);
     } catch (err) {
-      console.log(err);
       trx.rollback();
     }
     return;
