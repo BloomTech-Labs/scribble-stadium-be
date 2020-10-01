@@ -75,9 +75,9 @@ module.exports = () => {
           .send({ pages: pages[0] });
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual(
+        console.log(res.body);
+        expect(res.body.map(({ URL }, i) => ({ URL, PageNum: i + 1 }))).toEqual(
           pages[0].map((x, i) => ({
-            ID: i + 1,
             URL: x.Location,
             PageNum: i + 1,
           }))
@@ -122,10 +122,7 @@ module.exports = () => {
           .send({ drawing: [drawing[0]] });
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual({
-          ID: 1,
-          URL: drawing[0].Location,
-        });
+        expect(res.body.URL).toEqual(drawing[0].Location);
         submission.HasDrawn = true;
       });
 
