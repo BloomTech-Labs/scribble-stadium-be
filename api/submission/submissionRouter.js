@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const Submissions = require('./submissionModel');
-const authRequired = require('../middleware/authRequired');
+// const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
 const _omit = require('lodash.omit');
 
-const emitter = require('../../lib/eventDispatch');
+const {
+  dispatchWritingSub,
+  dispatchDrawingSub,
+} = require('../../lib/eventDispatch');
 
 /**
  * Schemas for submission data types.
@@ -218,7 +221,7 @@ router.post('/write/:id', fileUploadHandler, async (req, res) => {
     );
 
     // Dispatch the upload event to Data Science
-    emitter.emit('writing_sub', storyId, pages);
+    dispatchWritingSub(storyId, pages);
 
     // Return the pages object back to the client
     res.status(201).json(pages);
@@ -277,7 +280,7 @@ router.post('/draw/:id', fileUploadHandler, async (req, res) => {
     await Submissions.submitDrawingTransaction(id, _omit(drawing, 'checksum'));
 
     // Dispatch the upload event to Data Science
-    emitter.emit('drawing_sub');
+    dispatchDrawingSub(drawing);
 
     // Return the drawing object w/ checksum to the client
     res.status(201).json(drawing);
