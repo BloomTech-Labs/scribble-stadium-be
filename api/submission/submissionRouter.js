@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Submissions = require('./submissionModel');
-// const authRequired = require('../middleware/authRequired');
+const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
 const _omit = require('lodash.omit');
 
@@ -112,7 +112,7 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', async (req, res) => {
+router.get('/', authRequired, async (req, res) => {
   const { childId, storyId } = req.query;
 
   // Check to make sure both IDs are given
@@ -153,7 +153,7 @@ router.get('/', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', async (req, res) => {
+router.put('/read/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
     const count = await Submissions.markAsRead(id);
@@ -202,7 +202,7 @@ router.put('/read/:id', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', fileUploadHandler, async (req, res) => {
+router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const { storyId } = req.body;
 
@@ -267,7 +267,7 @@ router.post('/write/:id', fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
 
   const drawing = {
