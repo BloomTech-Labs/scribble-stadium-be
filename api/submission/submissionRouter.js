@@ -281,6 +281,7 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
 
     res.status(201).json(submitted);
   } catch ({ message }) {
+    console.log(message);
     if (message.includes('violates foreign key constraint')) {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {
