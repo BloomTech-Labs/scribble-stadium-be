@@ -1,6 +1,9 @@
-# Basic Node API
+# Story Squad API
+[![Maintainability](https://api.codeclimate.com/v1/badges/6590d9f8cbab03268109/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/Labs26-StorySquad-BE-TeamB/maintainability)  [![Test Coverage](https://api.codeclimate.com/v1/badges/6590d9f8cbab03268109/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/Labs26-StorySquad-BE-TeamB/test_coverage)
+
 
 Welcome to your `Basic Node API Repository`. Use this to start your own Greenfield Project using nodejs, express and common industry standards.
+
 
 This repository assumes a handful of industry practices and standards. We strive to keep you on the bleeding edge of the industry and as a result, we have made some opinions for you so that you don't have to; you're welcome.
 
