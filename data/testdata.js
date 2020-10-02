@@ -17,22 +17,34 @@ module.exports = {
         Location: faker.image.animals(),
         Checksum: faker.random.alphaNumeric(20),
       },
+    ],
+    [
       {
         Location: faker.image.business(),
         Checksum: faker.random.alphaNumeric(20),
       },
-    ],
-    [
       {
         Location: faker.image.cats(),
         Checksum: faker.random.alphaNumeric(20),
       },
+    ],
+    [
       {
         Location: faker.image.city(),
         Checksum: faker.random.alphaNumeric(20),
       },
       {
         Location: faker.image.fashion(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+    ],
+    [
+      {
+        Location: faker.image.food(),
+        Checksum: faker.random.alphaNumeric(20),
+      },
+      {
+        Location: faker.image.nature(),
         Checksum: faker.random.alphaNumeric(20),
       },
     ],
@@ -44,6 +56,14 @@ module.exports = {
     },
     {
       Location: faker.image.animals(),
+      Checksum: faker.random.alphaNumeric(20),
+    },
+    {
+      Location: faker.image.business(),
+      Checksum: faker.random.alphaNumeric(20),
+    },
+    {
+      Location: faker.image.cats(),
       Checksum: faker.random.alphaNumeric(20),
     },
   ],

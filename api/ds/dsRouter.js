@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const DS = require('./dsModel');
+const dsAuth = require('../middleware/dsAuthMiddleware');
 
-router.put('/flag/:id', async (req, res) => {
+router.put('/flag/:id', dsAuth, async (req, res) => {
   // this endpoint exists to flag submissions for review
   res.status(204).end();
 });
@@ -35,19 +36,34 @@ router.put('/flag/:id', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/complexity/:id', async (req, res) => {
+router.put('/complexity/:id', dsAuth, async (req, res) => {
   // Allows the data science team to set a complexity store on a submission
-  if (!req.body.complexity) {
+  if (!req.query.complexity) {
     return res.status(400).json({ error: 'No score provided.' });
   }
   const { id } = req.params;
-  const { complexity } = req.body;
+  const { complexity } = req.query;
   try {
     const count = await DS.setComplexity(id, complexity);
     if (count > 0) {
       res.status(204).end();
     } else {
       res.status(404).json({ error: 'SubmissionNotFound' });
+    }
+  } catch ({ message }) {
+    res.status(500).json({ message });
+  }
+});
+
+router.get('/complexity/:id', dsAuth, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const complexities = await DS.getComplexitiesByChild(id);
+    if (complexities.length > 0) {
+      res.status(200).json(complexities);
+    } else {
+      res.status(404).json({ error: 'NoSubmissionsFound' });
     }
   } catch ({ message }) {
     res.status(500).json({ message });

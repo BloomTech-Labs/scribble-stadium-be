@@ -5,6 +5,7 @@ const GradeLevelTests = require('./gradeLevels-test');
 const ChildTests = require('./children-test');
 const StoryTests = require('./stories-test');
 const SubmissionTests = require('./submissions-test');
+const DSTests = require('./data-tests');
 
 const db = require('../../data/db-config');
 
@@ -16,6 +17,9 @@ jest.mock('../../api/middleware/authRequired', () =>
   })
 );
 jest.mock('../../api/middleware/fileUpload', () =>
+  jest.fn((req, res, next) => next())
+);
+jest.mock('../../api/middleware/dsAuthMiddleware', () =>
   jest.fn((req, res, next) => next())
 );
 
@@ -44,6 +48,7 @@ const TestStorySquadAPI = () => {
     dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
+    DSTests();
   });
 };
 
