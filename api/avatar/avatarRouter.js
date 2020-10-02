@@ -3,7 +3,7 @@ const authRequired = require('../middleware/authRequired');
 const Avatars = require('./avatarModel');
 const fileUploadHandler = require('../middleware/fileUpload');
 const { avatarValidation } = require('../middleware/avatarValidation');
-const { getAll } = require('../../lib/crudOps');
+const { getAll, postVariableLength } = require('../../lib/crudOps');
 
 /**
  * Schemas for avatar types.
@@ -102,12 +102,8 @@ router.post(
     const avatars = req.body.avatars.map((x) => ({
       AvatarURL: x.Location,
     }));
-    try {
-      const IDs = await Avatars.add(avatars);
-      res.status(201).json(IDs);
-    } catch ({ message }) {
-      res.status(500).json({ message });
-    }
+    req.body = avatars;
+    postVariableLength(req, res, Avatars);
   }
 );
 

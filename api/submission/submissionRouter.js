@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Submissions = require('./submissionModel');
 const authRequired = require('../middleware/authRequired');
 const fileUploadHandler = require('../middleware/fileUpload');
+const sendError = require('../../lib/errorHandler');
 
 /**
  * Schemas for submission data types.
@@ -117,12 +118,8 @@ router.get('/', authRequired, async (req, res) => {
   try {
     const sub = await Submissions.getOrInitSubmission(childId, storyId);
     res.status(200).json(sub);
-  } catch ({ message }) {
-    if (message.includes('violates foreign key constraint')) {
-      res.status(404).json({ error: 'InvalidID' });
-    } else {
-      res.status(500).json({ message });
-    }
+  } catch (error) {
+    sendError(res, error, 'Child');
   }
 });
 
@@ -132,9 +129,8 @@ router.get('/child/:id', authRequired, async (req, res) => {
   try {
     const subs = await Submissions.getAllSubmissionsByChild(id);
     res.status(200).json(subs);
-  } catch ({ message }) {
-    console.log(message);
-    res.status(500).json({ message });
+  } catch (error) {
+    sendError(res, error, 'Child');
   }
 });
 

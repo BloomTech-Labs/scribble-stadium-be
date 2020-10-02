@@ -2,7 +2,7 @@ const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const GradeLevels = require('./gradeLevelModel');
 const { gradeLevelValidation } = require('../middleware/gradeLevelValidation');
-const { getAll } = require('../../lib/crudOps');
+const { getAll, postVariableLength } = require('../../lib/crudOps');
 
 /**
  * Schemas for grade level types.
@@ -95,14 +95,8 @@ router.get('/', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, gradeLevelValidation, async (req, res) => {
-  const gradeLevel = req.body;
-  try {
-    const IDs = await GradeLevels.add(gradeLevel);
-    res.status(201).json(IDs);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.post('/', authRequired, gradeLevelValidation, (req, res) => {
+  postVariableLength(req, res, GradeLevels);
 });
 
 module.exports = router;
