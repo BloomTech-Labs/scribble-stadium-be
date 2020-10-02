@@ -7,12 +7,53 @@ const server = require('../../api/app');
 
 module.exports = () => {
   describe('data science endpoints', () => {
-    describe('PUT /flag/:id', () => {
+    describe('PUT /data/flag/:id', () => {
       it("should return an empty 204 cause it's not implemented", async () => {
         const res = await request(server).put('/data/flag/1').send({});
 
         expect(res.status).toBe(204);
         expect(res.body).toEqual({});
+      });
+    });
+
+    describe('/complexity/:id?complexity=:complexity', () => {
+      it('should update the complexity of the first submission', async () => {
+        const res = await request(server).put(
+          '/data/complexity/1?complexity=123'
+        );
+
+        expect(res.status).toBe(204);
+      });
+
+      it('should throw a 400 if no score passed', async () => {
+        const res = await request(server).put('/data/complexity/1');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('No score provided.');
+      });
+
+      it('should throw a 404 on invalid id', async () => {
+        const res = await request(server).put(
+          '/data/complexity/5?complexity=123'
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('SubmissionNotFound');
+      });
+    });
+
+    describe('GET /data/complexity/:id', () => {
+      it('returns an array of null pointing objects', async () => {
+        const res = await request(server).get('/data/complexity/1');
+
+        expect(res.status).toBe(200);
+        res.body.forEach((item) => {
+          if (item.ID === 2) {
+            expect(item.Complexity).toBeNull();
+          } else {
+            expect(item.Complexity).toBe(123);
+          }
+        });
       });
     });
   });
