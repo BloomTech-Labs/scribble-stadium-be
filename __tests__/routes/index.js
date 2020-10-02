@@ -19,6 +19,9 @@ jest.mock('../../api/middleware/authRequired', () =>
 jest.mock('../../api/middleware/fileUpload', () =>
   jest.fn((req, res, next) => next())
 );
+jest.mock('../../api/middleware/dsAuthMiddleware', () =>
+  jest.fn((req, res, next) => next())
+);
 
 // Function mocking
 const dsRequests = require('../../lib/dsRequests');
@@ -41,8 +44,8 @@ const TestStorySquadAPI = () => {
     ChildTests();
     StoryTests();
 
-    // dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
-    // dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
+    dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
+    dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
     DSTests();

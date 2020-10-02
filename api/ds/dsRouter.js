@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const DS = require('./dsModel');
+const dsAuth = require('../middleware/dsAuthMiddleware');
 
-router.put('/flag/:id', async (req, res) => {
+router.put('/flag/:id', dsAuth, async (req, res) => {
   // this endpoint exists to flag submissions for review
   res.status(204).end();
 });
@@ -35,7 +36,7 @@ router.put('/flag/:id', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/complexity/:id', async (req, res) => {
+router.put('/complexity/:id', dsAuth, async (req, res) => {
   // Allows the data science team to set a complexity store on a submission
   if (!req.query.complexity) {
     return res.status(400).json({ error: 'No score provided.' });
@@ -54,7 +55,7 @@ router.put('/complexity/:id', async (req, res) => {
   }
 });
 
-router.get('/complexity/:id', async (req, res) => {
+router.get('/complexity/:id', dsAuth, async (req, res) => {
   const { id } = req.params;
 
   try {
