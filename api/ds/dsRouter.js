@@ -59,8 +59,11 @@ router.get('/complexity/:id', async (req, res) => {
 
   try {
     const complexities = await DS.getComplexitiesByChild(id);
-
-    res.status(200).json(complexities);
+    if (complexities.length > 0) {
+      res.status(200).json(complexities);
+    } else {
+      res.status(404).json({ error: 'NoSubmissionsFound' });
+    }
   } catch ({ message }) {
     res.status(500).json({ message });
   }

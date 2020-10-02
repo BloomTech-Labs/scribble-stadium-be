@@ -16,6 +16,24 @@ module.exports = () => {
       });
     });
 
+    describe('GET /data/complexity/:id', () => {
+      it('returns an array of null complexity objects', async () => {
+        const res = await request(server).get('/data/complexity/1');
+
+        expect(res.status).toBe(200);
+        res.body.forEach((item) => {
+          expect(item.Complexity).toBeNull();
+        });
+      });
+
+      it('returns a 404 when there are no relevant submissions', async () => {
+        const res = await request(server).get('/data/complexity/2');
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('NoSubmissionsFound');
+      });
+    });
+
     describe('/complexity/:id?complexity=:complexity', () => {
       it('should update the complexity of the first submission', async () => {
         const res = await request(server).put(
@@ -43,7 +61,7 @@ module.exports = () => {
     });
 
     describe('GET /data/complexity/:id', () => {
-      it('returns an array of null pointing objects', async () => {
+      it('should show the updated complexity', async () => {
         const res = await request(server).get('/data/complexity/1');
 
         expect(res.status).toBe(200);

@@ -200,7 +200,7 @@ module.exports = () => {
       });
     });
 
-    describe('GET /submisions', () => {
+    describe('GET /submissions', () => {
       it('should show the updated state after delete', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'

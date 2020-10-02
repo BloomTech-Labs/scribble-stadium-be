@@ -41,8 +41,8 @@ const TestStorySquadAPI = () => {
     ChildTests();
     StoryTests();
 
-    dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
-    dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
+    // dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
+    // dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
     DSTests();
