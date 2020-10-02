@@ -25,11 +25,19 @@ module.exports = () => {
         expect(res.status).toBe(201);
         expect(res.body.ID).toBe(1);
       });
+
       it('should successfully add a second story to the database', async () => {
         const res = await request(server).post('/story').send(stories[1]);
 
         expect(res.status).toBe(201);
         expect(res.body.ID).toBe(2);
+      });
+
+      it('should successfully add a third story to the database', async () => {
+        const res = await request(server).post('/story').send(stories[0]);
+
+        expect(res.status).toBe(201);
+        expect(res.body.ID).toBe(3);
       });
 
       it('should return a 400 on poorly formatted story', async () => {
@@ -49,7 +57,7 @@ module.exports = () => {
       });
 
       it('should return a 404 if story does not exist', async () => {
-        const res = await request(server).get('/story/3');
+        const res = await request(server).get('/story/4');
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe('StoryNotFound');
@@ -65,7 +73,7 @@ module.exports = () => {
       });
 
       it('should return a 404 on invalid story id', async () => {
-        const res = await request(server).put('/story/3').send({ Title });
+        const res = await request(server).put('/story/4').send({ Title });
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe('StoryNotFound');

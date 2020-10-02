@@ -126,6 +126,18 @@ router.get('/', authRequired, async (req, res) => {
   }
 });
 
+router.get('/child/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const subs = await Submissions.getAllSubmissionsByChild(id);
+    res.status(200).json(subs);
+  } catch ({ message }) {
+    console.log(message);
+    res.status(500).json({ message });
+  }
+});
+
 /**
  * @swagger
  * /submit/read/{id}:
@@ -200,14 +212,15 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
   const { storyId } = req.body;
 
-  const pages = req.body.pages.map((x, i) => ({
-    URL: x.Location,
-    PageNum: i + 1,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  }));
-
   try {
+    // Create valid page objects
+    const pages = req.body.pages.map((x, i) => ({
+      URL: x.Location,
+      PageNum: i + 1,
+      SubmissionID: id,
+      checksum: x.Checksum,
+    }));
+
     // Run transaction to update the database
     await Submissions.submitWritingTransaction(storyId, id, pages);
 
@@ -218,6 +231,8 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {
       res.status(403).json({ error: 'Only one submission allowed.' });
+    } else if (message.includes("read property 'map'")) {
+      res.status(400).json({ error: 'InvalidFormData' });
     } else {
       res.status(500).json({ message });
     }
@@ -258,13 +273,15 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
 router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
   const { id } = req.params;
 
-  const drawing = {
-    URL: req.body.drawing[0].Location,
-    SubmissionID: id,
-    checksum: req.body.drawing[0].Checksum,
-  };
-
   try {
+    // Create valid drawing object
+    const drawing = {
+      URL: req.body.drawing[0].Location,
+      SubmissionID: id,
+      checksum: req.body.drawing[0].Checksum,
+    };
+
+    // Run database transaction
     await Submissions.submitDrawingTransaction(id, drawing);
 
     // Return the drawing object w/ checksum to the client
@@ -274,9 +291,43 @@ router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
       res.status(404).json({ error: 'InvalidSubmissionID' });
     } else if (message.includes('violates unique constraint')) {
       res.status(403).json({ error: 'Only one submission allowed.' });
+    } else if (message.includes('Cannot read property')) {
+      res.status(400).json({ error: 'InvalidFormData' });
     } else {
       res.status(500).json({ message });
     }
+  }
+});
+
+router.delete('/write/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const count = await Submissions.deleteWritingSubmission(id);
+
+    if (count > 0) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: 'SubmissionNotFound' });
+    }
+  } catch ({ message }) {
+    res.status(500).json({ message });
+  }
+});
+
+router.delete('/draw/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const count = await Submissions.deleteDrawingSubmission(id);
+
+    if (count > 0) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: 'SubmissionNotFound' });
+    }
+  } catch ({ message }) {
+    res.status(500).json({ message });
   }
 });
 

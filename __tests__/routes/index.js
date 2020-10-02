@@ -5,6 +5,7 @@ const GradeLevelTests = require('./gradeLevels-test');
 const ChildTests = require('./children-test');
 const StoryTests = require('./stories-test');
 const SubmissionTests = require('./submissions-test');
+const DSTests = require('./data-tests');
 
 const db = require('../../data/db-config');
 
@@ -44,6 +45,7 @@ const TestStorySquadAPI = () => {
     dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
+    DSTests();
   });
 };
 

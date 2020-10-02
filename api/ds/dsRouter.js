@@ -35,13 +35,13 @@ router.put('/flag/:id', async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/complexity/:id', async (req, res) => {
+router.put('/complexity/:id?complexity=:complexity', async (req, res) => {
   // Allows the data science team to set a complexity store on a submission
-  if (!req.body.complexity) {
+  if (!req.query.complexity) {
     return res.status(400).json({ error: 'No score provided.' });
   }
   const { id } = req.params;
-  const { complexity } = req.body;
+  const { complexity } = req.query;
   try {
     const count = await DS.setComplexity(id, complexity);
     if (count > 0) {
@@ -52,6 +52,10 @@ router.put('/complexity/:id', async (req, res) => {
   } catch ({ message }) {
     res.status(500).json({ message });
   }
+});
+
+router.get('/complexity/:id', async (req, res) => {
+  const { id } = req.params;
 });
 
 module.exports = router;

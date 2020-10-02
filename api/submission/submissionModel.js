@@ -25,6 +25,28 @@ const getOrInitSubmission = async (ChildID, StoryID) => {
   }
 };
 
+const getAllSubmissionsByChild = (ChildID) => {
+  return db.transaction(async (trx) => {
+    const subs = await trx('Submissions').where({ ChildID });
+    const pages = {};
+    const images = {};
+    for (let s in subs) {
+      const p = await trx('Writing').where({ SubmissionID: subs[s].ID });
+      const i = await trx('Drawing')
+        .where({ SubmissionID: subs[s].ID })
+        .first();
+      pages[s] = p;
+      images[s] = i;
+    }
+    const res = subs.map((x, i) => ({
+      ...x,
+      pages: pages[i],
+      image: images[i] || null,
+    }));
+    return res;
+  });
+};
+
 /**
  * This function marks the submission with the given ID as read.
  * @param {number} ID the ID of the submission to be marked as read
@@ -37,10 +59,7 @@ const markAsRead = (ID, flag = true) => {
 const submitDrawingTransaction = (ID, drawing) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    const res = await trx('Drawing').insert(_omit(drawing, 'checksum'));
-    if (res.length < 1) {
-      throw new Error('No file uploaded.');
-    }
+    await trx('Drawing').insert(_omit(drawing, 'checksum'));
     try {
       await submitDrawingToDS(ID, drawing);
     } catch (err) {
@@ -53,12 +72,7 @@ const submitDrawingTransaction = (ID, drawing) => {
 const submitWritingTransaction = (storyId, ID, pages) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasWritten: true });
-    const res = await trx('Writing').insert(
-      pages.map((x) => _omit(x, 'checksum'))
-    );
-    if (res.length < 1) {
-      throw new Error('No file uploaded.');
-    }
+    await trx('Writing').insert(pages.map((x) => _omit(x, 'checksum')));
     try {
       await submitWritingToDS(storyId, ID, pages);
     } catch (err) {
@@ -68,9 +82,28 @@ const submitWritingTransaction = (storyId, ID, pages) => {
   });
 };
 
+const deleteWritingSubmission = (ID) => {
+  return db.transaction(async (trx) => {
+    await trx('Submissions').where({ ID }).update({ HasWritten: false });
+    const count = await trx('Writing').where({ SubmissionID: ID }).del();
+    return count;
+  });
+};
+
+const deleteDrawingSubmission = (ID) => {
+  return db.transaction(async (trx) => {
+    await trx('Submissions').where({ ID }).update({ HasDrawn: false });
+    const count = await trx('Drawing').where({ SubmissionID: ID }).del();
+    return count;
+  });
+};
+
 module.exports = {
   getOrInitSubmission,
+  getAllSubmissionsByChild,
   markAsRead,
   submitDrawingTransaction,
   submitWritingTransaction,
+  deleteWritingSubmission,
+  deleteDrawingSubmission,
 };
