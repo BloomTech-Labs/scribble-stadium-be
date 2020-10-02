@@ -5,6 +5,7 @@ const {
   storyValidation,
   storyUpdateValidation,
 } = require('../middleware/storyValidation');
+const { put, getById, deleteById, post } = require('../../lib/crudOps');
 
 /**
  * Schemas for story data types.
@@ -113,18 +114,8 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const story = await Stories.getById(id);
-    if (story.length > 0) {
-      res.status(200).json(story[0]);
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/:id', authRequired, (req, res) => {
+  getById(req, res, Stories, 'Story');
 });
 
 /**
@@ -158,13 +149,7 @@ router.get('/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, storyValidation, async (req, res) => {
-  const story = req.body;
-  try {
-    const [ID] = await Stories.add(story);
-    res.status(201).json({ ID });
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  post(req, res, Stories);
 });
 
 /**
@@ -196,19 +181,8 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
-  const { id } = req.params;
-  const changes = req.body;
-  try {
-    const count = await Stories.update(id, changes);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
+  put(req, res, Stories, 'Story');
 });
 
 /**
@@ -232,18 +206,8 @@ router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const count = await Stories.remove(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.delete('/:id', authRequired, (req, res) => {
+  deleteById(req, res, Stories, 'Story');
 });
 
 module.exports = router;

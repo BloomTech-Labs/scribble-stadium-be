@@ -5,6 +5,7 @@ const {
   childValidation,
   childUpdateValidation,
 } = require('../middleware/childValidation');
+const { put, getById, getAll, deleteById, post } = require('../../lib/crudOps');
 
 /**
  * Schemas for child data types.
@@ -103,13 +104,8 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  try {
-    const children = await Children.getAll();
-    res.status(200).json(children);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/', authRequired, (req, res) => {
+  getAll(req, res, Children);
 });
 
 /**
@@ -137,18 +133,8 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const child = await Children.getById(id);
-    if (child.length > 0) {
-      res.status(200).json(child[0]);
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/:id', authRequired, (req, res) => {
+  getById(req, res, Children, 'Child');
 });
 
 /**
@@ -181,14 +167,8 @@ router.get('/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, childValidation, async (req, res) => {
-  const child = req.body;
-  try {
-    const [ID] = await Children.add(child);
-    res.status(201).json(ID);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.post('/', authRequired, childValidation, (req, res) => {
+  post(req, res, Children);
 });
 
 /**
@@ -220,19 +200,8 @@ router.post('/', authRequired, childValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, childUpdateValidation, async (req, res) => {
-  const { id } = req.params;
-  const changes = req.body;
-  try {
-    const count = await Children.update(id, changes);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
+  put(req, res, Children, 'Child');
 });
 
 /**
@@ -256,18 +225,8 @@ router.put('/:id', authRequired, childUpdateValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
-  try {
-    const count = await Children.remove(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.delete('/:id', authRequired, (req, res) => {
+  deleteById(req, res, Children, 'Child');
 });
 
 module.exports = router;

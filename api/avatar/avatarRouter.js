@@ -3,6 +3,7 @@ const authRequired = require('../middleware/authRequired');
 const Avatars = require('./avatarModel');
 const fileUploadHandler = require('../middleware/fileUpload');
 const { avatarValidation } = require('../middleware/avatarValidation');
+const { getAll } = require('../../lib/crudOps');
 
 /**
  * Schemas for avatar types.
@@ -55,13 +56,8 @@ const { avatarValidation } = require('../middleware/avatarValidation');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  try {
-    const avatars = await Avatars.getAvatars();
-    res.status(200).json(avatars);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/', authRequired, (req, res) => {
+  getAll(req, res, Avatars);
 });
 
 /**
