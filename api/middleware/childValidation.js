@@ -1,5 +1,14 @@
-const _has = require('lodash.has');
+const _inter = require('lodash.intersection');
+const _keys = require('lodash.keys');
 
+const fields = [
+  'Name',
+  'PIN',
+  'ParentID',
+  'AvatarID',
+  'GradeLevelID',
+  'IsDyslexic',
+];
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
  * attempting to send it to the database. This allows for better error messages
@@ -13,14 +22,7 @@ const _has = require('lodash.has');
 const childValidation = (req, res, next) => {
   // Pull the task sent in the request body
   const child = req.body;
-  if (
-    _has(child, 'Name') &&
-    _has(child, 'PIN') &&
-    _has(child, 'ParentID') &&
-    _has(child, 'AvatarID') &&
-    _has(child, 'GradeLevelID') &&
-    _has(child, 'IsDyslexic')
-  ) {
+  if (_inter(_keys(child), fields).length === fields.length) {
     // If it's valid, continue
     next();
   } else {
@@ -42,14 +44,7 @@ const childValidation = (req, res, next) => {
 const childUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
   const changes = req.body;
-  if (
-    _has(changes, 'Name') ||
-    _has(changes, 'PIN') ||
-    _has(changes, 'ParentID') ||
-    _has(changes, 'AvatarID') ||
-    _has(changes, 'GradeLevelID') ||
-    _has(changes, 'IsDyslexic')
-  ) {
+  if (_inter(_keys(changes), fields).length > 0) {
     // If it contains at least one valid field
     next();
   } else {

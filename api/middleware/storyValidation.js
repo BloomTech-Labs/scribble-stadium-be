@@ -1,4 +1,7 @@
-const _has = require('lodash.has');
+const _inter = require('lodash.intersection');
+const _keys = require('lodash.keys');
+
+const fields = ['Title', 'URL', 'WritingPrompt', 'DrawingPrompt'];
 
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
@@ -13,12 +16,7 @@ const _has = require('lodash.has');
 const storyValidation = (req, res, next) => {
   // Pull the task sent in the request body
   const story = req.body;
-  if (
-    _has(story, 'Title') &&
-    _has(story, 'URL') &&
-    _has(story, 'WritingPrompt') &&
-    _has(story, 'DrawingPrompt')
-  ) {
+  if (_inter(_keys(story), fields).length === fields.length) {
     // If it's valid, continue
     next();
   } else {
@@ -40,12 +38,7 @@ const storyValidation = (req, res, next) => {
 const storyUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
   const changes = req.body;
-  if (
-    _has(changes, 'Title') ||
-    _has(changes, 'URL') ||
-    _has(changes, 'WritingPrompt') ||
-    _has(changes, 'DrawingPrompt')
-  ) {
+  if (_inter(_keys(changes), fields).length > 0) {
     // If it contains at least one valid field
     next();
   } else {
