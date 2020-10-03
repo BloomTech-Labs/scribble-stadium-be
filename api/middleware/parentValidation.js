@@ -14,14 +14,7 @@ const fields = ['Name', 'Email'];
  */
 const parentValidation = (req, res, next) => {
   // Pull the task sent in the request body
-  const parent = req.body;
-  if (checkInit(parent, fields)) {
-    // If it's valid, continue
-    next();
-  } else {
-    // Otherwise, return a 400 w/ error message
-    res.status(400).json({ error: 'InvalidParent' });
-  }
+  checkInit(req, res, next, fields, 'Parent');
 };
 
 /**
@@ -36,13 +29,7 @@ const parentValidation = (req, res, next) => {
  */
 const parentUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
-  const changes = req.body;
-  if (checkUpdate(changes, [...fields, 'PIN'])) {
-    // If it contains at least one valid field
-    next();
-  } else {
-    res.status(400).json({ error: 'InvalidParentChanges' });
-  }
+  checkUpdate(req, res, next, [...fields, 'PIN'], 'Parent');
 };
 
 module.exports = {

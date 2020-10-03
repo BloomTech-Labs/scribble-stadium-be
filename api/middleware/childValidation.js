@@ -8,6 +8,7 @@ const fields = [
   'GradeLevelID',
   'IsDyslexic',
 ];
+
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
  * attempting to send it to the database. This allows for better error messages
@@ -18,16 +19,8 @@ const fields = [
  * @param {Object} res the server response object
  * @param {Function} next a function that will continue to the next middleware
  */
-const childValidation = (req, res, next) => {
-  // Pull the task sent in the request body
-  const child = req.body;
-  if (checkInit(child, fields)) {
-    // If it's valid, continue
-    next();
-  } else {
-    // Otherwise, return a 400 w/ error message
-    res.status(400).json({ error: 'InvalidChild' });
-  }
+const childValidation = (...r) => {
+  checkInit(...r, fields, 'Child');
 };
 
 /**
@@ -40,15 +33,9 @@ const childValidation = (req, res, next) => {
  * @param {Object} res the server response object
  * @param {Function} next a function that will continue to the next middleware
  */
-const childUpdateValidation = (req, res, next) => {
+const childUpdateValidation = (...r) => {
   // pull the changes sent in the request body
-  const changes = req.body;
-  if (checkUpdate(changes, fields)) {
-    // If it contains at least one valid field
-    next();
-  } else {
-    res.status(400).json({ error: 'InvalidChildChanges' });
-  }
+  checkUpdate(...r, fields, 'Child');
 };
 
 module.exports = {
