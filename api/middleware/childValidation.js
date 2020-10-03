@@ -1,5 +1,4 @@
-const _inter = require('lodash.intersection');
-const _keys = require('lodash.keys');
+const { checkInit, checkUpdate } = require('../../lib/validationCheckers');
 
 const fields = [
   'Name',
@@ -22,7 +21,7 @@ const fields = [
 const childValidation = (req, res, next) => {
   // Pull the task sent in the request body
   const child = req.body;
-  if (_inter(_keys(child), fields).length === fields.length) {
+  if (checkInit(child, fields)) {
     // If it's valid, continue
     next();
   } else {
@@ -44,7 +43,7 @@ const childValidation = (req, res, next) => {
 const childUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
   const changes = req.body;
-  if (_inter(_keys(changes), fields).length > 0) {
+  if (checkUpdate(changes, fields)) {
     // If it contains at least one valid field
     next();
   } else {

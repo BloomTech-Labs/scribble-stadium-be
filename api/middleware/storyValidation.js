@@ -1,5 +1,4 @@
-const _inter = require('lodash.intersection');
-const _keys = require('lodash.keys');
+const { checkInit, checkUpdate } = require('../../lib/validationCheckers');
 
 const fields = ['Title', 'URL', 'WritingPrompt', 'DrawingPrompt'];
 
@@ -16,7 +15,7 @@ const fields = ['Title', 'URL', 'WritingPrompt', 'DrawingPrompt'];
 const storyValidation = (req, res, next) => {
   // Pull the task sent in the request body
   const story = req.body;
-  if (_inter(_keys(story), fields).length === fields.length) {
+  if (checkInit(story, fields)) {
     // If it's valid, continue
     next();
   } else {
@@ -38,7 +37,7 @@ const storyValidation = (req, res, next) => {
 const storyUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
   const changes = req.body;
-  if (_inter(_keys(changes), fields).length > 0) {
+  if (checkUpdate(changes, fields)) {
     // If it contains at least one valid field
     next();
   } else {

@@ -1,7 +1,7 @@
-const _inter = require('lodash.intersection');
-const _keys = require('lodash.keys');
+const { checkInit, checkUpdate } = require('../../lib/validationCheckers');
 
 const fields = ['Name', 'Email'];
+
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
  * attempting to send it to the database. This allows for better error messages
@@ -15,7 +15,7 @@ const fields = ['Name', 'Email'];
 const parentValidation = (req, res, next) => {
   // Pull the task sent in the request body
   const parent = req.body;
-  if (_inter(_keys(parent), fields).length === fields.length) {
+  if (checkInit(parent, fields)) {
     // If it's valid, continue
     next();
   } else {
@@ -37,7 +37,7 @@ const parentValidation = (req, res, next) => {
 const parentUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
   const changes = req.body;
-  if (_inter(_keys(changes), [...fields, 'PIN']).length > 0) {
+  if (checkUpdate(changes, [...fields, 'PIN'])) {
     // If it contains at least one valid field
     next();
   } else {
