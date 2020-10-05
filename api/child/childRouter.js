@@ -144,6 +144,40 @@ router.get('/:id', authRequired, (req, res) => {
 
 /**
  * @swagger
+ * /child/{id}/complexity:
+ *  get:
+ *    summary: Attempts to query the database for the complexity ratings of a child with the given ID.
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Children
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      200:
+ *        description: Returns an array of complexities from the database.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Complexity'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/:id/complexity', authRequired, async (req, res) => {
+  // Pull the relevant child ID out of the URL params
+  const { id } = req.params;
+
+  ops.getAll(res, Children.getComplexityList, 'Child', id);
+});
+
+/**
+ * @swagger
  * /child:
  *  post:
  *    summary: Attempts to add a new child to the database.

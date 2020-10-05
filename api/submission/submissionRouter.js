@@ -55,6 +55,51 @@ const Submissions = require('./submissionModel');
  *              type: integer
  *          example:
  *            PageNum: 1
+ *    GetDrawnSubmission:
+ *      type: object
+ *      properties:
+ *        ID:
+ *          type: integer
+ *        URL:
+ *          type: string
+ *        SubmissionID:
+ *          type: integer
+ *      example:
+ *        ID: 1
+ *        URL: 'http://someurl.com'
+ *        SubmissionID: 1
+ *    GetWrittenSubmission:
+ *      allOf:
+ *        - $ref: '#/components/schemas/GetDrawnSubmission'
+ *        - type: object
+ *          properties:
+ *            PageNum:
+ *              type: integer
+ *          example:
+ *            PageNum: 1
+ *    FullSubmission:
+ *      type: object
+ *      properties:
+ *        ID:
+ *          type: integer
+ *        ChildId:
+ *          type: integer
+ *        StoryId:
+ *          type: integer
+ *        HasRead:
+ *          type: boolean
+ *        HasWritten:
+ *          type: boolean
+ *        HasDrawn:
+ *          type: boolean
+ *        Complexity:
+ *          type: integer
+ *        pages:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/GetWrittenSubmission'
+ *        image:
+ *          $ref: '#/components/schemas/GetDrawnSubmission'
  *
  *  parameters:
  *    submissionId:
@@ -121,6 +166,31 @@ router.get('/', authRequired, async (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /submissions/child/{id}:
+ *  get:
+ *    summary: Attempts to get all data for every submission by a given child
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Submissions
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      200:
+ *        description: Returns an array of all submissions by a child
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/FullSubmission'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.get('/child/:id', authRequired, async (req, res) => {
   // Pull child ID out of URL parameter
   const { id } = req.params;
@@ -269,6 +339,27 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
   );
 });
 
+/**
+ * @swagger
+ * /submission/write/{id}:
+ *  delete:
+ *    summary: Attempts to delete the writing submission with the specified submission ID.
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Submissions
+ *    parameters:
+ *      - $ref: '#/components/parameters/submissionId'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.delete('/write/:id', authRequired, async (req, res) => {
   // Pull submission ID out of the URL parameter
   const { id } = req.params;
@@ -276,6 +367,27 @@ router.delete('/write/:id', authRequired, async (req, res) => {
   ops.update(res, Submissions.deleteWritingSubmission, 'Submission', id);
 });
 
+/**
+ * @swagger
+ * /submission/write/{id}:
+ *  delete:
+ *    summary: Attempts to delete the drawn submission with the specified submission ID.
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Submissions
+ *    parameters:
+ *      - $ref: '#/components/parameters/submissionId'
+ *    responses:
+ *      204:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.delete('/draw/:id', authRequired, async (req, res) => {
   // Pull submission ID out of the URL parameter
   const { id } = req.params;

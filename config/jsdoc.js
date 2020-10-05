@@ -44,6 +44,10 @@ module.exports = {
         name: 'Grade Levels',
         description: 'Operations for grade level data.',
       },
+      {
+        name: 'Data Science',
+        description: 'Endpoints for data science tasks.',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',
