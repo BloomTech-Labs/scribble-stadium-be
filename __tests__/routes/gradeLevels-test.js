@@ -36,8 +36,8 @@ module.exports = () => {
           .post('/gradelevel')
           .send(gradeLevels[0]);
 
-        expect(res.status).toBe(500);
-        expect(res.body.message).toContain('unique');
+        expect(res.status).toBe(403);
+        expect(res.body.error).toContain('duplicate');
       });
     });
     describe('GET /gradelevels', () => {

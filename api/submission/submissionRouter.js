@@ -1,8 +1,9 @@
 const router = require('express').Router();
+
+const { authRequired, fileUpload } = require('../middleware');
+const { ops } = require('../../lib');
+
 const Submissions = require('./submissionModel');
-const authRequired = require('../middleware/authRequired');
-const fileUploadHandler = require('../middleware/fileUpload');
-const sendError = require('../../lib/errorHandler');
 
 /**
  * Schemas for submission data types.
@@ -110,28 +111,19 @@ const sendError = require('../../lib/errorHandler');
 router.get('/', authRequired, async (req, res) => {
   const { childId, storyId } = req.query;
 
-  // Check to make sure both IDs are given
-  if (!childId || !storyId) {
-    return res.status(400).json({ error: 'Missing parameters.' });
-  }
-
-  try {
-    const sub = await Submissions.getOrInitSubmission(childId, storyId);
-    res.status(200).json(sub);
-  } catch (error) {
-    sendError(res, error, 'Child');
-  }
+  ops.getAll(
+    res,
+    Submissions.getOrInitSubmission,
+    'Submission',
+    childId,
+    storyId
+  );
 });
 
 router.get('/child/:id', authRequired, async (req, res) => {
   const { id } = req.params;
 
-  try {
-    const subs = await Submissions.getAllSubmissionsByChild(id);
-    res.status(200).json(subs);
-  } catch (error) {
-    sendError(res, error, 'Child');
-  }
+  ops.getAll(res, Submissions.getAllSubmissionsByChild, 'Submission', id);
 });
 
 /**
@@ -157,16 +149,7 @@ router.get('/child/:id', authRequired, async (req, res) => {
  */
 router.put('/read/:id', authRequired, async (req, res) => {
   const { id } = req.params;
-  try {
-    const count = await Submissions.markAsRead(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'SubmissionNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  ops.put(res, Submissions.markAsRead, 'Submission', id);
 });
 
 /**
@@ -204,35 +187,29 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
+  // Read the relevant data out of the request
   const { id } = req.params;
   const { storyId } = req.body;
+  const data = req.body.pages;
 
-  try {
-    // Create valid page objects
-    const pages = req.body.pages.map((x, i) => ({
-      URL: x.Location,
-      PageNum: i + 1,
-      SubmissionID: id,
-      checksum: x.Checksum,
-    }));
+  // Callback function to pass into map taht formats the data properly
+  const cb = (x, i) => ({
+    URL: x.Location,
+    PageNum: i + 1,
+    SubmissionID: id,
+    checksum: x.Checksum,
+  });
 
-    // Run transaction to update the database
-    await Submissions.submitWritingTransaction(storyId, id, pages);
-
-    // Return the pages object back to the client
-    res.status(201).json(pages);
-  } catch ({ message }) {
-    if (message.includes('violates foreign key constraint')) {
-      res.status(404).json({ error: 'InvalidSubmissionID' });
-    } else if (message.includes('violates unique constraint')) {
-      res.status(403).json({ error: 'Only one submission allowed.' });
-    } else if (message.includes("read property 'map'")) {
-      res.status(400).json({ error: 'InvalidFormData' });
-    } else {
-      res.status(500).json({ message });
-    }
-  }
+  ops.submission(
+    res,
+    Submissions.submitWritingTransaction,
+    'Submission',
+    data,
+    cb,
+    id,
+    storyId
+  );
 });
 
 /**
@@ -266,65 +243,38 @@ router.post('/write/:id', authRequired, fileUploadHandler, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', authRequired, fileUploadHandler, async (req, res) => {
+router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
+  // Read the relevant data out of the request
   const { id } = req.params;
+  const data = req.body.drawing;
 
-  try {
-    // Create valid drawing object
-    const drawing = {
-      URL: req.body.drawing[0].Location,
-      SubmissionID: id,
-      checksum: req.body.drawing[0].Checksum,
-    };
+  // Callback function to pass into map taht formats the data properly
+  const cb = (x) => ({
+    URL: x.Location,
+    SubmissionID: id,
+    checksum: x.Checksum,
+  });
 
-    // Run database transaction
-    await Submissions.submitDrawingTransaction(id, drawing);
-
-    // Return the drawing object w/ checksum to the client
-    res.status(201).json(drawing);
-  } catch ({ message }) {
-    if (message.includes('violates foreign key constraint')) {
-      res.status(404).json({ error: 'InvalidSubmissionID' });
-    } else if (message.includes('violates unique constraint')) {
-      res.status(403).json({ error: 'Only one submission allowed.' });
-    } else if (message.includes('Cannot read property')) {
-      res.status(400).json({ error: 'InvalidFormData' });
-    } else {
-      res.status(500).json({ message });
-    }
-  }
+  ops.submission(
+    res,
+    Submissions.submitDrawingTransaction,
+    'Submission',
+    data,
+    cb,
+    id
+  );
 });
 
 router.delete('/write/:id', authRequired, async (req, res) => {
   const { id } = req.params;
 
-  try {
-    const count = await Submissions.deleteWritingSubmission(id);
-
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'SubmissionNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  ops.deleteById(res, Submissions.deleteWritingSubmission, 'Submission', id);
 });
 
 router.delete('/draw/:id', authRequired, async (req, res) => {
   const { id } = req.params;
 
-  try {
-    const count = await Submissions.deleteDrawingSubmission(id);
-
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'SubmissionNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  ops.deleteById(res, Submissions.deleteDrawingSubmission, 'Submission', id);
 });
 
 module.exports = router;

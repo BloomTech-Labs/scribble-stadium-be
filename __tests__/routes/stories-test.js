@@ -23,21 +23,21 @@ module.exports = () => {
         const res = await request(server).post('/story').send(stories[0]);
 
         expect(res.status).toBe(201);
-        expect(res.body.ID).toBe(1);
+        expect(res.body).toBe(1);
       });
 
       it('should successfully add a second story to the database', async () => {
         const res = await request(server).post('/story').send(stories[1]);
 
         expect(res.status).toBe(201);
-        expect(res.body.ID).toBe(2);
+        expect(res.body).toBe(2);
       });
 
       it('should successfully add a third story to the database', async () => {
         const res = await request(server).post('/story').send(stories[0]);
 
         expect(res.status).toBe(201);
-        expect(res.body.ID).toBe(3);
+        expect(res.body).toBe(3);
       });
 
       it('should return a 400 on poorly formatted story', async () => {

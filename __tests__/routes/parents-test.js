@@ -24,19 +24,19 @@ module.exports = () => {
         const res = await request(server).post('/parent').send(parents[0]);
 
         expect(res.status).toBe(201);
-        expect(res.body.ID).toBe(1);
+        expect(res.body).toBe(1);
       });
       it('should successfully post a second user', async () => {
         const res = await request(server).post('/parent').send(parents[1]);
 
         expect(res.status).toBe(201);
-        expect(res.body.ID).toBe(2);
+        expect(res.body).toBe(2);
       });
 
       it('should restrict creation of parent with duplicate email', async () => {
         const res = await request(server).post('/parent').send(parents[0]);
 
-        expect(res.status).toBe(500);
+        expect(res.status).toBe(403);
       });
 
       it('should return a 400 on poorly-formatted parent', async () => {

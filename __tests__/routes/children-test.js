@@ -24,13 +24,13 @@ module.exports = () => {
         const res = await request(server).post('/child').send(children[0]);
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual({ ID: 1 });
+        expect(res.body).toEqual(1);
       });
       it('should successfully post a second child', async () => {
         const res = await request(server).post('/child').send(children[1]);
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual({ ID: 2 });
+        expect(res.body).toEqual(2);
       });
 
       it('should return a 400 on poorly-formatted child', async () => {

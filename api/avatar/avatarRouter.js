@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const authRequired = require('../middleware/authRequired');
+
+const { authRequired, avatarValidation, fileUpload } = require('../middleware');
+const { ops } = require('../../lib');
+
 const Avatars = require('./avatarModel');
-const fileUploadHandler = require('../middleware/fileUpload');
-const { avatarValidation } = require('../middleware/avatarValidation');
-const { getAll, postVariableLength } = require('../../lib/crudOps');
 
 /**
  * Schemas for avatar types.
@@ -57,7 +57,7 @@ const { getAll, postVariableLength } = require('../../lib/crudOps');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  getAll(req, res, Avatars);
+  ops.getAll(res, Avatars.getAll, 'Avatar');
 });
 
 /**
@@ -96,14 +96,15 @@ router.get('/', authRequired, (req, res) => {
 router.post(
   '/',
   authRequired,
-  fileUploadHandler,
+  fileUpload,
   avatarValidation,
   async (req, res) => {
-    const avatars = req.body.avatars.map((x) => ({
+    const data = req.body.avatars;
+    const cb = (x) => ({
       AvatarURL: x.Location,
-    }));
-    req.body = avatars;
-    postVariableLength(req, res, Avatars);
+    });
+
+    ops.submission(res, Avatars.add, 'Avatar', data, cb);
   }
 );
 

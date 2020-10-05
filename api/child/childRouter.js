@@ -1,11 +1,13 @@
 const router = require('express').Router();
-const authRequired = require('../middleware/authRequired');
-const Children = require('./childModel');
+
 const {
+  authRequired,
   childValidation,
   childUpdateValidation,
-} = require('../middleware/childValidation');
-const { put, getById, getAll, deleteById, post } = require('../../lib/crudOps');
+} = require('../middleware');
+const { ops } = require('../../lib/');
+
+const Children = require('./childModel');
 
 /**
  * Schemas for child data types.
@@ -105,7 +107,7 @@ const { put, getById, getAll, deleteById, post } = require('../../lib/crudOps');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  getAll(req, res, Children);
+  ops.getAll(res, Children.getAll, 'Child');
 });
 
 /**
@@ -134,7 +136,8 @@ router.get('/', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/:id', authRequired, (req, res) => {
-  getById(req, res, Children, 'Child');
+  const { id } = req.params;
+  ops.getById(res, Children.getById, 'Child', id);
 });
 
 /**
@@ -168,7 +171,8 @@ router.get('/:id', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, childValidation, (req, res) => {
-  post(req, res, Children);
+  const newChild = req.body;
+  ops.post(res, Children.add, 'Child', newChild);
 });
 
 /**
@@ -201,7 +205,9 @@ router.post('/', authRequired, childValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
-  put(req, res, Children, 'Child');
+  const { id } = req.params;
+  const childChanges = req.body;
+  ops.put(res, Children.update, 'Child', id, childChanges);
 });
 
 /**
@@ -226,7 +232,8 @@ router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  deleteById(req, res, Children, 'Child');
+  const { id } = req.params;
+  ops.deleteById(res, Children.remove, 'Child', id);
 });
 
 module.exports = router;

@@ -46,7 +46,7 @@ module.exports = () => {
 
         expect(res.status).toBe(404);
         expect(res.body).toHaveProperty('error');
-        expect(res.body.error).toBe('InvalidID');
+        expect(res.body.error).toBe('InvalidSubmissionID');
       });
     });
 
@@ -100,7 +100,7 @@ module.exports = () => {
           .send({ pages: pages[1] });
 
         expect(res.status).toBe(403);
-        expect(res.body.error).toBe('Only one submission allowed.');
+        expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
       it('should pass a 404 on invalid submission ID', async () => {
@@ -140,7 +140,7 @@ module.exports = () => {
           .send({ drawing: [drawing[0]] });
 
         expect(res.status).toBe(201);
-        expect(res.body.URL).toEqual(drawing[0].Location);
+        expect(res.body[0].URL).toEqual(drawing[0].Location);
         submission.HasDrawn = true;
       });
 
@@ -150,7 +150,7 @@ module.exports = () => {
           .send({ drawing: [drawing[1]] });
 
         expect(res.status).toBe(403);
-        expect(res.body.error).toBe('Only one submission allowed.');
+        expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
       it('should pass a 404 on invalid submission ID', async () => {
@@ -275,7 +275,7 @@ module.exports = () => {
           .send({ drawing: [drawing[0]] });
 
         expect(res.status).toBe(201);
-        expect(res.body.URL).toEqual(drawing[0].Location);
+        expect(res.body[0].URL).toEqual(drawing[0].Location);
       });
     });
 

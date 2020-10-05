@@ -25,7 +25,6 @@ jest.mock('../../api/middleware/dsAuthMiddleware', () =>
 
 // Function mocking
 const dsRequests = require('../../lib/dsRequests');
-
 jest.mock('../../lib/dsRequests');
 
 const TestStorySquadAPI = () => {
