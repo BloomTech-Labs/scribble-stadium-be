@@ -99,10 +99,15 @@ router.post(
   fileUpload,
   avatarValidation,
   async (req, res) => {
+    // Pull processed avatars out of the request body
+    const avatars = req.body.avatars;
+
+    // Callback function to format the avatars correctly
     const cb = (x) => ({
       AvatarURL: x.Location,
     });
-    ops.submission(res, Avatars.add, 'Avatar', req.body.avatars, cb);
+
+    ops.submission(res, Avatars.add, 'Avatar', avatars, cb);
   }
 );
 

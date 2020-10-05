@@ -109,22 +109,23 @@ const Submissions = require('./submissionModel');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
+  // Pull intersection IDs out of the URL querystring
+  const { childId, storyId } = req.query;
+
   ops.getAll(
     res,
     Submissions.getOrInitSubmission,
     'Submission',
-    req.query.childId,
-    req.query.storyId
+    childId,
+    storyId
   );
 });
 
 router.get('/child/:id', authRequired, async (req, res) => {
-  ops.getAll(
-    res,
-    Submissions.getAllSubmissionsByChild,
-    'Submission',
-    req.params.id
-  );
+  // Pull child ID out of URL parameter
+  const { id } = req.params;
+
+  ops.getAll(res, Submissions.getAllSubmissionsByChild, 'Submission', id);
 });
 
 /**
@@ -149,7 +150,10 @@ router.get('/child/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/read/:id', authRequired, async (req, res) => {
-  ops.update(res, Submissions.markAsRead, 'Submission', req.params.id);
+  // Pull submission ID out of URL parameter
+  const { id } = req.params;
+
+  ops.update(res, Submissions.markAsRead, 'Submission', id);
 });
 
 /**
@@ -188,11 +192,16 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
+  // Pull relevant data out of the request object
+  const { id } = req.params;
+  const storyId = req.body.storyId;
+  const pages = req.body.pages;
+
   // Callback function to pass into map taht formats the data properly
   const cb = (x, i) => ({
     URL: x.Location,
     PageNum: i + 1,
-    SubmissionID: req.params.id,
+    SubmissionID: id,
     checksum: x.Checksum,
   });
 
@@ -200,10 +209,10 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
     res,
     Submissions.submitWritingTransaction,
     'Submission',
-    req.body.pages,
+    pages,
     cb,
-    req.params.id,
-    req.body.storyId
+    id,
+    storyId
   );
 });
 
@@ -239,10 +248,14 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
+  // Pull relevant data out of the request object
+  const { id } = req.params;
+  const data = req.body.drawing;
+
   // Callback function to pass into map taht formats the data properly
   const cb = (x) => ({
     URL: x.Location,
-    SubmissionID: req.params.id,
+    SubmissionID: id,
     checksum: x.Checksum,
   });
 
@@ -250,28 +263,24 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
     res,
     Submissions.submitDrawingTransaction,
     'Submission',
-    req.body.drawing,
+    data,
     cb,
-    req.params.id
+    id
   );
 });
 
 router.delete('/write/:id', authRequired, async (req, res) => {
-  ops.update(
-    res,
-    Submissions.deleteWritingSubmission,
-    'Submission',
-    req.params.id
-  );
+  // Pull submission ID out of the URL parameter
+  const { id } = req.params;
+
+  ops.update(res, Submissions.deleteWritingSubmission, 'Submission', id);
 });
 
 router.delete('/draw/:id', authRequired, async (req, res) => {
-  ops.update(
-    res,
-    Submissions.deleteDrawingSubmission,
-    'Submission',
-    req.params.id
-  );
+  // Pull submission ID out of the URL parameter
+  const { id } = req.params;
+
+  ops.update(res, Submissions.deleteDrawingSubmission, 'Submission', id);
 });
 
 module.exports = router;

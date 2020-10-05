@@ -97,7 +97,9 @@ router.get('/', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, gradeLevelValidation, (req, res) => {
-  ops.postMult(res, GradeLevels.add, 'GradeLevel', req.body);
+  const newGrades = req.body;
+
+  ops.postMult(res, GradeLevels.add, 'GradeLevel', newGrades);
 });
 
 module.exports = router;

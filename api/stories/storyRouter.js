@@ -117,7 +117,10 @@ router.get('/', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/:id', authRequired, (req, res) => {
-  ops.getById(res, Stories.getById, 'Story', req.params.id);
+  // Pull story ID out of the URL params
+  const { id } = req.params;
+
+  ops.getById(res, Stories.getById, 'Story', id);
 });
 
 /**
@@ -151,7 +154,10 @@ router.get('/:id', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, storyValidation, async (req, res) => {
-  ops.post(res, Stories.add, 'Story', req.body);
+  // Pull relevant data out of the request object
+  const newStory = req.body;
+
+  ops.post(res, Stories.add, 'Story', newStory);
 });
 
 /**
@@ -184,7 +190,11 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
-  ops.update(res, Stories.update, 'Story', req.params.id, req.body);
+  // Pull relevant data out of the request object
+  const { id } = req.params;
+  const changes = req.body;
+
+  ops.update(res, Stories.update, 'Story', id, changes);
 });
 
 /**
@@ -209,7 +219,10 @@ router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  ops.update(res, Stories.remove, 'Story', req.params.id);
+  // Pull story ID out of the URL params
+  const { id } = req.params;
+
+  ops.update(res, Stories.remove, 'Story', id);
 });
 
 module.exports = router;
