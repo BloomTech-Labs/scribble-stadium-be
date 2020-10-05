@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const authRequired = require('../middleware/authRequired');
-const Parents = require('./parentModel');
+
 const {
+  authRequired,
   parentValidation,
   parentUpdateValidation,
-} = require('../middleware/parentValidation');
+} = require('../middleware');
+const { ops } = require('../../lib');
+
+const Parents = require('./parentModel');
 
 /**
  * Schemas for parent data types.
@@ -91,13 +94,8 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  try {
-    const parents = await Parents.getAll();
-    res.status(200).json(parents);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/', authRequired, (req, res) => {
+  ops.getAll(res, Parents.getAll, 'Parent');
 });
 
 /**
@@ -125,18 +123,11 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, async (req, res) => {
+router.get('/:id', authRequired, (req, res) => {
+  // Pull parent ID data out of the URL params
   const { id } = req.params;
-  try {
-    const parent = await Parents.getById(id);
-    if (parent.length > 0) {
-      res.status(200).json(parent[0]);
-    } else {
-      res.status(404).json({ error: 'ParentNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.getById(res, Parents.getById, 'Parent', id);
 });
 
 /**
@@ -170,13 +161,10 @@ router.get('/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, parentValidation, async (req, res) => {
-  const parent = req.body;
-  try {
-    const [ID] = await Parents.add(parent);
-    res.status(201).json({ ID });
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  // Pull relevant data out of the request object
+  const newParent = req.body;
+
+  ops.post(res, Parents.add, 'Parent', newParent);
 });
 
 /**
@@ -208,19 +196,12 @@ router.post('/', authRequired, parentValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, parentUpdateValidation, async (req, res) => {
+router.put('/:id', authRequired, parentUpdateValidation, (req, res) => {
+  // Pull relevant data out of the request object
   const { id } = req.params;
   const changes = req.body;
-  try {
-    const count = await Parents.update(id, changes);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ParentNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Parents.update, 'Parent', id, changes);
 });
 
 /**
@@ -244,18 +225,11 @@ router.put('/:id', authRequired, parentUpdateValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/:id', authRequired, async (req, res) => {
+router.delete('/:id', authRequired, (req, res) => {
+  // Pull submission ID out of the URL parameter
   const { id } = req.params;
-  try {
-    const count = await Parents.remove(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ParentNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Parents.remove, 'Parent', id);
 });
 
 module.exports = router;

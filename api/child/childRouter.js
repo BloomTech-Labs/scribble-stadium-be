@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const authRequired = require('../middleware/authRequired');
-const Children = require('./childModel');
+
 const {
+  authRequired,
   childValidation,
   childUpdateValidation,
-} = require('../middleware/childValidation');
+} = require('../middleware');
+const { ops } = require('../../lib/');
+
+const Children = require('./childModel');
 
 /**
  * Schemas for child data types.
@@ -103,13 +106,8 @@ const {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  try {
-    const children = await Children.getAll();
-    res.status(200).json(children);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/', authRequired, (req, res) => {
+  ops.getAll(res, Children.getAll, 'Child');
 });
 
 /**
@@ -137,18 +135,45 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, async (req, res) => {
+router.get('/:id', authRequired, (req, res) => {
+  // Pull child ID out of the URL params
   const { id } = req.params;
-  try {
-    const child = await Children.getById(id);
-    if (child.length > 0) {
-      res.status(200).json(child[0]);
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.getById(res, Children.getById, 'Child', id);
+});
+
+/**
+ * @swagger
+ * /child/{id}/complexity:
+ *  get:
+ *    summary: Attempts to query the database for the complexity ratings of a child with the given ID.
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Children
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      200:
+ *        description: Returns an array of complexities from the database.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Complexity'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/:id/complexity', authRequired, async (req, res) => {
+  // Pull the relevant child ID out of the URL params
+  const { id } = req.params;
+
+  ops.getAll(res, Children.getComplexityList, 'Child', id);
 });
 
 /**
@@ -181,14 +206,11 @@ router.get('/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, childValidation, async (req, res) => {
-  const child = req.body;
-  try {
-    const [ID] = await Children.add(child);
-    res.status(201).json(ID);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.post('/', authRequired, childValidation, (req, res) => {
+  // Pull relevant data out of the request object
+  const newChild = req.body;
+
+  ops.post(res, Children.add, 'Child', newChild);
 });
 
 /**
@@ -220,19 +242,12 @@ router.post('/', authRequired, childValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, childUpdateValidation, async (req, res) => {
+router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
+  // Pull relevant data out of the request object
   const { id } = req.params;
   const changes = req.body;
-  try {
-    const count = await Children.update(id, changes);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Children.update, 'Child', id, changes);
 });
 
 /**
@@ -256,18 +271,11 @@ router.put('/:id', authRequired, childUpdateValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/:id', authRequired, async (req, res) => {
+router.delete('/:id', authRequired, (req, res) => {
+  // Pull child ID out of the URL params
   const { id } = req.params;
-  try {
-    const count = await Children.remove(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'ChildNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Children.remove, 'Child', id);
 });
 
 module.exports = router;

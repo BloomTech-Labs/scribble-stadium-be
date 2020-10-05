@@ -1,29 +1,46 @@
 const router = require('express').Router();
-const DS = require('./dsModel');
-const dsAuth = require('../middleware/dsAuthMiddleware');
 
-router.put('/flag/:id', dsAuth, async (req, res) => {
+const { dsAuthMiddleware } = require('../middleware');
+const { ops } = require('../../lib');
+
+const DS = require('./dsModel');
+
+/**
+ * Data types for DS endpoints
+ * @swagger
+ * components:
+ *  schemas:
+ *    Complexity:
+ *      type: integer
+ *      example: 300
+ *
+ *  parameters:
+ *    Complexity:
+ *      in: query
+ *      name: complexity
+ *      schema:
+ *        $ref: '#/components/schemas/Complexity'
+ *      required: true
+ *      description: Complexity calculation for a submission
+ */
+
+router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
   // this endpoint exists to flag submissions for review
   res.status(204).end();
 });
 
 /**
  * @swagger
- * /parent/{id}:
+ * /data/complexity/{id}?complexity={complexity}:
  *  put:
- *    summary: Attempts to update the parent with the given ID parameter.
+ *    summary: Attempts to update the complexity of the relevant submission
  *    security:
  *      - okta: []
  *    tags:
- *      - Parents
+ *      - Data Science
  *    parameters:
- *      - $ref: '#/components/parameters/parentId'
- *    requestBody:
- *      description: Changes to be applied to the specified parent.
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/Parent'
+ *      - $ref: '#/components/parameters/submissionId'
+ *      - $ref: '#/components/parameters/Complexity'
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
@@ -36,38 +53,13 @@ router.put('/flag/:id', dsAuth, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/complexity/:id', dsAuth, async (req, res) => {
+router.put('/complexity/:id', dsAuthMiddleware, async (req, res) => {
+  // Pull the relevant data form the request
+  const { id } = req.params;
+  const complexity = req.query.complexity;
+
   // Allows the data science team to set a complexity store on a submission
-  if (!req.query.complexity) {
-    return res.status(400).json({ error: 'No score provided.' });
-  }
-  const { id } = req.params;
-  const { complexity } = req.query;
-  try {
-    const count = await DS.setComplexity(id, complexity);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'SubmissionNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
-});
-
-router.get('/complexity/:id', dsAuth, async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const complexities = await DS.getComplexitiesByChild(id);
-    if (complexities.length > 0) {
-      res.status(200).json(complexities);
-    } else {
-      res.status(404).json({ error: 'NoSubmissionsFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  ops.update(res, DS.setComplexity, 'Submission', id, complexity);
 });
 
 module.exports = router;

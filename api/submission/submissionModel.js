@@ -1,10 +1,7 @@
 const db = require('../../data/db-config');
 const _omit = require('lodash.omit');
 
-const {
-  submitWritingToDS,
-  submitDrawingToDS,
-} = require('../../lib/dsRequests');
+const { dsApi } = require('../../lib');
 
 /**
  * This function checks to see if a submission exists at the given child/story intersection,
@@ -56,12 +53,12 @@ const markAsRead = (ID, flag = true) => {
   return db('Submissions').where({ ID }).update({ HasRead: flag });
 };
 
-const submitDrawingTransaction = (ID, drawing) => {
+const submitDrawingTransaction = (drawing, ID) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    await trx('Drawing').insert(_omit(drawing, 'checksum'));
+    await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
     try {
-      await submitDrawingToDS(ID, drawing);
+      await dsApi.submitDrawingToDS(drawing[0]);
     } catch (err) {
       trx.rollback();
     }
@@ -69,12 +66,12 @@ const submitDrawingTransaction = (ID, drawing) => {
   });
 };
 
-const submitWritingTransaction = (storyId, ID, pages) => {
+const submitWritingTransaction = (pages, ID, storyId) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasWritten: true });
     await trx('Writing').insert(pages.map((x) => _omit(x, 'checksum')));
     try {
-      await submitWritingToDS(storyId, ID, pages);
+      await dsApi.submitWritingToDS(storyId, ID, pages);
     } catch (err) {
       trx.rollback();
     }

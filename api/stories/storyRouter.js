@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const Stories = require('./storyModel');
-const authRequired = require('../middleware/authRequired');
+
 const {
+  authRequired,
   storyValidation,
   storyUpdateValidation,
-} = require('../middleware/storyValidation');
+} = require('../middleware');
+const { ops } = require('../../lib');
+
+const Stories = require('./storyModel');
 
 /**
  * Schemas for story data types.
@@ -113,18 +116,11 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, async (req, res) => {
+router.get('/:id', authRequired, (req, res) => {
+  // Pull story ID out of the URL params
   const { id } = req.params;
-  try {
-    const story = await Stories.getById(id);
-    if (story.length > 0) {
-      res.status(200).json(story[0]);
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.getById(res, Stories.getById, 'Story', id);
 });
 
 /**
@@ -158,13 +154,10 @@ router.get('/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, storyValidation, async (req, res) => {
-  const story = req.body;
-  try {
-    const [ID] = await Stories.add(story);
-    res.status(201).json({ ID });
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+  // Pull relevant data out of the request object
+  const newStory = req.body;
+
+  ops.post(res, Stories.add, 'Story', newStory);
 });
 
 /**
@@ -196,19 +189,12 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
+router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
+  // Pull relevant data out of the request object
   const { id } = req.params;
   const changes = req.body;
-  try {
-    const count = await Stories.update(id, changes);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Stories.update, 'Story', id, changes);
 });
 
 /**
@@ -232,18 +218,11 @@ router.put('/:id', authRequired, storyUpdateValidation, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/:id', authRequired, async (req, res) => {
+router.delete('/:id', authRequired, (req, res) => {
+  // Pull story ID out of the URL params
   const { id } = req.params;
-  try {
-    const count = await Stories.remove(id);
-    if (count > 0) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ error: 'StoryNotFound' });
-    }
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.update(res, Stories.remove, 'Story', id);
 });
 
 module.exports = router;

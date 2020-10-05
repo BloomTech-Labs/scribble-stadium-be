@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const authRequired = require('../middleware/authRequired');
+
+const { authRequired, gradeLevelValidation } = require('../middleware');
+const { ops } = require('../../lib');
+
 const GradeLevels = require('./gradeLevelModel');
-const { gradeLevelValidation } = require('../middleware/gradeLevelValidation');
 
 /**
  * Schemas for grade level types.
@@ -60,13 +62,8 @@ const { gradeLevelValidation } = require('../middleware/gradeLevelValidation');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  try {
-    const gradeLevels = await GradeLevels.getAll();
-    res.status(200).json(gradeLevels);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.get('/', authRequired, (req, res) => {
+  ops.getAll(res, GradeLevels.getAll, 'GradeLevel');
 });
 
 /**
@@ -99,14 +96,10 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/', authRequired, gradeLevelValidation, async (req, res) => {
-  const gradeLevel = req.body;
-  try {
-    const IDs = await GradeLevels.add(gradeLevel);
-    res.status(201).json(IDs);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+router.post('/', authRequired, gradeLevelValidation, (req, res) => {
+  const newGrades = req.body;
+
+  ops.postMult(res, GradeLevels.add, 'GradeLevel', newGrades);
 });
 
 module.exports = router;

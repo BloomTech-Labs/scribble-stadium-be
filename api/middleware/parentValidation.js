@@ -1,4 +1,6 @@
-const _has = require('lodash.has');
+const { checkInit, checkUpdate } = require('../../lib/validationCheckers');
+
+const fields = ['Name', 'Email', 'PIN'];
 
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
@@ -12,14 +14,7 @@ const _has = require('lodash.has');
  */
 const parentValidation = (req, res, next) => {
   // Pull the task sent in the request body
-  const parent = req.body;
-  if (_has(parent, 'Name') && _has(parent, 'Email')) {
-    // If it's valid, continue
-    next();
-  } else {
-    // Otherwise, return a 400 w/ error message
-    res.status(400).json({ error: 'InvalidParent' });
-  }
+  checkInit(req, res, next, fields, 'Parent');
 };
 
 /**
@@ -34,13 +29,7 @@ const parentValidation = (req, res, next) => {
  */
 const parentUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
-  const changes = req.body;
-  if (_has(changes, 'Name') || _has(changes, 'Email') || _has(changes, 'PIN')) {
-    // If it contains at least one valid field
-    next();
-  } else {
-    res.status(400).json({ error: 'InvalidParentChanges' });
-  }
+  checkUpdate(req, res, next, fields, 'Parent');
 };
 
 module.exports = {

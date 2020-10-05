@@ -18,7 +18,7 @@ module.exports = () => {
 
     describe('GET /data/complexity/:id', () => {
       it('returns an array of null complexity objects', async () => {
-        const res = await request(server).get('/data/complexity/1');
+        const res = await request(server).get('/child/1/complexity');
 
         expect(res.status).toBe(200);
         res.body.forEach((item) => {
@@ -26,11 +26,11 @@ module.exports = () => {
         });
       });
 
-      it('returns a 404 when there are no relevant submissions', async () => {
-        const res = await request(server).get('/data/complexity/2');
+      it('returns an empty 200 when there are no relevant submissions', async () => {
+        const res = await request(server).get('/child/2/complexity');
 
-        expect(res.status).toBe(404);
-        expect(res.body.error).toBe('NoSubmissionsFound');
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual([]);
       });
     });
 
@@ -47,7 +47,7 @@ module.exports = () => {
         const res = await request(server).put('/data/complexity/1');
 
         expect(res.status).toBe(400);
-        expect(res.body.error).toBe('No score provided.');
+        expect(res.body.error).toBe('Missing parameters.');
       });
 
       it('should throw a 404 on invalid id', async () => {
@@ -62,7 +62,7 @@ module.exports = () => {
 
     describe('GET /data/complexity/:id', () => {
       it('should show the updated complexity', async () => {
-        const res = await request(server).get('/data/complexity/1');
+        const res = await request(server).get('/child/1/complexity');
 
         expect(res.status).toBe(200);
         res.body.forEach((item) => {

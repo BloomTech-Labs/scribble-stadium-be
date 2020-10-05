@@ -75,10 +75,23 @@ const remove = (ID) => {
   return db('Children').where({ ID }).del();
 };
 
+/**
+ * Attempts to get the complexities of all of a child's submissions
+ * @param {number} ChildID the ID of the child whose data you want to view
+ * @returns {Promise} returns a promise that resolves to an array of child submission complexities
+ */
+const getComplexityList = (ChildID) => {
+  return db('Submissions')
+    .where({ ChildID })
+    .orderBy('ID', 'desc')
+    .select(['ID', 'Complexity']);
+};
+
 module.exports = {
   getAll,
   getById,
   add,
   update,
   remove,
+  getComplexityList,
 };

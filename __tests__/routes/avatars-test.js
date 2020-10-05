@@ -12,7 +12,8 @@ module.exports = () => {
           .send({ avatars: avatars[0] });
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual([1]);
+        expect(res.body.length).toBe(1);
+        expect(res.body).toEqual([{ AvatarURL: avatars[0].Location }]);
       });
 
       it('should successfully add two avatars to the database', async () => {
@@ -21,7 +22,7 @@ module.exports = () => {
           .send({ avatars: avatars.slice(1, 3) });
 
         expect(res.status).toBe(201);
-        expect(res.body).toEqual([2, 3]);
+        expect(res.body.length).toBe(2);
       });
 
       it('should return a 400 on poorly formatted avatar', async () => {
@@ -36,8 +37,8 @@ module.exports = () => {
           .post('/avatar')
           .send({ avatars: avatars.slice(0, 1) });
 
-        expect(res.status).toBe(500);
-        expect(res.body.message).toContain('unique');
+        expect(res.status).toBe(403);
+        expect(res.body.error).toContain('duplicate');
       });
     });
 

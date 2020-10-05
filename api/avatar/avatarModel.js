@@ -4,7 +4,7 @@ const db = require('../../data/db-config');
  * Attempts to return an array of all valid avatars for children.
  * @returns {Promise} promise that resolves to an array of avatar objects
  */
-const getAvatars = () => {
+const getAll = () => {
   return db('Avatars');
 };
 
@@ -19,6 +19,6 @@ const add = (avatars) => {
 };
 
 module.exports = {
-  getAvatars,
+  getAll,
   add,
 };
