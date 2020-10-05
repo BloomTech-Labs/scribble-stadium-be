@@ -253,7 +253,7 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      403:
- *        $ref: '#/components/responses/OneSubmission'
+ *        $ref: '#/components/responses/DuplicateError'
  *      404:
  *        $ref: '#/components/responses/NotFound'
  *      409:
@@ -307,9 +307,13 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/DrawnSubmission'
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/DrawnSubmission'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      403:
+ *        $ref: '#/components/responses/DuplicateError'
  *      404:
  *        $ref: '#/components/responses/NotFound'
  *      409:

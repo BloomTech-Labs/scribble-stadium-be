@@ -157,6 +157,8 @@ router.get('/:id', authRequired, (req, res) => {
  *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      403:
+ *        $ref: '#/components/responses/DuplicateError'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */

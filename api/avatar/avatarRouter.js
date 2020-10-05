@@ -78,16 +78,19 @@ router.get('/', authRequired, (req, res) => {
  *        description: The avatar file to upload, or an array of avatar files
  *    responses:
  *      201:
- *        description: Returns the ID(s) of the newly created avatar(s).
+ *        description: Returns the URLs of the newly created avatars.
  *        content:
  *          application/json:
- *            example: 1
  *            schema:
- *              type: integer
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Avatar'
  *      400:
  *        $ref: '#/components/responses/InvalidFormat'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      403:
+ *        $ref: '#/components/responses/DuplicateError'
  *      409:
  *        $ref: '#/components/responses/UploadFailed'
  *      500:
