@@ -1,6 +1,6 @@
 const { checkInit, checkUpdate } = require('../../lib/validationCheckers');
 
-const fields = ['Name', 'Email'];
+const fields = ['Name', 'Email', 'PIN'];
 
 /**
  * A custom middleware that checks to ensure the data passed in is valid before
@@ -29,7 +29,7 @@ const parentValidation = (req, res, next) => {
  */
 const parentUpdateValidation = (req, res, next) => {
   // pull the changes sent in the request body
-  checkUpdate(req, res, next, [...fields, 'PIN'], 'Parent');
+  checkUpdate(req, res, next, fields, 'Parent');
 };
 
 module.exports = {
