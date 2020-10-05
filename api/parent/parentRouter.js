@@ -191,7 +191,7 @@ router.post('/', authRequired, parentValidation, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, parentUpdateValidation, (req, res) => {
-  ops.put(res, Parents.update, 'Parent', req.params.id, req.body);
+  ops.update(res, Parents.update, 'Parent', req.params.id, req.body);
 });
 
 /**
@@ -216,7 +216,7 @@ router.put('/:id', authRequired, parentUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  ops.deleteById(res, Parents.remove, 'Parent', req.params.id);
+  ops.update(res, Parents.remove, 'Parent', req.params.id);
 });
 
 module.exports = router;

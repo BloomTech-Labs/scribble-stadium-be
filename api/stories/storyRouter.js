@@ -184,7 +184,7 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
-  ops.put(res, Stories.update, 'Story', req.params.id, req.body);
+  ops.update(res, Stories.update, 'Story', req.params.id, req.body);
 });
 
 /**
@@ -209,7 +209,7 @@ router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  ops.deleteById(res, Stories.remove, 'Story', req.params.id);
+  ops.update(res, Stories.remove, 'Story', req.params.id);
 });
 
 module.exports = router;

@@ -203,7 +203,7 @@ router.post('/', authRequired, childValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
-  ops.put(res, Children.update, 'Child', req.params.id, req.body);
+  ops.update(res, Children.update, 'Child', req.params.id, req.body);
 });
 
 /**
@@ -228,7 +228,7 @@ router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  ops.deleteById(res, Children.remove, 'Child', req.params.id);
+  ops.update(res, Children.remove, 'Child', req.params.id);
 });
 
 module.exports = router;

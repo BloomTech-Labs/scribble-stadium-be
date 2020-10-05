@@ -149,7 +149,7 @@ router.get('/child/:id', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/read/:id', authRequired, async (req, res) => {
-  ops.put(res, Submissions.markAsRead, 'Submission', req.params.id);
+  ops.update(res, Submissions.markAsRead, 'Submission', req.params.id);
 });
 
 /**
@@ -257,7 +257,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
 });
 
 router.delete('/write/:id', authRequired, async (req, res) => {
-  ops.deleteById(
+  ops.update(
     res,
     Submissions.deleteWritingSubmission,
     'Submission',
@@ -266,7 +266,7 @@ router.delete('/write/:id', authRequired, async (req, res) => {
 });
 
 router.delete('/draw/:id', authRequired, async (req, res) => {
-  ops.deleteById(
+  ops.update(
     res,
     Submissions.deleteDrawingSubmission,
     'Submission',

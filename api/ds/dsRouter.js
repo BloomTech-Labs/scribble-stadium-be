@@ -41,7 +41,7 @@ router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
  */
 router.put('/complexity/:id', dsAuthMiddleware, async (req, res) => {
   // Allows the data science team to set a complexity store on a submission
-  ops.put(
+  ops.update(
     res,
     DS.setComplexity,
     'Submission',
