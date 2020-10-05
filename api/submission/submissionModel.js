@@ -56,9 +56,9 @@ const markAsRead = (ID, flag = true) => {
 const submitDrawingTransaction = (drawing, ID) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    await trx('Drawing').insert(drawing.map((x) => _omit(x, 'checksum')));
+    await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
     try {
-      await dsApi.submitDrawingToDS(ID, drawing);
+      await dsApi.submitDrawingToDS(drawing[0]);
     } catch (err) {
       trx.rollback();
     }
