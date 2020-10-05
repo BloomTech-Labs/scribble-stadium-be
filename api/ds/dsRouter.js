@@ -41,15 +41,17 @@ router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
  */
 router.put('/complexity/:id', dsAuthMiddleware, async (req, res) => {
   // Allows the data science team to set a complexity store on a submission
-  const { id } = req.params;
-  const data = req.query.complexity;
-
-  ops.put(res, DS.setComplexity, 'Submission', id, data);
+  ops.put(
+    res,
+    DS.setComplexity,
+    'Submission',
+    req.params.id,
+    req.query.complexity
+  );
 });
 
 router.get('/complexity/:id', dsAuthMiddleware, async (req, res) => {
-  const { id } = req.params;
-  ops.getAll(res, DS.getComplexitiesByChild, 'Submission', id);
+  ops.getAll(res, DS.getComplexitiesByChild, 'Submission', req.params.id);
 });
 
 module.exports = router;

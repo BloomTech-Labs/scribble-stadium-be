@@ -99,12 +99,10 @@ router.post(
   fileUpload,
   avatarValidation,
   async (req, res) => {
-    const data = req.body.avatars;
     const cb = (x) => ({
       AvatarURL: x.Location,
     });
-
-    ops.submission(res, Avatars.add, 'Avatar', data, cb);
+    ops.submission(res, Avatars.add, 'Avatar', req.body.avatars, cb);
   }
 );
 

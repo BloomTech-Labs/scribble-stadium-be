@@ -136,8 +136,7 @@ router.get('/', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/:id', authRequired, (req, res) => {
-  const { id } = req.params;
-  ops.getById(res, Children.getById, 'Child', id);
+  ops.getById(res, Children.getById, 'Child', req.params.id);
 });
 
 /**
@@ -171,8 +170,7 @@ router.get('/:id', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, childValidation, (req, res) => {
-  const newChild = req.body;
-  ops.post(res, Children.add, 'Child', newChild);
+  ops.post(res, Children.add, 'Child', req.body);
 });
 
 /**
@@ -205,9 +203,7 @@ router.post('/', authRequired, childValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
-  const { id } = req.params;
-  const childChanges = req.body;
-  ops.put(res, Children.update, 'Child', id, childChanges);
+  ops.put(res, Children.update, 'Child', req.params.id, req.body);
 });
 
 /**
@@ -232,8 +228,7 @@ router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  const { id } = req.params;
-  ops.deleteById(res, Children.remove, 'Child', id);
+  ops.deleteById(res, Children.remove, 'Child', req.params.id);
 });
 
 module.exports = router;

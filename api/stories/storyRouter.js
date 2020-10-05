@@ -117,8 +117,7 @@ router.get('/', authRequired, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/:id', authRequired, (req, res) => {
-  const { id } = req.params;
-  ops.getById(res, Stories.getById, 'Story', id);
+  ops.getById(res, Stories.getById, 'Story', req.params.id);
 });
 
 /**
@@ -152,8 +151,7 @@ router.get('/:id', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.post('/', authRequired, storyValidation, async (req, res) => {
-  const newStory = req.body;
-  ops.post(res, Stories.add, 'Story', newStory);
+  ops.post(res, Stories.add, 'Story', req.body);
 });
 
 /**
@@ -186,10 +184,7 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
-  const { id } = req.params;
-  const changes = req.body;
-
-  ops.put(res, Stories.update, 'Story', id, changes);
+  ops.put(res, Stories.update, 'Story', req.params.id, req.body);
 });
 
 /**
@@ -214,8 +209,7 @@ router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.delete('/:id', authRequired, (req, res) => {
-  const { id } = req.params;
-  ops.deleteById(res, Stories.remove, 'Story', id);
+  ops.deleteById(res, Stories.remove, 'Story', req.params.id);
 });
 
 module.exports = router;
