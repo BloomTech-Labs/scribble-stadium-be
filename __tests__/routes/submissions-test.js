@@ -45,7 +45,6 @@ module.exports = () => {
         );
 
         expect(res.status).toBe(404);
-        expect(res.body).toHaveProperty('error');
         expect(res.body.error).toBe('InvalidSubmissionID');
       });
     });

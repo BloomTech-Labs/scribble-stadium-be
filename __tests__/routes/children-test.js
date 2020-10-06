@@ -26,6 +26,7 @@ module.exports = () => {
         expect(res.status).toBe(201);
         expect(res.body).toEqual(1);
       });
+
       it('should successfully post a second child', async () => {
         const res = await request(server).post('/child').send(children[1]);
 
@@ -37,6 +38,7 @@ module.exports = () => {
         const res = await request(server).post('/child').send(badRequest);
 
         expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidChild');
       });
     });
 
@@ -54,6 +56,7 @@ module.exports = () => {
         const res = await request(server).get('/child/3');
 
         expect(res.status).toBe(404);
+        expect(res.body.error).toBe('ChildNotFound');
       });
     });
 
@@ -87,6 +90,7 @@ module.exports = () => {
           .send({ bad: 'field' });
 
         expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidChild');
       });
     });
 

@@ -83,6 +83,7 @@ module.exports = () => {
         const res = await request(server).put('/story/1').send(badRequest);
 
         expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidStory');
       });
     });
 
