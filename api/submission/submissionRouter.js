@@ -27,6 +27,8 @@ const Submissions = require('./submissionModel');
  *          type: boolean
  *        Complexity:
  *          type: integer
+ *        LowConfidence:
+ *          type: boolean
  *      example:
  *        ID: 1
  *        ChildID: 1

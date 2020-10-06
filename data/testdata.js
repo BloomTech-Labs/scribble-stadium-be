@@ -135,5 +135,6 @@ module.exports = {
     HasWritten: false,
     HasDrawn: false,
     Complexity: null,
+    LowConfidence: null,
   },
 };
