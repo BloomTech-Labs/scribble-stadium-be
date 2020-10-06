@@ -91,7 +91,7 @@ const fileUploadHandler = async (req, res, next) => {
       next();
     } catch (err) {
       // There was an error with the S3 upload
-      res.status(409).json({ message: 'File upload failed.' });
+      res.status(409).json({ error: 'File upload failed.' });
     }
   });
 };

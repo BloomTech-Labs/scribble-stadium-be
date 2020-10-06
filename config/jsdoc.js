@@ -94,9 +94,25 @@ module.exports = {
               schema: {
                 type: 'object',
                 properties: {
-                  message: {
+                  error: {
                     type: 'string',
                     example: 'PostgreSQL error message.',
+                  },
+                },
+              },
+            },
+          },
+        },
+        MissingParams: {
+          description: 'Error: Missing parameters.',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  error: {
+                    type: 'string',
+                    example: 'Missing parameters.',
                   },
                 },
               },
@@ -126,7 +142,7 @@ module.exports = {
               schema: {
                 type: 'object',
                 properties: {
-                  message: {
+                  error: {
                     type: 'string',
                     example: 'File upload failed.',
                   },
@@ -178,7 +194,7 @@ module.exports = {
             },
           },
         },
-        OneSubmission: {
+        DuplicateError: {
           description: 'Error: Can only submit once per story.',
           content: {
             'application/json': {

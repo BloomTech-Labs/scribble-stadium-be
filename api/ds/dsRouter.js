@@ -45,7 +45,7 @@ router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
  *      400:
- *        $ref: '#/components/responses/InvalidFormat'
+ *        $ref: '#/components/responses/MissingParams'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
