@@ -12,9 +12,9 @@ const fields = ['Name', 'Email', 'PIN'];
  * @param {Object} res the server response object
  * @param {Function} next a function that will continue to the next middleware
  */
-const parentValidation = (req, res, next) => {
+const parentValidation = (...r) => {
   // Pull the task sent in the request body
-  checkInit(req, res, next, fields, 'Parent');
+  checkInit(...r, fields, 'Parent');
 };
 
 /**
@@ -27,9 +27,9 @@ const parentValidation = (req, res, next) => {
  * @param {Object} res the server response object
  * @param {Function} next a function that will continue to the next middleware
  */
-const parentUpdateValidation = (req, res, next) => {
+const parentUpdateValidation = (...r) => {
   // pull the changes sent in the request body
-  checkUpdate(req, res, next, fields, 'Parent');
+  checkUpdate(...r, fields, 'Parent');
 };
 
 module.exports = {
