@@ -26,6 +26,7 @@ module.exports = () => {
         expect(res.status).toBe(201);
         expect(res.body).toBe(1);
       });
+
       it('should successfully post a second user', async () => {
         const res = await request(server).post('/parent').send(parents[1]);
 
@@ -77,6 +78,7 @@ module.exports = () => {
         const res = await request(server).put('/parent/1').send({ Name });
 
         expect(res.status).toBe(204);
+        expect(res.body).toEqual({});
       });
 
       it('should return a 404 on invalid parent id', async () => {
@@ -90,6 +92,7 @@ module.exports = () => {
         const res = await request(server).put('/parent/1').send(badRequest);
 
         expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidParent');
       });
     });
 
