@@ -8,9 +8,6 @@ const parents = [...new Array(4)].map((i, idx) => ({
 }));
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
-  return knex('Parents').then(function () {
-    // Inserts seed entries
-    return knex('Parents').insert(parents);
-  });
+  // Inserts seed entries
+  return knex('Parents').insert(parents);
 };
