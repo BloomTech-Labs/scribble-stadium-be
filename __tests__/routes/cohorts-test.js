@@ -10,6 +10,7 @@ module.exports = () => {
         const res = await request(server).post('/cohort').send(cohort);
 
         expect(res.status).toBe(201);
+        expect(res.body).toEqual([1]);
       });
     });
   });

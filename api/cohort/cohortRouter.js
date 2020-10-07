@@ -1,5 +1,7 @@
 const router = require('express').Router();
+
 const { ops } = require('../../lib');
+
 const Cohorts = require('./cohortModel');
 
 router.post('/', (req, res) => {
