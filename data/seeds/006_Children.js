@@ -7,6 +7,7 @@ const children = [...new Array(8)].map((i, idx) => ({
   ParentID: `${Math.floor((idx + 2) / 2)}`,
   AvatarID: `${faker.random.number({ min: 1, max: 8 })}`,
   GradeLevelID: `${faker.random.number({ min: 1, max: 6 })}`,
+  CohortID: 1,
   IsDyslexic: `${faker.random.boolean()}`,
 }));
 

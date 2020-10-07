@@ -14,6 +14,7 @@ const getAll = () => {
       'C.PIN',
       'C.IsDyslexic',
       'C.ParentID',
+      'C.CohortID',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);
@@ -35,6 +36,7 @@ const getById = (ID) => {
       'C.PIN',
       'C.IsDyslexic',
       'C.ParentID',
+      'C.CohortID',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);

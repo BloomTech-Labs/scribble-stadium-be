@@ -5,5 +5,5 @@ const cohort = {
 
 exports.seed = function (knex) {
   // Inserts seed entries
-  return knex('table_name').insert(cohort);
+  return knex('Cohorts').insert(cohort);
 };
