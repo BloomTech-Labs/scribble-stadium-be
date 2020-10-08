@@ -29,8 +29,6 @@ const DS = require('./dsModel');
  * /data/complexity/{id}?complexity={complexity}:
  *  put:
  *    summary: Attempts to update the complexity of the relevant submission
- *    security:
- *      - okta: []
  *    tags:
  *      - Data Science
  *    parameters:
