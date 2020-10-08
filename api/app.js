@@ -29,7 +29,7 @@ const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const submissionRouter = require('./submission/submissionRouter');
 const oktaRouter = require('./okta/oktaRouter');
 const dsRouter = require('./ds/dsRouter');
-const cohortRouter = require('./cohort/cohortRouter');
+const modRouter = require('./mod/modRouter');
 
 const app = express();
 
@@ -64,7 +64,7 @@ app.use(['/story', '/stories'], storyRouter);
 app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use(['/submit', '/submission', '/submissions'], submissionRouter);
-app.use(['/cohort', '/cohorts'], cohortRouter);
+app.use('/mod', modRouter);
 app.use('/register', oktaRouter);
 app.use('/data', dsRouter);
 

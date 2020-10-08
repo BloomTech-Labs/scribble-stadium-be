@@ -3,7 +3,7 @@ const ParentTests = require('./parents-test');
 const AvatarTests = require('./avatars-test');
 const GradeLevelTests = require('./gradeLevels-test');
 const StoryTests = require('./stories-test');
-const CohortTests = require('./cohorts-test');
+const ModTests = require('./mod-test');
 const ChildTests = require('./children-test');
 const SubmissionTests = require('./submissions-test');
 const DSTests = require('./data-tests');
@@ -42,7 +42,7 @@ const TestStorySquadAPI = () => {
     AvatarTests();
     GradeLevelTests();
     StoryTests();
-    CohortTests();
+    ModTests();
     ChildTests();
 
     dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
