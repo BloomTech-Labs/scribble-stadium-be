@@ -7,15 +7,6 @@ const server = require('../../api/app');
 
 module.exports = () => {
   describe('data science endpoints', () => {
-    describe('PUT /data/flag/:id', () => {
-      it("should return an empty 204 cause it's not implemented", async () => {
-        const res = await request(server).put('/data/flag/1').send({});
-
-        expect(res.status).toBe(204);
-        expect(res.body).toEqual({});
-      });
-    });
-
     describe('GET /data/complexity/:id', () => {
       it('returns an array of null complexity objects', async () => {
         const res = await request(server).get('/child/1/complexity');
