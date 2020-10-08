@@ -24,4 +24,12 @@ router.get('/submissions', (req, res) => {
   ops.getAll(res, Mod.getSubmissionsByCohort, 'Cohort', cohortId);
 });
 
+router.put('/submissions/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  console.log(id, changes, 'THING');
+
+  ops.update(res, Mod.moderatePost, 'Submission', id, changes);
+});
+
 module.exports = router;

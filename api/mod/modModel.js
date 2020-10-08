@@ -16,6 +16,7 @@ const getSubmissionsByCohort = async (CohortID) => {
     .leftJoin('Flags AS F', 'S.ID', 'F.SubmissionID')
     .select([
       'S.ID',
+      'S.Status',
       'W.URL AS WritingURL',
       'W.PageNum',
       'D.URL AS DrawingURL',
@@ -32,6 +33,7 @@ const getSubmissionsByCohort = async (CohortID) => {
         image: page.DrawingURL,
         inappropriate: page.Inappropriate,
         sensitive: page.Sensitive,
+        status: page.Status,
         pages: {},
       };
     }
@@ -40,8 +42,13 @@ const getSubmissionsByCohort = async (CohortID) => {
   return res;
 };
 
+const moderatePost = (ID, Status) => {
+  return db('Submissions').where({ ID }).update(Status);
+};
+
 module.exports = {
   getCohorts,
   addCohort,
   getSubmissionsByCohort,
+  moderatePost,
 };
