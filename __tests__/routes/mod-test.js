@@ -31,6 +31,15 @@ module.exports = (flag) => {
           expect(res.status).toBe(400);
           expect(res.body.error).toBe('InvalidCohort');
         });
+
+        it('throws an error when the StoryID is invalid', async () => {
+          const res = await request(server)
+            .post('/mod/cohorts')
+            .send({ StoryID: 5 });
+
+          expect(res.status).toBe(404);
+          expect(res.body.error).toBe('InvalidCohortID');
+        });
       });
 
       describe('GET /mod', () => {
@@ -46,6 +55,13 @@ module.exports = (flag) => {
 
           expect(res.status).toBe(200);
           expect(res.body).toEqual({ ID: 1, ...stories[0] });
+        });
+
+        it('returns a 404 on invalid cohortId', async () => {
+          const res = await request(server).get('/story?cohortId=5');
+
+          expect(res.status).toBe(404);
+          expect(res.body.error).toEqual('StoryNotFound');
         });
       });
     } else {
