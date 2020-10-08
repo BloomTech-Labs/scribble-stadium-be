@@ -24,11 +24,6 @@ const DS = require('./dsModel');
  *      description: Complexity calculation for a submission
  */
 
-router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
-  // this endpoint exists to flag submissions for review
-  res.status(204).end();
-});
-
 /**
  * @swagger
  * /data/complexity/{id}?complexity={complexity}:
