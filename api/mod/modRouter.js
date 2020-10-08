@@ -27,7 +27,6 @@ router.get('/submissions', (req, res) => {
 router.put('/submissions/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
-  console.log(id, changes, 'THING');
 
   ops.update(res, Mod.moderatePost, 'Submission', id, changes);
 });

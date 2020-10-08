@@ -4,8 +4,11 @@ const db = require('../../data/db-config');
  * Queries database for a list of all stories
  * @returns {Promise} a promise that resolves into an array of stories
  */
-const getAll = () => {
-  return db('Stories');
+const getByCohortId = (CohortID) => {
+  return db('Stories AS S')
+    .join('Cohorts AS C', 'S.ID', 'C.StoryID')
+    .where('C.ID', CohortID)
+    .select('S.*');
 };
 
 /**
@@ -54,7 +57,7 @@ const remove = (ID) => {
 };
 
 module.exports = {
-  getAll,
+  getByCohortId,
   getById,
   add,
   update,

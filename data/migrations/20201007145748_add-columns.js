@@ -4,7 +4,7 @@ exports.up = function (knex) {
       t.enu('Status', ['CLEAR', 'PENDING', 'APPROVED', 'REJECTED'], {
         useNative: true,
         enumName: 'status',
-      });
+      }).defaultsTo('CLEAR');
       t.integer('CohortID')
         .notNullable()
         .unsigned()

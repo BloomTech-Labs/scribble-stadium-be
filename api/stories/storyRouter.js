@@ -69,7 +69,7 @@ const Stories = require('./storyModel');
 
 /**
  * @swagger
- * /stories:
+ * /stories?cohortId={id}:
  *  get:
  *    summary: Returns the current week's story ID.
  *    security:
@@ -88,7 +88,9 @@ const Stories = require('./storyModel');
  *        $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/', authRequired, async (req, res) => {
-  res.status(200).json(1);
+  const cohortId = req.query.cohortId;
+
+  ops.getById(res, Stories.getByCohortId, 'Story', cohortId);
 });
 
 /**

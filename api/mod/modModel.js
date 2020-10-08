@@ -10,7 +10,7 @@ const addCohort = (cohort) => {
 
 const getSubmissionsByCohort = async (CohortID) => {
   const data = await db('Submissions AS S')
-    .where({ CohortID, HasDrawn: true, HasWritten: true })
+    .where({ CohortID })
     .join('Writing AS W', 'S.ID', 'W.SubmissionID')
     .join('Drawing AS D', 'S.ID', 'D.SubmissionID')
     .leftJoin('Flags AS F', 'S.ID', 'F.SubmissionID')

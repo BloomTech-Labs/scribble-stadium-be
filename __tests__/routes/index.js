@@ -42,13 +42,14 @@ const TestStorySquadAPI = () => {
     AvatarTests();
     GradeLevelTests();
     StoryTests();
-    ModTests();
+    ModTests('PRE');
     ChildTests();
 
     dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
     dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
+    ModTests();
     DSTests();
   });
 };
