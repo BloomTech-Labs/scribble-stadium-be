@@ -94,6 +94,10 @@ const Stories = require('./storyModel');
  *              $ref: '#/components/schemas/GetStory'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
   const cohortId = req.query.cohortId;
