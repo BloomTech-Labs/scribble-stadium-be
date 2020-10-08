@@ -1,8 +1,9 @@
 const db = require('../../data/db-config');
 
 /**
- * Queries database for a list of all stories
- * @returns {Promise} a promise that resolves into an array of stories
+ * Returns the current week's story for the given cohort
+ * @param {number} CohortID the id of the cohort to search on
+ * @returns {Promise} a promise that resolves to a story object
  */
 const getByCohortId = (CohortID) => {
   return db('Stories AS S')
