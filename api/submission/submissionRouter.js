@@ -269,7 +269,7 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
   const storyId = req.body.storyId;
   const pages = req.body.pages;
 
-  // Callback function to pass into map taht formats the data properly
+  // Callback function to pass into map that formats the data properly
   const cb = (x, i) => ({
     URL: x.Location,
     PageNum: i + 1,
@@ -328,7 +328,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
   const { id } = req.params;
   const data = req.body.drawing;
 
-  // Callback function to pass into map taht formats the data properly
+  // Callback function to pass into map that formats the data properly
   const cb = (x) => ({
     URL: x.Location,
     SubmissionID: id,
