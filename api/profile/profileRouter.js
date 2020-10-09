@@ -2,6 +2,8 @@ const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Parents = require('../parent/parentModel');
 
+const { ops } = require('../../lib');
+
 /**
  * Schemas for typed profiles.
  * @swagger
@@ -93,23 +95,8 @@ const Parents = require('../parent/parentModel');
  */
 router.get('/', authRequired, async (req, res) => {
   const { Email } = req.profile;
-  try {
-    const parent = await Parents.getByEmail(Email);
-    /* istanbul ignore next */
-    if (parent.length === 0) {
-      return res.status(404).json({ error: 'ParentNotFound' });
-    }
-    // If we find a parent, then look for the children
-    const children = await Parents.getChildren(parent[0].ID);
-    res
-      .status(200)
-      .json([
-        { ...parent[0], type: 'Parent' },
-        ...children.map((child) => ({ ...child, type: 'Child' })),
-      ]);
-  } catch ({ message }) {
-    res.status(500).json({ message });
-  }
+
+  ops.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
 });
 
 module.exports = router;
