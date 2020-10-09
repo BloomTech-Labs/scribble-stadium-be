@@ -1,4 +1,5 @@
 const db = require('../../data/db-config');
+const { formatSubmissions } = require('../../lib');
 
 /**
  * Queries the database for a list of all current cohorts
@@ -42,20 +43,7 @@ const getSubmissionsByCohort = async (CohortID) => {
     .orderBy('S.ID', 'ASC')
     .orderBy('W.PageNum', 'ASC');
 
-  const res = {};
-  data.forEach((page) => {
-    if (!res[page.ID]) {
-      res[page.ID] = {
-        image: page.DrawingURL,
-        inappropriate: page.Inappropriate,
-        sensitive: page.Sensitive,
-        status: page.Status,
-        pages: {},
-      };
-    }
-    res[page.ID].pages[page.PageNum] = page.WritingURL;
-  });
-  return res;
+  return formatSubmissions(data);
 };
 
 /**
