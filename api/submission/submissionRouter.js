@@ -19,6 +19,8 @@ const Submissions = require('./submissionModel');
  *          type: integer
  *        StoryID:
  *          type: integer
+ *        CohortID:
+ *          type: integer
  *        HasRead:
  *          type: boolean
  *        HasWritten:
@@ -29,14 +31,23 @@ const Submissions = require('./submissionModel');
  *          type: integer
  *        LowConfidence:
  *          type: boolean
+ *        Status:
+ *          type: string
+ *          enum:
+ *            - CLEAR
+ *            - PENDING
+ *            - ACCEPTED
+ *            - REJECTED
  *      example:
  *        ID: 1
  *        ChildID: 1
  *        StoryID: 1
+ *        CohortID: 1
  *        HasRead: false
  *        HasWritten: false
  *        HasDrawn: false
  *        Complexity: null
+ *        Status: PENDING
  *    DrawnSubmission:
  *      type: object
  *      properties:
@@ -87,6 +98,8 @@ const Submissions = require('./submissionModel');
  *        ChildId:
  *          type: integer
  *        StoryId:
+ *          type: integer
+ *        CohortId:
  *          type: integer
  *        HasRead:
  *          type: boolean
@@ -269,7 +282,7 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
   const storyId = req.body.storyId;
   const pages = req.body.pages;
 
-  // Callback function to pass into map taht formats the data properly
+  // Callback function to pass into map that formats the data properly
   const cb = (x, i) => ({
     URL: x.Location,
     PageNum: i + 1,
@@ -328,7 +341,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
   const { id } = req.params;
   const data = req.body.drawing;
 
-  // Callback function to pass into map taht formats the data properly
+  // Callback function to pass into map that formats the data properly
   const cb = (x) => ({
     URL: x.Location,
     SubmissionID: id,

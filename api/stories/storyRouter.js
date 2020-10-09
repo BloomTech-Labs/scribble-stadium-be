@@ -65,30 +65,44 @@ const Stories = require('./storyModel');
  *      example: 1
  *      schema:
  *        type: integer
+ *    cohortQuery:
+ *      name: cohortId
+ *      in: query
+ *      description: a query parameter that tells the server the cohort to search by
+ *      example: ?cohortId=1
+ *      schema:
+ *        type: integer
  */
 
 /**
  * @swagger
- * /stories:
+ * /story?cohortId={id}:
  *  get:
- *    summary: Returns the current week's story ID.
+ *    summary: Returns the story for the given cohort.
  *    security:
  *      - okta: []
  *    tags:
  *      - Stories
+ *    parameters:
+ *      - $ref: '#/components/parameters/cohortQuery'
  *    responses:
  *      200:
- *        description: Returns the ID of the current week's story.
+ *        description: Returns the current story for the given cohort.
  *        content:
  *          application/json:
  *            schema:
- *              type: integer
- *              example: 1
+ *              $ref: '#/components/schemas/GetStory'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, async (req, res) => {
-  res.status(200).json(1);
+  const cohortId = req.query.cohortId;
+
+  ops.getById(res, Stories.getByCohortId, 'Story', cohortId);
 });
 
 /**

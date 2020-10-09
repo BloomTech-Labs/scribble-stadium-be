@@ -92,6 +92,7 @@ module.exports = {
       AvatarID: 1,
       ParentID: 1,
       GradeLevelID: 1,
+      CohortID: 1,
       IsDyslexic: true,
     },
     {
@@ -100,6 +101,7 @@ module.exports = {
       AvatarID: 2,
       ParentID: 1,
       GradeLevelID: 2,
+      CohortID: 1,
       IsDyslexic: false,
     },
   ],
@@ -112,7 +114,7 @@ module.exports = {
       URL:
         'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       WritingPrompt:
-        "Explain the symbolism of the juxtaposition of Kiss From a Rose with Pierce's Hallucination and Annie and Shirley's hitchhiker.",
+        "Explain the symbolism of the juxtaposition of Kiss From a Rose with Pierce's Hallucination and Britta and Shirley's hitchhiker.",
       DrawingPrompt:
         "Draw your favorite background image from Jeff and the Dean's karaoke session.",
     },
@@ -136,5 +138,10 @@ module.exports = {
     HasDrawn: false,
     Complexity: null,
     LowConfidence: null,
+    Status: 'CLEAR',
+    CohortID: 1,
+  },
+  cohort: {
+    StoryID: 1,
   },
 };

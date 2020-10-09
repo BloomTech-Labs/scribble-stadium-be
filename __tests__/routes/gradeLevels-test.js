@@ -31,6 +31,15 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidGradeLevel');
       });
 
+      it('should return a 400 on array of poorly formatted gradeLevels', async () => {
+        const res = await request(server)
+          .post('/gradelevel')
+          .send([badRequest, badRequest]);
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidGradeLevel');
+      });
+
       it('should restrict the addition of redundant grade levels', async () => {
         const res = await request(server)
           .post('/gradelevel')

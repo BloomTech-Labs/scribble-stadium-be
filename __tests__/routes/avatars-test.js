@@ -32,6 +32,15 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidAvatar');
       });
 
+      it('should return a 400 on array of poorly formatted avatars', async () => {
+        const res = await request(server)
+          .post('/avatar')
+          .send({ avatars: [badRequest, badRequest] });
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidAvatar');
+      });
+
       it('should restrict the addition of redundant avatars', async () => {
         const res = await request(server)
           .post('/avatar')

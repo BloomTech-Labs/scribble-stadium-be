@@ -1,4 +1,5 @@
 const db = require('../../data/db-config');
+const { formatProfiles } = require('../../lib');
 
 /**
  * A method to get all parents from the database
@@ -65,21 +66,22 @@ const remove = (ID) => {
  * @param {number} ID unique ID of the parent
  * @returns {Promise} promise that resolves to an array of children
  */
-const getChildren = (ID) => {
-  return db('Parents AS P')
-    .join('Children AS C', 'P.ID', 'C.ParentID')
-    .join('Avatars AS A', 'C.AvatarID', 'A.ID')
-    .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
-    .where('C.ParentID', ID)
+const getProfilesByEmail = async (Email) => {
+  const data = await db('Parents AS P')
+    .leftJoin('Children AS C', 'P.ID', 'C.ParentID')
+    .leftJoin('Avatars AS A', 'C.AvatarID', 'A.ID')
+    .leftJoin('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
+    .where('P.Email', Email)
     .select([
-      'C.ID',
-      'C.Name',
-      'C.ParentID',
-      'C.PIN',
+      'P.*',
+      'C.ID AS ChildID',
+      'C.PIN AS ChildPIN',
+      'C.Name AS ChildName',
       'C.IsDyslexic',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);
+  return formatProfiles(data);
 };
 
 /**
@@ -110,6 +112,6 @@ module.exports = {
   add,
   update,
   remove,
-  getChildren,
+  getProfilesByEmail,
   findOrCreate,
 };

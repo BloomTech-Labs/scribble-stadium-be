@@ -5,9 +5,6 @@ const avatars = [...new Array(8)].map(() => ({
 }));
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
-  return knex('Avatars').then(function () {
-    // Inserts seed entries
-    return knex('Avatars').insert(avatars);
-  });
+  // Inserts seed entries
+  return knex('Avatars').insert(avatars);
 };

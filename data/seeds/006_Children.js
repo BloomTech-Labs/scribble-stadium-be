@@ -7,13 +7,11 @@ const children = [...new Array(8)].map((i, idx) => ({
   ParentID: `${Math.floor((idx + 2) / 2)}`,
   AvatarID: `${faker.random.number({ min: 1, max: 8 })}`,
   GradeLevelID: `${faker.random.number({ min: 1, max: 6 })}`,
+  CohortID: 1,
   IsDyslexic: `${faker.random.boolean()}`,
 }));
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
-  return knex('Children').then(function () {
-    // Inserts seed entries
-    return knex('Children').insert(children);
-  });
+  // Inserts seed entries
+  return knex('Children').insert(children);
 };

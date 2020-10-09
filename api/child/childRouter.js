@@ -23,10 +23,14 @@ const Children = require('./childModel');
  *          type: string
  *        IsDyslexic:
  *          type: boolean
+ *        CohortID:
+ *          type: integer
+ *          description: Foreign key to child's current cohort
  *      example:
  *        Name: 'Alison Brie'
  *        PIN: '00uhjfrwdWAQv10JV4x6'
  *        IsDyslexic: false
+ *        CohortID: 1
  *    PutChild:
  *      allOf:
  *        - $ref: '#/components/schemas/Child'

@@ -48,6 +48,10 @@ module.exports = {
         name: 'Data Science',
         description: 'Endpoints for data science tasks.',
       },
+      {
+        name: 'Moderation',
+        description: 'Endpoints for content moderation.',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',

@@ -9,15 +9,6 @@ const {
 
 module.exports = () => {
   describe('story router endpoints', () => {
-    describe('GET /stories', () => {
-      it('should return a 200 and a story ID', async () => {
-        const res = await request(server).get('/stories');
-
-        expect(res.status).toBe(200);
-        expect(res.body).toBe(1);
-      });
-    });
-
     describe('POST /story', () => {
       it('should successfully add a story to the database', async () => {
         const res = await request(server).post('/story').send(stories[0]);

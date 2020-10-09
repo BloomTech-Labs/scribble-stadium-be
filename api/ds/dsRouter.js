@@ -24,18 +24,11 @@ const DS = require('./dsModel');
  *      description: Complexity calculation for a submission
  */
 
-router.put('/flag/:id', dsAuthMiddleware, async (req, res) => {
-  // this endpoint exists to flag submissions for review
-  res.status(204).end();
-});
-
 /**
  * @swagger
  * /data/complexity/{id}?complexity={complexity}:
  *  put:
  *    summary: Attempts to update the complexity of the relevant submission
- *    security:
- *      - okta: []
  *    tags:
  *      - Data Science
  *    parameters:

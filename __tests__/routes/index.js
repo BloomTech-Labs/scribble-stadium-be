@@ -2,8 +2,9 @@ const IndexTests = require('./index-test');
 const ParentTests = require('./parents-test');
 const AvatarTests = require('./avatars-test');
 const GradeLevelTests = require('./gradeLevels-test');
-const ChildTests = require('./children-test');
 const StoryTests = require('./stories-test');
+const ModTests = require('./mod-test');
+const ChildTests = require('./children-test');
 const SubmissionTests = require('./submissions-test');
 const DSTests = require('./data-tests');
 
@@ -33,20 +34,22 @@ const TestStorySquadAPI = () => {
       await db.raw(
         'TRUNCATE TABLE public."Drawing", public."Writing", public."Submissions", \
       public."Stories", public."Children", public."Avatars", public."GradeLevels", \
-      public."Parents" RESTART IDENTITY CASCADE'
+      public."Cohorts", public."Parents" RESTART IDENTITY CASCADE'
       );
     });
     IndexTests();
     ParentTests();
     AvatarTests();
     GradeLevelTests();
-    ChildTests();
     StoryTests();
+    ModTests('PRE');
+    ChildTests();
 
     dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
     dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
+    ModTests();
     DSTests();
   });
 };
