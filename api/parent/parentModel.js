@@ -62,9 +62,9 @@ const remove = (ID) => {
 };
 
 /**
- * Returns a list of all children profiles for an account
- * @param {number} ID unique ID of the parent
- * @returns {Promise} promise that resolves to an array of children
+ * Returns a list of all parent and child profiles for an account
+ * @param {string} Email unique email of the parent
+ * @returns {Promise} promise that resolves to an array with the parent and all of their children
  */
 const getProfilesByEmail = async (Email) => {
   const data = await db('Parents AS P')
