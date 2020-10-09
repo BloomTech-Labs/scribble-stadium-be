@@ -78,6 +78,7 @@ const getProfilesByEmail = async (Email) => {
       'C.PIN AS ChildPIN',
       'C.Name AS ChildName',
       'C.IsDyslexic',
+      'C.CohortID',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);

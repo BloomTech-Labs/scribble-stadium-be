@@ -85,6 +85,8 @@ const { ops } = require('../../lib');
  *                  AvatarURL: 'http://someurl.com'
  *                  GradeLevel: 3
  *                  ParentID: 1
+ *                  CohortID: 1
+ *                  IsDyslexic: false
  *                  type: 'Child'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
