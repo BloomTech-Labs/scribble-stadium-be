@@ -19,6 +19,8 @@ const Submissions = require('./submissionModel');
  *          type: integer
  *        StoryID:
  *          type: integer
+ *        CohortID:
+ *          type: integer
  *        HasRead:
  *          type: boolean
  *        HasWritten:
@@ -29,14 +31,23 @@ const Submissions = require('./submissionModel');
  *          type: integer
  *        LowConfidence:
  *          type: boolean
+ *        Status:
+ *          type: string
+ *          enum:
+ *            - CLEAR
+ *            - PENDING
+ *            - ACCEPTED
+ *            - REJECTED
  *      example:
  *        ID: 1
  *        ChildID: 1
  *        StoryID: 1
+ *        CohortID: 1
  *        HasRead: false
  *        HasWritten: false
  *        HasDrawn: false
  *        Complexity: null
+ *        Status: PENDING
  *    DrawnSubmission:
  *      type: object
  *      properties:
@@ -87,6 +98,8 @@ const Submissions = require('./submissionModel');
  *        ChildId:
  *          type: integer
  *        StoryId:
+ *          type: integer
+ *        CohortId:
  *          type: integer
  *        HasRead:
  *          type: boolean
