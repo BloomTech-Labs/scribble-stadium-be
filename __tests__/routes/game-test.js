@@ -113,6 +113,12 @@ module.exports = () => {
           expect(res.status).toBe(204);
         }
       });
+
+      it('clusters students appropriately', async () => {
+        const res = await request(server).get('/data/clusters');
+
+        expect(res.status).toBe(200);
+      });
     });
   });
 };

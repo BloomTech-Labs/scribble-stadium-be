@@ -30,12 +30,6 @@ exports.up = function (knex) {
         .references('Teams.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');
-      t.integer('ChildID')
-        .notNullable()
-        .unsigned()
-        .references('Children.ID')
-        .onUpdate('CASCADE')
-        .onDelete('RESTRICT');
       t.integer('SubmissionID')
         .notNullable()
         .unsigned()

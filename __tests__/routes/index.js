@@ -25,9 +25,11 @@ jest.mock('../../api/middleware/dsAuthMiddleware', () =>
   jest.fn((req, res, next) => next())
 );
 
-// Function mocking
-const dsRequests = require('../../lib/dsRequests');
-jest.mock('../../lib/dsRequests');
+jest.mock('../../lib/dsRequests', () => ({
+  ...jest.requireActual('../../lib/dsRequests'),
+  submitWritingToDS: () => Promise.resolve(),
+  submitDrawingToDS: () => Promise.resolve(),
+}));
 
 const TestStorySquadAPI = () => {
   describe('StorySquad testing suite', () => {
@@ -35,7 +37,9 @@ const TestStorySquadAPI = () => {
       await db.raw(
         'TRUNCATE TABLE public."Drawing", public."Writing", public."Submissions", \
       public."Stories", public."Children", public."Avatars", public."GradeLevels", \
-      public."Cohorts", public."Parents" RESTART IDENTITY CASCADE'
+      public."Cohorts", public."Parents", public."Flags", public."Squads", \
+      public."Teams", public."Members", public."Points", public."Faceoffs", \
+      public."Votes" RESTART IDENTITY CASCADE'
       );
     });
     IndexTests();
@@ -45,9 +49,6 @@ const TestStorySquadAPI = () => {
     StoryTests();
     ModTests('PRE');
     ChildTests();
-
-    dsRequests.submitWritingToDS.mockResolvedValue(Promise.resolve());
-    dsRequests.submitDrawingToDS.mockResolvedValue(Promise.resolve());
 
     SubmissionTests();
     ModTests();

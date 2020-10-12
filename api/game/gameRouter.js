@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { authRequired } = require('../middleware');
 
-router.get('/', (req, res) => {
+router.get('/', authRequired, (req, res) => {
   res.send(1);
 });
 

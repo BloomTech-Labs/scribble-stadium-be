@@ -55,4 +55,8 @@ router.put('/complexity/:id', dsAuthMiddleware, async (req, res) => {
   ops.update(res, DS.setComplexity, 'Submission', id, complexity);
 });
 
+router.get('/clusters', dsAuthMiddleware, async (req, res) => {
+  ops.getAll(res, DS.clusterGeneration, 'Cluster');
+});
+
 module.exports = router;
