@@ -30,6 +30,7 @@ const submissionRouter = require('./submission/submissionRouter');
 const oktaRouter = require('./okta/oktaRouter');
 const dsRouter = require('./ds/dsRouter');
 const modRouter = require('./mod/modRouter');
+const gameRouter = require('./game/gameRouter');
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use(['/submit', '/submission', '/submissions'], submissionRouter);
 app.use('/mod', modRouter);
 app.use('/register', oktaRouter);
 app.use('/data', dsRouter);
+app.use('/game', gameRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
