@@ -12,51 +12,50 @@ const setComplexity = (ID, Complexity) => {
   return db('Submissions').where({ ID }).update({ Complexity });
 };
 
+const addSquad = (conn, CohortID) => {
+  return conn('Squads').insert({ CohortID }).returning('ID');
+};
+
+const addTeams = (
+  conn,
+  SquadID,
+  team1Name = 'Team 1',
+  team2Name = 'Team 2'
+) => {
+  return conn('Teams')
+    .insert([
+      { SquadID, Name: team1Name },
+      { SquadID, Name: team2Name },
+    ])
+    .returning('ID');
+};
+
+const addSingleMember = (conn, SubmissionID, TeamID) => {
+  return conn('Members').insert({ SubmissionID, TeamID }).returning('ID');
+};
+
+const addMembers = (conn, team1ID, team2ID, subIDs) => {
+  return Promise.all(
+    subIDs.map((id, i) => addSingleMember(conn, id, i < 2 ? team1ID : team2ID))
+  );
+};
+
 const clusterGeneration = () => {
   return db.transaction(async (trx) => {
     try {
       const res = {};
-
       const cohorts = await trx('Cohorts');
-
       for (let { ID } of cohorts) {
         res[ID] = await Mod.getSubmissionsByCohort(ID);
       }
-
       const clusters = await dsApi.getClusters(res);
 
+      // Add the generated clusters to the database
       for (let { ID } of cohorts) {
         for (let squad of clusters[ID]) {
-          const [SquadID] = await trx('Squads')
-            .insert({ CohortID: ID })
-            .returning('ID');
-
-          const [t1, t2] = await trx('Teams')
-            .insert([
-              { SquadID, Name: 'Team 1' },
-              { SquadID, Name: 'Team 2' },
-            ])
-            .returning('ID');
-
-          const t1mem = await trx('Members')
-            .insert(
-              squad.slice(0, 2).map((SubmissionID) => ({
-                SubmissionID,
-                TeamID: t1,
-              }))
-            )
-            .returning('ID');
-
-          const t2mem = await trx('Members')
-            .insert(
-              squad.slice(2, 4).map((SubmissionID) => ({
-                SubmissionID,
-                TeamID: t2,
-              }))
-            )
-            .returning('ID');
-
-          console.log({ SquadID, t1, t2, t1mem, t2mem });
+          const [SquadID] = await addSquad(trx, ID);
+          const [t1, t2] = await addTeams(trx, SquadID);
+          await addMembers(trx, t1, t2, squad);
         }
       }
 
