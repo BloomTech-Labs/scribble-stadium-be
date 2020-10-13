@@ -1,5 +1,5 @@
 const db = require('../../data/db-config');
-const { formatSubmissions } = require('../../lib');
+const { formatCohortSubmissions, dbOps } = require('../../lib');
 
 /**
  * Queries the database for a list of all current cohorts
@@ -26,24 +26,8 @@ const addCohort = (cohort) => {
  * @returns {Promise} a promise that resolves to a table of submissions
  */
 const getSubmissionsByCohort = async (CohortID) => {
-  const data = await db('Submissions AS S')
-    .where({ CohortID })
-    .join('Writing AS W', 'S.ID', 'W.SubmissionID')
-    .join('Drawing AS D', 'S.ID', 'D.SubmissionID')
-    .leftJoin('Flags AS F', 'S.ID', 'F.SubmissionID')
-    .select([
-      'S.ID',
-      'S.Status',
-      'W.URL AS WritingURL',
-      'W.PageNum',
-      'D.URL AS DrawingURL',
-      'F.Inappropriate',
-      'F.Sensitive',
-    ])
-    .orderBy('S.ID', 'ASC')
-    .orderBy('W.PageNum', 'ASC');
-
-  return formatSubmissions(data);
+  const data = await dbOps.getAllSubmissionsByCohort(db, CohortID);
+  return formatCohortSubmissions(data);
 };
 
 /**
