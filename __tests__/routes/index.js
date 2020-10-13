@@ -26,9 +26,16 @@ jest.mock('../../api/middleware/dsAuthMiddleware', () =>
 );
 
 jest.mock('../../lib/dsRequests', () => ({
-  ...jest.requireActual('../../lib/dsRequests'),
   submitWritingToDS: () => Promise.resolve(),
   submitDrawingToDS: () => Promise.resolve(),
+  getClusters: (submissions) => {
+    const cohorts = Object.keys(submissions);
+    const res = {};
+    cohorts.forEach((c) => {
+      res[c] = [Object.keys(submissions[c])];
+    });
+    return Promise.resolve(res);
+  },
 }));
 
 const TestStorySquadAPI = () => {
