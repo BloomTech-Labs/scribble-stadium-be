@@ -55,4 +55,24 @@ router.put('/complexity/:id', dsAuthMiddleware, async (req, res) => {
   ops.update(res, DS.setComplexity, 'Submission', id, complexity);
 });
 
+/**
+ * @swagger
+ * /data/clusters:
+ *  get:
+ *    summary: This endpoint triggers a query to the DSAPI that sends submissions,
+ *      receives clusters, and stores clusters in our database.
+ *    tags:
+ *      - Data Science
+ *    responses:
+ *      200:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/clusters', dsAuthMiddleware, async (req, res) => {
+  ops.getAll(res, DS.clusterGeneration, 'Cluster');
+});
+
 module.exports = router;
