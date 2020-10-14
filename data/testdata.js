@@ -1,12 +1,4 @@
 const faker = require('faker');
-// const {
-//   uploadHelpers: { generateChecksum },
-// } = require('../lib');
-
-const genRanHex = (size) =>
-  [...Array(size)]
-    .map(() => Math.floor(Math.random() * 16).toString(16))
-    .join('');
 
 module.exports = {
   // enumerated data types
@@ -16,68 +8,63 @@ module.exports = {
     { Location: faker.image.business() },
   ],
   pages: [
-    // () => {
-    //   const [p1, p2] = [faker.image.abstract(), faker.image.animals()];
-    //   const [c1, c2] = [generateChecksum(p1), generateChecksum(p2)];
-    //   return [{}];
-    // },
     [
       {
         Location: faker.image.abstract(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
       {
         Location: faker.image.animals(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
     ],
     [
       {
         Location: faker.image.business(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
       {
         Location: faker.image.cats(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
     ],
     [
       {
         Location: faker.image.city(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
       {
         Location: faker.image.fashion(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
     ],
     [
       {
         Location: faker.image.food(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
       {
         Location: faker.image.nature(),
-        Checksum: genRanHex(128),
+        Checksum: faker.random.alphaNumeric(20),
       },
     ],
   ],
   drawing: [
     {
       Location: faker.image.abstract(),
-      Checksum: genRanHex(128),
+      Checksum: faker.random.alphaNumeric(20),
     },
     {
       Location: faker.image.animals(),
-      Checksum: genRanHex(128),
+      Checksum: faker.random.alphaNumeric(20),
     },
     {
       Location: faker.image.business(),
-      Checksum: genRanHex(128),
+      Checksum: faker.random.alphaNumeric(20),
     },
     {
       Location: faker.image.cats(),
-      Checksum: genRanHex(128),
+      Checksum: faker.random.alphaNumeric(20),
     },
   ],
   gradeLevels: [
