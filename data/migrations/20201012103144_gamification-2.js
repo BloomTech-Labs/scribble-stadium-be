@@ -15,6 +15,7 @@ exports.up = function (knex) {
       .references('Submissions.ID')
       .onUpdate('CASCADE')
       .onDelete('RESTRICT');
+    t.unique(['MemberID', 'SubmissionID']);
   });
 };
 

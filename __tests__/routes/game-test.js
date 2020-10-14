@@ -5,12 +5,14 @@ const {
   children,
   pages,
   drawings,
+  points,
 } = require('../../data/gamificationTestData');
+const { badRequest } = require('../../data/testdata');
 
 module.exports = () => {
   describe('gamification endpoints!', () => {
-    let childIds = [];
-    let subIds = [];
+    let childIds = [1];
+    let subIds = [1];
     describe('gamification setup', () => {
       it('posts 3 more children for testing', async () => {
         let res = await request(server).post('/child').send(children[0]);
@@ -25,8 +27,8 @@ module.exports = () => {
         expect(res.status).toBe(201);
         childIds.push(res.body);
 
-        expect(childIds).toHaveLength(3);
-        expect(childIds).toEqual([3, 4, 5]);
+        expect(childIds).toHaveLength(4);
+        expect(childIds).toEqual([1, 3, 4, 5]);
       });
 
       it('verifies 4 children are present', async () => {
@@ -38,12 +40,6 @@ module.exports = () => {
 
       it('initializes a submission for each of the new children', async () => {
         let res = await request(server).get(
-          `/submit?childId=${childIds[0]}&storyId=1`
-        );
-        expect(res.status).toBe(200);
-        subIds.push(res.body.ID);
-
-        res = await request(server).get(
           `/submit?childId=${childIds[1]}&storyId=1`
         );
         expect(res.status).toBe(200);
@@ -55,40 +51,46 @@ module.exports = () => {
         expect(res.status).toBe(200);
         subIds.push(res.body.ID);
 
-        expect(subIds).toHaveLength(3);
-        expect(subIds).toEqual([4, 5, 6]);
+        res = await request(server).get(
+          `/submit?childId=${childIds[3]}&storyId=1`
+        );
+        expect(res.status).toBe(200);
+        subIds.push(res.body.ID);
+
+        expect(subIds).toHaveLength(4);
+        expect(subIds).toEqual([1, 4, 5, 6]);
       });
 
       it('posts written pages for each of the submissions', async () => {
         let res = await request(server)
-          .post(`/submit/write/${subIds[0]}`)
+          .post(`/submit/write/${subIds[1]}`)
           .send(pages[0]);
         expect(res.status).toBe(201);
 
         res = await request(server)
-          .post(`/submit/write/${subIds[1]}`)
+          .post(`/submit/write/${subIds[2]}`)
           .send(pages[1]);
         expect(res.status).toBe(201);
 
         res = await request(server)
-          .post(`/submit/write/${subIds[2]}`)
+          .post(`/submit/write/${subIds[3]}`)
           .send(pages[2]);
         expect(res.status).toBe(201);
       });
 
       it('posts a drawing for each of the submissions', async () => {
         let res = await request(server)
-          .post(`/submit/draw/${subIds[0]}`)
+          .post(`/submit/draw/${subIds[1]}`)
           .send(drawings[0]);
         expect(res.status).toBe(201);
 
         res = await request(server)
-          .post(`/submit/draw/${subIds[1]}`)
+          .post(`/submit/draw/${subIds[2]}`)
           .send(drawings[1]);
         expect(res.status).toBe(201);
 
         res = await request(server)
-          .post(`/submit/draw/${subIds[2]}`)
+          .post(`/submit/draw/${subIds[3]}`)
           .send(drawings[2]);
         expect(res.status).toBe(201);
       });
@@ -98,9 +100,7 @@ module.exports = () => {
 
         expect(res.status).toBe(200);
         expect(Object.keys(res.body)).toHaveLength(4);
-        expect(Object.keys(res.body)).toEqual(
-          [1, ...subIds].map((x) => `${x}`)
-        );
+        expect(Object.keys(res.body)).toEqual(subIds.map((x) => `${x}`));
       });
 
       it('marks all 4 submissions as APPROVED', async () => {
@@ -117,6 +117,7 @@ module.exports = () => {
         const res = await request(server).get('/data/clusters');
 
         expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(4);
       });
     });
 
@@ -152,6 +153,55 @@ module.exports = () => {
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
+      });
+    });
+
+    describe('POST /game/points', () => {
+      it('assigns points successfully', async () => {
+        const res = await request(server).post('/game/points').send(points[0]);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveLength(2);
+      });
+
+      it('returns a 403 when attempting voter fraud', async () => {
+        const res = await request(server).post('/game/points').send(points[0]);
+
+        expect(res.status).toBe(403);
+        expect(res.body.error).toBe('Could not submit duplicate.');
+      });
+
+      it('returns a 400 on bad data', async () => {
+        const res = await request(server).post('/game/points').send(badRequest);
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidSubmission');
+      });
+
+      it('returns a 404 when the given submission ID is invalid', async () => {
+        const res = await request(server)
+          .post('/game/points')
+          .send([{ ...points[1][0], SubmissionID: 10 }, points[1][1]]);
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('InvalidSubmissionID');
+      });
+
+      it('submits points for the other three children in the squad', async () => {
+        let res = await request(server).post('/game/points').send(points[1]);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveLength(2);
+
+        res = await request(server).post('/game/points').send(points[2]);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveLength(2);
+
+        res = await request(server).post('/game/points').send(points[3]);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveLength(2);
       });
     });
   });

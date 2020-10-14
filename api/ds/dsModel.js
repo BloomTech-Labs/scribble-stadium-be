@@ -30,15 +30,16 @@ const clusterGeneration = () => {
       const clusters = await dsApi.getClusters(res);
 
       // Add the generated clusters to the database
+      let members;
       for (let { ID } of cohorts) {
         for (let squad of clusters[ID]) {
           const [SquadID] = await addSquad(trx, ID);
           const [t1, t2] = await addTeams(trx, SquadID);
-          await addMembers(trx, t1, t2, squad);
+          members = await addMembers(trx, t1, t2, squad);
         }
       }
 
-      return clusters;
+      return [].concat.apply([], members);
     } catch (err) {
       trx.rollback();
     }

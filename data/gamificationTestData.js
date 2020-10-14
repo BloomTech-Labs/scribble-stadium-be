@@ -1,5 +1,12 @@
 const faker = require('faker');
 
+const makePoints = (MemberID, SubmissionID) => ({
+  WritingPoints: 35,
+  DrawingPoints: 15,
+  MemberID,
+  SubmissionID,
+});
+
 module.exports = {
   children: [
     {
@@ -89,5 +96,11 @@ module.exports = {
         },
       ],
     },
+  ],
+  points: [
+    [makePoints(1, 1), makePoints(1, 4)],
+    [makePoints(2, 1), makePoints(2, 4)],
+    [makePoints(3, 5), makePoints(3, 6)],
+    [makePoints(4, 5), makePoints(4, 6)],
   ],
 };

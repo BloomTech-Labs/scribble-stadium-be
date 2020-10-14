@@ -10,8 +10,13 @@ const getFormattedTeam = (ChildID) => {
   return db.transaction(async (trx) => {
     const team = await getTeamIDByChild(trx, ChildID);
     const submissions = await getTeamByID(trx, team.TeamID);
+    // const hasSubmittedPoints
     return formatTeam(submissions);
   });
+};
+
+const assignPoints = (points) => {
+  return db('Points').insert(points).returning('ID');
 };
 
 /**
@@ -54,4 +59,5 @@ const getTeamByID = (conn, TeamID) => {
 
 module.exports = {
   getFormattedTeam,
+  assignPoints,
 };
