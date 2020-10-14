@@ -81,7 +81,7 @@ module.exports = () => {
       it('successfully posts written pages for a user', async () => {
         const res = await request(server)
           .post('/submit/write/1')
-          .send({ pages: pages[0] });
+          .send({ pages: pages[0], storyId: submission.StoryID });
 
         expect(res.status).toBe(201);
         expect(res.body.map(({ URL }, i) => ({ URL, PageNum: i + 1 }))).toEqual(
@@ -96,7 +96,7 @@ module.exports = () => {
       it('should restrict a second written submission from a user', async () => {
         const res = await request(server)
           .post('/submit/write/1')
-          .send({ pages: pages[1] });
+          .send({ pages: pages[1], storyId: submission.StoryID });
 
         expect(res.status).toBe(403);
         expect(res.body.error).toBe('Could not submit duplicate.');
@@ -105,7 +105,7 @@ module.exports = () => {
       it('should pass a 404 on invalid submission ID', async () => {
         const res = await request(server)
           .post('/submit/write/3')
-          .send({ pages: pages[1] });
+          .send({ pages: pages[1], storyId: submission.StoryID });
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe('InvalidSubmissionID');

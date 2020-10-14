@@ -281,6 +281,7 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
   const { id } = req.params;
   const storyId = req.body.storyId;
   const pages = req.body.pages;
+  // console.log({ id, storyId });
 
   // Callback function to pass into map that formats the data properly
   const cb = (x, i) => ({
