@@ -92,6 +92,7 @@ module.exports = () => {
         );
         submission.HasWritten = true;
         submission.Complexity = 30;
+        submission.LowConfidence = false;
       });
 
       it('should restrict a second written submission from a user', async () => {
