@@ -81,7 +81,6 @@ const submitDrawingTransaction = (drawing, ID) => {
         Checksum: drawing[0].checksum,
       };
       const { data } = await dsApi.submitDrawingToDS(drawingProperFormat);
-      console.log({ data });
       dsResponse = data;
     } catch (err) {
       trx.rollback();
@@ -113,7 +112,6 @@ const submitWritingTransaction = (pages, ID, storyId) => {
       const { data } = await dsApi.submitWritingToDS(storyId, ID, pages);
       dsResponse = data;
     } catch (err) {
-      console.log({ err: err.message });
       trx.rollback();
     }
 
@@ -121,8 +119,8 @@ const submitWritingTransaction = (pages, ID, storyId) => {
       .where({ ID })
       .update({
         HasWritten: true,
-        LowConfidence: dsResponse.LowConfidence || null,
-        Complexity: Math.round(dsResponse.Complexity) || null,
+        LowConfidence: dsResponse.LowConfidence,
+        Complexity: Math.round(dsResponse.Complexity),
       });
 
     return;
