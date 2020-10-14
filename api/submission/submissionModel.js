@@ -74,11 +74,18 @@ const submitDrawingTransaction = (drawing, ID) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
     await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
+    let dsResponse;
     try {
-      await dsApi.submitDrawingToDS(drawing[0]);
+      const drawingProperFormat = {
+        ...drawing[0],
+        Checksum: drawing[0].checksum,
+      };
+      const { data } = await dsApi.submitDrawingToDS(drawingProperFormat);
+      dsResponse = data;
     } catch (err) {
       trx.rollback();
     }
+    console.log({ dsResponse });
     return;
   });
 };
@@ -97,13 +104,25 @@ const submitDrawingTransaction = (drawing, ID) => {
  */
 const submitWritingTransaction = (pages, ID, storyId) => {
   return db.transaction(async (trx) => {
-    await trx('Submissions').where({ ID }).update({ HasWritten: true });
     await trx('Writing').insert(pages.map((x) => _omit(x, 'checksum')));
+
+    let dsResponse;
+
     try {
-      await dsApi.submitWritingToDS(storyId, ID, pages);
+      const { data } = await dsApi.submitWritingToDS(storyId, ID, pages);
+      dsResponse = data;
     } catch (err) {
       trx.rollback();
     }
+
+    await trx('Submissions')
+      .where({ ID })
+      .update({
+        HasWritten: true,
+        LowConfidence: dsResponse.LowConfidence,
+        Complexity: Math.round(dsResponse.Complexity),
+      });
+
     return;
   });
 };

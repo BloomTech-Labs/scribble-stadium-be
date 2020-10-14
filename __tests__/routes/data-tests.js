@@ -8,12 +8,12 @@ const server = require('../../api/app');
 module.exports = () => {
   describe('data science endpoints', () => {
     describe('GET /data/complexity/:id', () => {
-      it('returns an array of null complexity objects', async () => {
+      it('returns an array of complexity objects', async () => {
         const res = await request(server).get('/child/1/complexity');
 
         expect(res.status).toBe(200);
         res.body.forEach((item) => {
-          expect(item.Complexity).toBeNull();
+          expect(item.Complexity).toBe(30);
         });
       });
 
@@ -58,7 +58,7 @@ module.exports = () => {
         expect(res.status).toBe(200);
         res.body.forEach((item) => {
           if (item.ID === 2) {
-            expect(item.Complexity).toBeNull();
+            expect(item.Complexity).toBe(30);
           } else {
             expect(item.Complexity).toBe(123);
           }
