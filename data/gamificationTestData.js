@@ -37,6 +37,14 @@ module.exports = {
           Location: faker.image.nature(),
           Checksum: faker.random.alphaNumeric(20),
         },
+        {
+          Location: faker.image.sports(),
+          Checksum: faker.random.alphaNumeric(20),
+        },
+        {
+          Location: faker.image.technics(),
+          Checksum: faker.random.alphaNumeric(20),
+        },
       ],
     },
     {
