@@ -25,6 +25,24 @@ jest.mock('../../api/middleware/dsAuthMiddleware', () =>
   jest.fn((req, res, next) => next())
 );
 
+// DS Request Mocking
+jest.mock('../../lib/dsRequests', () => ({
+  ...jest.requireActual('../../lib/dsRequests'),
+  submitWritingToDS: (StoryId, SubmissionID) =>
+    Promise.resolve({
+      data: {
+        SubmissionID,
+        IsFlagged: false,
+        LowConfidence: false,
+        Complexity: 30,
+      },
+    }),
+  submitDrawingToDS: (image) =>
+    Promise.resolve({
+      data: { SubmissionID: image.SubmissionID, IsFlagged: false, reason: [] },
+    }),
+}));
+
 const TestStorySquadAPI = () => {
   describe('StorySquad testing suite', () => {
     beforeAll(async () => {
@@ -45,10 +63,10 @@ const TestStorySquadAPI = () => {
     ChildTests();
 
     SubmissionTests();
-    // ModTests();
-    // DSTests();
+    ModTests();
+    DSTests();
 
-    // GameTests();
+    GameTests();
   });
 };
 
