@@ -204,5 +204,14 @@ module.exports = () => {
         expect(res.body).toHaveLength(2);
       });
     });
+
+    describe('PUT /mod/faceoffs', () => {
+      it('generates faceoffs', async () => {
+        const res = await request(server).put('/mod/faceoffs');
+
+        expect(res.status).toBe(204);
+        expect(res.body).toEqual({});
+      });
+    });
   });
 };

@@ -67,6 +67,7 @@
     "lodash.has": "^4.5.2",
     "lodash.intersection": "^4.4.0",
     "lodash.keys": "^4.2.0",
+    "lodash.maxby": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "morgan": "~1.9.1",

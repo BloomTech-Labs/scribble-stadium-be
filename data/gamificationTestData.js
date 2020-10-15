@@ -1,11 +1,15 @@
 const faker = require('faker');
 
-const makePoints = (MemberID, SubmissionID) => ({
-  WritingPoints: 35,
-  DrawingPoints: 15,
-  MemberID,
-  SubmissionID,
-});
+const makePoints = (MemberID, SubmissionID) => {
+  const WritingPoints = Math.floor(Math.random() * Math.floor(50));
+  const DrawingPoints = 50 - WritingPoints;
+  return {
+    WritingPoints,
+    DrawingPoints,
+    MemberID,
+    SubmissionID,
+  };
+};
 
 module.exports = {
   children: [

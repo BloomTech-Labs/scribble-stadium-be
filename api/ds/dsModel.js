@@ -21,13 +21,13 @@ const setComplexity = (ID, Complexity) => {
 const clusterGeneration = () => {
   return db.transaction(async (trx) => {
     try {
-      const res = {};
+      const data = {};
       const cohorts = await trx('Cohorts');
       for (let { ID } of cohorts) {
         const unformatted = await dbOps.getAllSubmissionsByCohort(trx, ID);
-        res[ID] = formatCohortSubmissions(unformatted);
+        data[ID] = formatCohortSubmissions(unformatted);
       }
-      const clusters = await dsApi.getClusters(res);
+      const clusters = await dsApi.getClusters(data);
 
       // Add the generated clusters to the database
       let members;
@@ -39,6 +39,8 @@ const clusterGeneration = () => {
         }
       }
 
+      // This line flattens the array of arrays so that this function
+      // returns a simple 1D array of integers
       return [].concat.apply([], members);
     } catch (err) {
       trx.rollback();

@@ -188,4 +188,8 @@ router.put('/submissions/:id', (req, res) => {
   ops.update(res, Mod.moderatePost, 'Submission', id, changes);
 });
 
+router.put('/faceoffs', (req, res) => {
+  ops.update(res, Mod.generateFaceoffs, 'Faceoff');
+});
+
 module.exports = router;
