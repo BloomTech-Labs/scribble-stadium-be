@@ -94,14 +94,8 @@ const sortBySquad = (submissions) => {
   return teams;
 };
 
-const rankWritingSubs = (teamRef) => {
-  const maxSubIndex = teamRef.indexOf(_maxBy(teamRef, 'WritingPoints'));
-  const minSubIndex = maxSubIndex ? 0 : 1;
-  return [maxSubIndex, minSubIndex];
-};
-
-const rankDrawingSubs = (teamRef) => {
-  const maxSubIndex = teamRef.indexOf(_maxBy(teamRef, 'DrawingPoints'));
+const rankSubs = (teamRef, type) => {
+  const maxSubIndex = teamRef.indexOf(_maxBy(teamRef, `${type}Points`));
   const minSubIndex = maxSubIndex ? 0 : 1;
   return [maxSubIndex, minSubIndex];
 };
@@ -124,12 +118,12 @@ const groupOnPoints = (squads) => {
     let minDrawingSubs = [];
     for (let TeamID in squads[SquadID]) {
       // Generate writing matchups
-      const [wMaxI, wMinI] = rankWritingSubs(squads[SquadID][TeamID]);
+      const [wMaxI, wMinI] = rankSubs(squads[SquadID][TeamID], 'Writing');
       maxWritingSubs.push(squads[SquadID][TeamID][wMaxI]);
       minWritingSubs.push(squads[SquadID][TeamID][wMinI]);
 
       // generate drawing matchups
-      const [dMaxI, dMinI] = rankDrawingSubs(squads[SquadID][TeamID]);
+      const [dMaxI, dMinI] = rankSubs(squads[SquadID][TeamID], 'Drawing');
       maxDrawingSubs.push(squads[SquadID][TeamID][dMaxI]);
       minDrawingSubs.push(squads[SquadID][TeamID][dMinI]);
     }
