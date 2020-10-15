@@ -1,5 +1,5 @@
 const db = require('../../data/db-config');
-const { formatTeam } = require('../../lib');
+const { formatTeam, dbOps } = require('../../lib');
 
 /**
  * Attempts to query the database for all submissions from a given child's team
@@ -57,7 +57,39 @@ const getTeamByID = (conn, TeamID) => {
     ]);
 };
 
+const getFaceoffsForSquad = (SquadID) => {
+  return db.transaction(async (trx) => {
+    try {
+      const faceoffs = await getSubIdsForFaceoffs(trx, SquadID);
+
+      await addSubmissionsToFaceoffs(trx, faceoffs);
+
+      return faceoffs;
+    } catch (err) {
+      console.log({ err: err.message });
+      trx.rollback();
+    }
+  });
+};
+
+const getSubIdsForFaceoffs = (conn, SquadID) => {
+  return conn('Faceoffs AS F')
+    .join('Squads AS S', 'S.ID', 'F.SquadID')
+    .where('S.ID', SquadID)
+    .select('F.*');
+};
+
+const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
+  for (let f in faceoffs) {
+    const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
+    const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
+    faceoffs[f].Submission1 = s1;
+    faceoffs[f].Submission2 = s2;
+  }
+};
+
 module.exports = {
   getFormattedTeam,
   assignPoints,
+  getFaceoffsForSquad,
 };

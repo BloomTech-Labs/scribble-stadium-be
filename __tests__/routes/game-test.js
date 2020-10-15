@@ -213,5 +213,13 @@ module.exports = () => {
         expect(res.body).toEqual({});
       });
     });
+
+    describe('GET /mod/faceoffs', () => {
+      it('returns the newly-generated faceoffs', async () => {
+        const res = await request(server).get('/game/faceoffs?squadId=1');
+
+        console.log(res.body);
+      });
+    });
   });
 };

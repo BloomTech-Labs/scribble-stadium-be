@@ -31,4 +31,10 @@ router.post('/points', authRequired, (req, res) => {
   ops.postMult(res, Game.assignPoints, 'Submission', points);
 });
 
+router.get('/faceoffs', (req, res) => {
+  const squadId = req.query.squadId;
+
+  ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
+});
+
 module.exports = router;

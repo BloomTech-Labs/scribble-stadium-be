@@ -74,18 +74,15 @@ const submitDrawingTransaction = (drawing, ID) => {
   return db.transaction(async (trx) => {
     await trx('Submissions').where({ ID }).update({ HasDrawn: true });
     await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
-    let dsResponse;
     try {
       const drawingProperFormat = {
         ...drawing[0],
         Checksum: drawing[0].checksum,
       };
-      const { data } = await dsApi.submitDrawingToDS(drawingProperFormat);
-      dsResponse = data;
+      await dsApi.submitDrawingToDS(drawingProperFormat);
     } catch (err) {
       trx.rollback();
     }
-    console.log({ dsResponse });
     return;
   });
 };

@@ -41,6 +41,7 @@ const formatPointSums = (submissions) => {
   });
   return res;
 };
+
 const sortBySquad = (submissions) => {
   const teams = {};
   submissions.forEach((sub) => {
@@ -86,6 +87,7 @@ const formatMatchup = (subs, Type) => ({
   Type,
   SubmissionID1: subs[0].SubmissionID,
   SubmissionID2: subs[1].SubmissionID,
+  SquadID: subs[0].SquadID,
 });
 
 const rankSubs = (teamRef, type) => {

@@ -23,6 +23,12 @@ exports.up = function (knex) {
         .references('Submissions.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');
+      t.integer('SquadID')
+        .notNullable()
+        .unsigned()
+        .references('Squads.ID')
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT');
     })
     .createTable('Votes', (t) => {
       t.increments('ID');
