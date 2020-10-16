@@ -131,6 +131,7 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(Object.keys(res.body)).toHaveLength(3);
         res1 = res.body;
+        // console.log({ getTeam: res.body, pages: res.body[1].Pages });
       });
 
       it('returns the same object for their teammate', async () => {
@@ -162,6 +163,7 @@ module.exports = () => {
 
         expect(res.status).toBe(201);
         expect(res.body).toHaveLength(2);
+        // console.log({ send: points[0], res: res.body });
       });
 
       it('returns a 403 when attempting voter fraud', async () => {
@@ -214,11 +216,37 @@ module.exports = () => {
       });
     });
 
-    describe('GET /mod/faceoffs', () => {
+    describe('GET /game/squad?childId=:id', () => {
+      it('returns the squad ID for a given child', async () => {
+        const res = await request(server).get(
+          `/game/squad?childId=${childIds[0]}`
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({ ID: 1 });
+      });
+
+      it('returns a 404 on invalid child ID', async () => {
+        const res = await request(server).get('/game/squad?childId=10');
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('ChildNotFound');
+      });
+
+      it('returns a 400 on missing child ID', async () => {
+        const res = await request(server).get('/game/squad');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('Missing parameters.');
+      });
+    });
+
+    describe('GET /game/faceoffs', () => {
       it('returns the newly-generated faceoffs', async () => {
         const res = await request(server).get('/game/faceoffs?squadId=1');
 
-        console.log(res.body);
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(4);
       });
     });
   });

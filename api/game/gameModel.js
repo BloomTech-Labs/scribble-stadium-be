@@ -1,5 +1,5 @@
 const db = require('../../data/db-config');
-const { formatTeam, dbOps } = require('../../lib');
+const { formatTeam, dbOps, formatSubForMatchups } = require('../../lib');
 
 /**
  * Attempts to query the database for all submissions from a given child's team
@@ -61,12 +61,10 @@ const getFaceoffsForSquad = (SquadID) => {
   return db.transaction(async (trx) => {
     try {
       const faceoffs = await getSubIdsForFaceoffs(trx, SquadID);
-
       await addSubmissionsToFaceoffs(trx, faceoffs);
 
       return faceoffs;
     } catch (err) {
-      console.log({ err: err.message });
       trx.rollback();
     }
   });
@@ -83,13 +81,24 @@ const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
   for (let f in faceoffs) {
     const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
     const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
-    faceoffs[f].Submission1 = s1;
-    faceoffs[f].Submission2 = s2;
+    faceoffs[f].Submission1 = formatSubForMatchups(s1);
+    faceoffs[f].Submission2 = formatSubForMatchups(s2);
   }
+};
+
+const getSquadIDFromChildID = (ChildID) => {
+  return db('Squads AS S')
+    .join('Teams AS T', 'S.ID', 'T.SquadID')
+    .join('Members AS M', 'T.ID', 'M.TeamID')
+    .join('Submissions AS Sub', 'Sub.ID', 'M.SubmissionID')
+    .join('Children AS C', 'C.ID', 'Sub.ChildID')
+    .where('C.ID', ChildID)
+    .select('S.ID');
 };
 
 module.exports = {
   getFormattedTeam,
   assignPoints,
   getFaceoffsForSquad,
+  getSquadIDFromChildID,
 };

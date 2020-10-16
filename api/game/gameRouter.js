@@ -5,6 +5,12 @@ const { authRequired } = require('../middleware');
 
 const Game = require('./gameModel');
 
+router.get('/squad', (req, res) => {
+  const childId = req.query.childId;
+
+  ops.getById(res, Game.getSquadIDFromChildID, 'Child', childId);
+});
+
 /**
  * 200
  * 400
