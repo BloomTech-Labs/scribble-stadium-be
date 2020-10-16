@@ -11,6 +11,12 @@ const makePoints = (MemberID, SubmissionID) => {
   };
 };
 
+const makeVote = (MemberID, FaceoffID) => ({
+  Vote: Math.round(Math.random()) ? 1 : 2,
+  MemberID,
+  FaceoffID,
+});
+
 module.exports = {
   children: [
     {
@@ -106,5 +112,11 @@ module.exports = {
     [makePoints(2, 1), makePoints(2, 4)],
     [makePoints(3, 5), makePoints(3, 6)],
     [makePoints(4, 5), makePoints(4, 6)],
+  ],
+  votes: [
+    [...new Array(4)].map((x, i) => makeVote(1, i + 1)),
+    [...new Array(4)].map((x, i) => makeVote(2, i + 1)),
+    [...new Array(4)].map((x, i) => makeVote(3, i + 1)),
+    [...new Array(4)].map((x, i) => makeVote(4, i + 1)),
   ],
 };

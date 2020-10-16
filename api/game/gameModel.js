@@ -96,9 +96,24 @@ const getSquadIDFromChildID = (ChildID) => {
     .select('S.ID');
 };
 
+const getVotesBySquad = (SquadID, MemberID) => {
+  return db('Votes AS V')
+    .join('Members AS M', 'M.ID', 'V.MemberID')
+    .join('Teams AS T', 'T.ID', 'M.TeamID')
+    .join('Squads AS S', 'S.ID', 'T.SquadID')
+    .where({ SquadID, MemberID })
+    .select(['FaceoffID', 'Vote']);
+};
+
+const submitVote = (vote) => {
+  return db('Votes').insert(vote).returning('ID');
+};
+
 module.exports = {
   getFormattedTeam,
   assignPoints,
   getFaceoffsForSquad,
   getSquadIDFromChildID,
+  getVotesBySquad,
+  submitVote,
 };

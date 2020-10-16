@@ -43,4 +43,17 @@ router.get('/faceoffs', (req, res) => {
   ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
 });
 
+router.get('/votes', (req, res) => {
+  const squadId = req.query.squadId;
+  const memberId = req.query.memberId;
+
+  ops.getAll(res, Game.getVotesBySquad, 'Squad', squadId, memberId);
+});
+
+router.post('/votes', (req, res) => {
+  const vote = req.body;
+
+  ops.post(res, Game.submitVote, 'Vote', vote);
+});
+
 module.exports = router;

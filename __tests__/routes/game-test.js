@@ -6,6 +6,7 @@ const {
   pages,
   drawings,
   points,
+  votes,
 } = require('../../data/gamificationTestData');
 const { badRequest } = require('../../data/testdata');
 
@@ -247,6 +248,48 @@ module.exports = () => {
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
+      });
+    });
+
+    describe('GET /game/votes?squadId=:id', () => {
+      it('returns empty 200 when no votes are cast', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=1&memberId=1'
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual([]);
+      });
+    });
+
+    describe('POST /game/votes', () => {
+      it('allows a user to vote on a faceoff', async () => {
+        const res = await request(server).post('/game/votes').send(votes[0][0]);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toBe(1);
+      });
+
+      it('allows a user to vote on all other faceoffs', async () => {
+        let res = await request(server).post('/game/votes').send(votes[0][1]);
+        expect(res.status).toBe(201);
+
+        res = await request(server).post('/game/votes').send(votes[0][2]);
+        expect(res.status).toBe(201);
+
+        res = await request(server).post('/game/votes').send(votes[0][3]);
+        expect(res.status).toBe(201);
+      });
+    });
+
+    describe('GET /game/votes?squadId=:id', () => {
+      it('returns an array of all 4 votes once a user has voted', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=1&memberId=1'
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body.map((x) => x.FaceoffID)).toEqual([1, 2, 3, 4]);
       });
     });
   });
