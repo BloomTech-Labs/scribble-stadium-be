@@ -52,6 +52,8 @@ const getTeamByID = (conn, TeamID) => {
       'W.URL AS PageURL',
       'D.URL AS ImgURL',
       'T.Name',
+      'T.Points',
+      'T.Num',
       'S.ID AS SubmissionID',
       'S.ChildID',
     ]);

@@ -292,5 +292,71 @@ module.exports = () => {
         expect(res.body.map((x) => x.FaceoffID)).toEqual([1, 2, 3, 4]);
       });
     });
+
+    describe('POST /game/votes', () => {
+      it('posts votes for all other users', async () => {
+        let res = await request(server).post('/game/votes').send(votes[1][0]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[1][1]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[1][2]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[1][3]);
+        expect(res.status).toBe(201);
+
+        res = await request(server).post('/game/votes').send(votes[2][0]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[2][1]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[2][2]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[2][3]);
+        expect(res.status).toBe(201);
+
+        res = await request(server).post('/game/votes').send(votes[3][0]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[3][1]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[3][2]);
+        expect(res.status).toBe(201);
+        res = await request(server).post('/game/votes').send(votes[3][3]);
+        expect(res.status).toBe(201);
+      });
+    });
+
+    describe('GET /game/votes?squadId=:id', () => {
+      it('returns an array of length 4 for each member', async () => {
+        let res = await request(server).get('/game/votes?squadId=1&memberId=2');
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(4);
+
+        res = await request(server).get('/game/votes?squadId=1&memberId=3');
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(4);
+
+        res = await request(server).get('/game/votes?squadId=1&memberId=4');
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(4);
+      });
+    });
+
+    describe('PUT /mod/results', () => {
+      it('calculates all results for the week successfully', async () => {
+        const res = await request(server).put('/mod/results');
+
+        expect(res.status).toBe(204);
+        expect(res.body).toEqual({});
+      });
+    });
+
+    describe('GET /game/squad?childId=:id', () => {
+      it('returns the squad ID for a given child', async () => {
+        const res = await request(server).get(
+          `/game/squad?childId=${childIds[0]}`
+        );
+
+        // console.log(res.body);
+      });
+    });
   });
 };

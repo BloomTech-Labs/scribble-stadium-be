@@ -192,4 +192,8 @@ router.put('/faceoffs', (req, res) => {
   ops.update(res, Mod.generateFaceoffs, 'Faceoff');
 });
 
+router.put('/results', (req, res) => {
+  ops.update(res, Mod.calculateResultsForTheWeek, 'Results');
+});
+
 module.exports = router;

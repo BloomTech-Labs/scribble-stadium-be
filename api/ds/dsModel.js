@@ -76,8 +76,8 @@ const addTeams = (
 ) => {
   return conn('Teams')
     .insert([
-      { SquadID, Name: team1Name },
-      { SquadID, Name: team2Name },
+      { SquadID, Name: team1Name, Num: 1 },
+      { SquadID, Name: team2Name, Num: 2 },
     ])
     .returning('ID');
 };
