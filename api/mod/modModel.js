@@ -43,6 +43,12 @@ const moderatePost = (ID, changes) => {
   return db('Submissions').where({ ID }).update(changes);
 };
 
+/**
+ * A database transaction that runs a series of processes on the server. This should be run
+ * every wednesday night after children have assigned points to generate matchups.
+ * 1. Gets a list of all submissions, formats, and sorts them by squad
+ * 2. Generates 4 matchups for each squad for children to vote on the following day
+ */
 const generateFaceoffs = () => {
   return db.transaction(async (trx) => {
     try {
@@ -61,6 +67,13 @@ const generateFaceoffs = () => {
   });
 };
 
+/**
+ * A database transaction that can be triggered to run a series of processes on the server.
+ * This should be run at the end of every week after the children have voted:
+ * 1. Tallies up the votes for each faceoff
+ * 2. Updates the Faceoffs table with the victor information
+ * 3. Updates the Teams and Squads tables with the winner and points totals
+ */
 const calculateResultsForTheWeek = () => {
   return db.transaction(async (trx) => {
     try {
@@ -73,8 +86,6 @@ const calculateResultsForTheWeek = () => {
     }
   });
 };
-
-// const calculateFaceoffResults
 
 module.exports = {
   getCohorts,
