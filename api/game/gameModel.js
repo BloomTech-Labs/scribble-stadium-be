@@ -1,5 +1,6 @@
 const db = require('../../data/db-config');
-const { formatTeam, dbOps, formatSubForMatchups } = require('../../lib');
+const { formatTeam } = require('../../lib');
+const { points, faceoff } = require('./gameHelpers');
 
 /**
  * Attempts to query the database for all submissions from a given child's team
@@ -8,9 +9,8 @@ const { formatTeam, dbOps, formatSubForMatchups } = require('../../lib');
  */
 const getFormattedTeam = (ChildID) => {
   return db.transaction(async (trx) => {
-    const team = await getTeamIDByChild(trx, ChildID);
-    const submissions = await getTeamByID(trx, team.TeamID);
-    // const hasSubmittedPoints
+    const team = await points.getTeamIDByChild(trx, ChildID);
+    const submissions = await points.getTeamByID(trx, team.TeamID);
     return formatTeam(submissions);
   });
 };
@@ -19,73 +19,17 @@ const assignPoints = (points) => {
   return db('Points').insert(points).returning('ID');
 };
 
-/**
- * Attempts to find the ID of the given child's current team
- * @param {Object} conn a knex client connection
- * @param {number} ChildID integer ID of a child
- * @returns {Promise} returns a promise that resolves to the team ID of the given child
- */
-const getTeamIDByChild = (conn, ChildID) => {
-  return conn('Submissions AS S')
-    .where({ ChildID })
-    .join('Members AS M', 'S.ID', 'M.SubmissionID')
-    .join('Teams AS T', 'M.TeamID', 'T.ID')
-    .first()
-    .select('TeamID');
-};
-//
-/**
- * Attempts to query the database for all of a team's submissions and relevant info
- * @param {Object} conn a knex connection
- * @param {number} TeamID the ID of the desired team
- */
-const getTeamByID = (conn, TeamID) => {
-  return conn('Submissions AS S')
-    .join('Members AS M', 'S.ID', 'M.SubmissionID')
-    .join('Teams AS T', 'M.TeamID', 'T.ID')
-    .where({ TeamID })
-    .join('Writing AS W', 'S.ID', 'W.SubmissionID')
-    .join('Drawing AS D', 'S.ID', 'D.SubmissionID')
-    .select([
-      'M.ID AS MemberID',
-      'W.PageNum',
-      'W.URL AS PageURL',
-      'D.URL AS ImgURL',
-      'T.Name',
-      'T.Points',
-      'T.Num',
-      'S.ID AS SubmissionID',
-      'S.ChildID',
-    ]);
-};
-
 const getFaceoffsForSquad = (SquadID) => {
   return db.transaction(async (trx) => {
     try {
-      const faceoffs = await getSubIdsForFaceoffs(trx, SquadID);
-      await addSubmissionsToFaceoffs(trx, faceoffs);
+      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
+      await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
 
       return faceoffs;
     } catch (err) {
       trx.rollback();
     }
   });
-};
-//
-const getSubIdsForFaceoffs = (conn, SquadID) => {
-  return conn('Faceoffs AS F')
-    .join('Squads AS S', 'S.ID', 'F.SquadID')
-    .where('S.ID', SquadID)
-    .select('F.*');
-};
-//
-const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
-  for (let f in faceoffs) {
-    const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
-    const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
-    faceoffs[f].Submission1 = formatSubForMatchups(s1);
-    faceoffs[f].Submission2 = formatSubForMatchups(s2);
-  }
 };
 
 const getSquadIDFromChildID = (ChildID) => {
