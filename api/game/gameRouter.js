@@ -56,4 +56,10 @@ router.post('/votes', (req, res) => {
   ops.post(res, Game.submitVote, 'Vote', vote);
 });
 
+router.get('/results', (req, res) => {
+  const squadId = req.query.squadId;
+
+  ops.getAll(res, Game.getSquadResults, 'Squad', squadId);
+});
+
 module.exports = router;

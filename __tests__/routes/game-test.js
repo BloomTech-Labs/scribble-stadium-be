@@ -349,13 +349,24 @@ module.exports = () => {
       });
     });
 
+    describe('GET /game/results?squadId', () => {
+      it('should return the results of a squad', async () => {
+        const res = await request(server).get('/game/results?squadId=1');
+
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveLength(2);
+        expect(res.body[0].Winner).toBeDefined();
+      });
+    });
+
     describe('GET /game/squad?childId=:id', () => {
       it('returns the squad ID for a given child', async () => {
         const res = await request(server).get(
           `/game/squad?childId=${childIds[0]}`
         );
 
-        // console.log(res.body);
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({ ID: 1 });
       });
     });
   });

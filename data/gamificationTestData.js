@@ -11,8 +11,8 @@ const makePoints = (MemberID, SubmissionID) => {
   };
 };
 
-const makeVote = (MemberID, FaceoffID) => ({
-  Vote: Math.round(Math.random()) ? 1 : 2,
+const makeVote = (MemberID, FaceoffID, vote) => ({
+  Vote: vote ? vote : Math.round(Math.random()) ? 1 : 2,
   MemberID,
   FaceoffID,
 });

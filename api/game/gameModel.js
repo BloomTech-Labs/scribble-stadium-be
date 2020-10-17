@@ -33,7 +33,7 @@ const getTeamIDByChild = (conn, ChildID) => {
     .first()
     .select('TeamID');
 };
-
+//
 /**
  * Attempts to query the database for all of a team's submissions and relevant info
  * @param {Object} conn a knex connection
@@ -71,14 +71,14 @@ const getFaceoffsForSquad = (SquadID) => {
     }
   });
 };
-
+//
 const getSubIdsForFaceoffs = (conn, SquadID) => {
   return conn('Faceoffs AS F')
     .join('Squads AS S', 'S.ID', 'F.SquadID')
     .where('S.ID', SquadID)
     .select('F.*');
 };
-
+//
 const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
   for (let f in faceoffs) {
     const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
@@ -111,6 +111,13 @@ const submitVote = (vote) => {
   return db('Votes').insert(vote).returning('ID');
 };
 
+const getSquadResults = (ID) => {
+  return db('Squads AS S')
+    .join('Teams AS T', 'S.ID', 'T.SquadID')
+    .where('S.ID', ID)
+    .orderBy('T.Num', 'asc');
+};
+
 module.exports = {
   getFormattedTeam,
   assignPoints,
@@ -118,4 +125,5 @@ module.exports = {
   getSquadIDFromChildID,
   getVotesBySquad,
   submitVote,
+  getSquadResults,
 };
