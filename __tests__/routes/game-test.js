@@ -115,10 +115,11 @@ module.exports = () => {
       });
 
       it('clusters students appropriately', async () => {
-        const res = await request(server).get('/data/clusters');
+        const res = await request(server).put('/mod/clusters');
 
         expect(res.status).toBe(200);
-        expect(res.body).toHaveLength(4);
+        expect(res.body).toHaveLength(1);
+        expect(res.body[0]).toHaveLength(4);
       });
     });
 

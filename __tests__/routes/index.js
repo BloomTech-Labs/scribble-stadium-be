@@ -6,7 +6,6 @@ const StoryTests = require('./stories-test');
 const ModTests = require('./mod-test');
 const ChildTests = require('./children-test');
 const SubmissionTests = require('./submissions-test');
-const DSTests = require('./data-tests');
 const GameTests = require('./game-test');
 
 const db = require('../../data/db-config');
@@ -64,7 +63,6 @@ const TestStorySquadAPI = () => {
 
     SubmissionTests();
     ModTests();
-    DSTests();
 
     GameTests();
   });

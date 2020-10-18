@@ -1,15 +1,5 @@
-const db = require('../../data/db-config');
-const { dsApi, dbOps, formatCohortSubmissions } = require('../../lib');
-
-/**
- * Attempts to update the complexity score of a submission.
- * @param {number} ID the id of the submission to update
- * @param {number} Complexity an integer representation of the complexity of a written story
- * @returns {Promise} returns a promise that resolves to the number of rows updated
- */
-const setComplexity = (ID, Complexity) => {
-  return db('Submissions').where({ ID }).update({ Complexity });
-};
+const db = require('../../../data/db-config');
+const { dsApi, dbOps, formatCohortSubmissions } = require('../../../lib');
 
 /**
  * This function runs a series of transactional requests to:
@@ -30,18 +20,19 @@ const clusterGeneration = () => {
       const clusters = await dsApi.getClusters(data);
 
       // Add the generated clusters to the database
-      let members;
+      let members = [];
       for (let { ID } of cohorts) {
         for (let squad of clusters[ID]) {
           const [SquadID] = await addSquad(trx, ID);
           const [t1, t2] = await addTeams(trx, SquadID);
-          members = await addMembers(trx, t1, t2, squad);
+          const newMembers = await addMembers(trx, t1, t2, squad);
+          members.push([].concat.apply([], newMembers));
         }
       }
 
       // This line flattens the array of arrays so that this function
       // returns a simple 1D array of integers
-      return [].concat.apply([], members);
+      return members;
     } catch (err) {
       trx.rollback();
     }
@@ -107,7 +98,4 @@ const addSingleMember = (conn, SubmissionID, TeamID) => {
   return conn('Members').insert({ SubmissionID, TeamID }).returning('ID');
 };
 
-module.exports = {
-  setComplexity,
-  clusterGeneration,
-};
+module.exports = clusterGeneration;

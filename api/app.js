@@ -28,7 +28,6 @@ const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const submissionRouter = require('./submission/submissionRouter');
 const oktaRouter = require('./okta/oktaRouter');
-const dsRouter = require('./ds/dsRouter');
 const modRouter = require('./mod/modRouter');
 const gameRouter = require('./game/gameRouter');
 
@@ -67,7 +66,6 @@ app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use(['/submit', '/submission', '/submissions'], submissionRouter);
 app.use('/mod', modRouter);
 app.use('/register', oktaRouter);
-app.use('/data', dsRouter);
 app.use('/game', gameRouter);
 
 // catch 404 and forward to error handler

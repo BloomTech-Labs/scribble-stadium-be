@@ -45,10 +45,6 @@ module.exports = {
         description: 'Operations for grade level data.',
       },
       {
-        name: 'Data Science',
-        description: 'Endpoints for data science tasks.',
-      },
-      {
         name: 'Moderation',
         description: 'Endpoints for content moderation.',
       },
