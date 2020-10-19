@@ -165,7 +165,6 @@ module.exports = () => {
 
         expect(res.status).toBe(201);
         expect(res.body).toHaveLength(2);
-        // console.log({ send: points[0], res: res.body });
       });
 
       it('returns a 403 when attempting voter fraud', async () => {
@@ -243,12 +242,27 @@ module.exports = () => {
       });
     });
 
-    describe('GET /game/faceoffs', () => {
+    describe('GET /game/faceoffs>squadId=:id', () => {
       it('returns the newly-generated faceoffs', async () => {
         const res = await request(server).get('/game/faceoffs?squadId=1');
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
+        console.log(res.body[0].Submission1);
+      });
+
+      it('returns a 400 when squadId is missing', async () => {
+        const res = await request(server).get('/game/faceoffs');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('Missing parameters.');
+      });
+
+      it('returns a 404 when no faceoffs are found', async () => {
+        const res = await request(server).get('/game/faceoffs?squadId=10');
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('SquadNotFound');
       });
     });
 
@@ -261,6 +275,45 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual([]);
       });
+
+      it('returns a 404 on invalid member ID', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=1&memberId=20'
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toEqual('NotFound');
+      });
+
+      it('returns a 404 on invalid squad ID', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=15&memberId=1'
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toEqual('NotFound');
+      });
+
+      it('returns a 400 on missing squad ID', async () => {
+        const res = await request(server).get('/game/votes?memberId=1');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toEqual('Missing parameters.');
+      });
+
+      it('returns a 400 on missing squad ID', async () => {
+        const res = await request(server).get('/game/votes?squadId=1');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toEqual('Missing parameters.');
+      });
+
+      it("returns a 400 when query params aren't passed", async () => {
+        const res = await request(server).get('/game/votes');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toEqual('Missing parameters.');
+      });
     });
 
     describe('POST /game/votes', () => {
@@ -269,6 +322,40 @@ module.exports = () => {
 
         expect(res.status).toBe(201);
         expect(res.body).toBe(1);
+      });
+
+      it('returns a 400 on bad data', async () => {
+        const res = await request(server)
+          .post('/game/votes')
+          .send({ bad: 'data' });
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('InvalidVote');
+      });
+
+      it('returns a 403 on duplicate vote', async () => {
+        const res = await request(server).post('/game/votes').send(votes[0][0]);
+
+        expect(res.status).toBe(403);
+        expect(res.body.error).toBe('Could not submit duplicate.');
+      });
+
+      it('returns a 404 on invalid faceoff ID', async () => {
+        const res = await request(server)
+          .post('/game/votes')
+          .send({ ...votes[0][1], FaceoffID: 10 });
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('InvalidVoteID');
+      });
+
+      it('returns a 404 on invalid member ID', async () => {
+        const res = await request(server)
+          .post('/game/votes')
+          .send({ ...votes[0][1], MemberID: 10 });
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('InvalidVoteID');
       });
 
       it('allows a user to vote on all other faceoffs', async () => {

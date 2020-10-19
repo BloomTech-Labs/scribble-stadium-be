@@ -53,12 +53,13 @@ const getFaceoffsForSquad = (SquadID) => {
     try {
       // Get the faceoffs from the Faceoffs table in the db
       const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
+      if (faceoffs.length <= 0) throw new Error('NotFound');
       // Add submission data to the faceoffs pulled from the DB
       await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
 
       return faceoffs;
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
   });
 };
@@ -67,18 +68,32 @@ const getFaceoffsForSquad = (SquadID) => {
  * This function queries the database for an array of votes cast by a user
  * in a specific squad. This is to provide data on what has already been
  * voted on in order to restrict user from voting again on the frontend.
+ * It first runs a check to make sure that the given IDs exist in the database,
+ * and will throw an error that triggers a 404 if they don't.
  * @param {number} SquadID the unique integer ID of a squad
  * @param {number} MemberID the unique integer ID of the member
  * @returns {Promise} returns a promise that resolves to an array of votes\
  *                    ex. [ { FaceoffID: int, Vote: 1 | 2 }, ... ]
  */
 const getVotesBySquad = (SquadID, MemberID) => {
-  return db('Votes AS V')
-    .join('Members AS M', 'M.ID', 'V.MemberID')
-    .join('Teams AS T', 'T.ID', 'M.TeamID')
-    .join('Squads AS S', 'S.ID', 'T.SquadID')
-    .where({ SquadID, MemberID })
-    .select(['FaceoffID', 'Vote']);
+  return db.transaction(async (trx) => {
+    try {
+      const squads = await trx('Squads').where({ ID: SquadID });
+      const members = await trx('Members').where({ ID: MemberID });
+
+      if (squads.length <= 0 || members.length <= 0)
+        throw new Error('NotFound');
+
+      return trx('Votes AS V')
+        .join('Members AS M', 'M.ID', 'V.MemberID')
+        .join('Teams AS T', 'T.ID', 'M.TeamID')
+        .join('Squads AS S', 'S.ID', 'T.SquadID')
+        .where({ SquadID, MemberID })
+        .select(['FaceoffID', 'Vote']);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  });
 };
 
 /**
