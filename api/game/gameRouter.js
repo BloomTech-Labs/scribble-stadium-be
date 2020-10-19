@@ -140,6 +140,44 @@ const Game = require('./gameModel');
  *                type: integer
  *                description: The unique member ID of the child (NOT child ID)
  *                example: 1
+ *      ResultsObj:
+ *        type: object
+ *        properties:
+ *          ID:
+ *            type: integer
+ *            description: Team ID
+ *            example: 1
+ *          CohortID:
+ *            type: integer
+ *            example: 1
+ *          SquadID:
+ *            type: integer
+ *            example: 1
+ *          Num:
+ *            type: integer
+ *            description: Team number (1 or 2)
+ *            enum:
+ *              - 1
+ *              - 2
+ *          Name:
+ *            type: string
+ *            description: Team name
+ *            example: Team 1
+ *          Winner:
+ *            type: integer
+ *            description: The winning team number: 1, 2, or 0 for a tie
+ *            enum:
+ *              - 0
+ *              - 1
+ *              - 2
+ *          Points:
+ *            type: integer
+ *            description: The amount of points a team won
+ *            example: 200
+ *      Results:
+ *        type: array
+ *        items:
+ *          $ref: '#/components/schemas/ResultsObj'
  *
  *    parameters:
  *      childId:
@@ -383,6 +421,31 @@ router.post('/votes', (req, res) => {
   ops.post(res, Game.submitVote, 'Vote', vote);
 });
 
+/**
+ * @swagger
+ * /game/results?squadId={id}:
+ *  gett:
+ *    summary: Submits a user's vote to the database
+ *    tags:
+ *      - Gamification
+ *    parameters:
+ *      - $ref: '#/components/parameters/squadId'
+ *    responses:
+ *      200:
+ *        description: Returns an array with the results of the squad matchup
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Results'
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
 router.get('/results', (req, res) => {
   const squadId = req.query.squadId;
 
