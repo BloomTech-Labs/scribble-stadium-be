@@ -201,6 +201,8 @@ router.post('/cohorts', (req, res) => {
  *                        2: http://urlofpage2.com
  *      400:
  *        $ref: '#/components/responses/InvalidFormat'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */

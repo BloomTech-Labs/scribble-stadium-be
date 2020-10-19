@@ -165,7 +165,7 @@ const Game = require('./gameModel');
  *            example: Team 1
  *          Winner:
  *            type: integer
- *            description: The winning team number: 1, 2, or 0 for a tie
+ *            description: The winning team number - 1, 2, or 0 for a tie
  *            enum:
  *              - 0
  *              - 1

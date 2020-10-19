@@ -28,8 +28,17 @@ const addCohort = (cohort) => {
  * @returns {Promise} a promise that resolves to a table of submissions
  */
 const getSubmissionsByCohort = async (CohortID) => {
-  const data = await dbOps.getAllSubmissionsByCohort(db, CohortID);
-  return formatCohortSubmissions(data);
+  return db.transaction(async (trx) => {
+    try {
+      const cohorts = await trx('Cohorts').where({ ID: CohortID });
+      if (cohorts.length <= 0) throw new Error('NotFound');
+
+      const data = await dbOps.getAllSubmissionsByCohort(trx, CohortID);
+      return formatCohortSubmissions(data);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  });
 };
 
 /**

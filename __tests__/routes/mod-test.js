@@ -6,7 +6,7 @@ const { cohort, badRequest, stories } = require('../../data/testdata');
 module.exports = (flag) => {
   describe('testing for mod router', () => {
     if (flag === 'PRE') {
-      describe('GET /mod', () => {
+      describe('GET /mod/cohorts', () => {
         it('returns an empty 200', async () => {
           const res = await request(server).get('/mod/cohorts');
 
@@ -15,7 +15,7 @@ module.exports = (flag) => {
         });
       });
 
-      describe('POST /mod', () => {
+      describe('POST /mod/cohorts', () => {
         it('adds a new cohort', async () => {
           const res = await request(server).post('/mod/cohorts').send(cohort);
 
@@ -74,11 +74,11 @@ module.exports = (flag) => {
           expect(res.body[1].status).toBe('CLEAR');
         });
 
-        it('should return an empty 200 on nonexistent id', async () => {
+        it('should return a 404 on invalid id', async () => {
           const res = await request(server).get('/mod/submissions?cohortId=2');
 
-          expect(res.status).toBe(200);
-          expect(Object.keys(res.body)).toHaveLength(0);
+          expect(res.status).toBe(404);
+          expect(res.body.error).toBe('CohortNotFound');
         });
 
         it('should return a 400 on missing cohort id', async () => {
