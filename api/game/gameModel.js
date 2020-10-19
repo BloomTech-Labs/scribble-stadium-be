@@ -114,10 +114,19 @@ const submitVote = (vote) => {
  * @returns {Promise} returns a promise that resolves to an array of 2 teams with squad info
  */
 const getSquadResults = (ID) => {
-  return db('Squads AS S')
-    .join('Teams AS T', 'S.ID', 'T.SquadID')
-    .where('S.ID', ID)
-    .orderBy('T.Num', 'asc');
+  return db.transaction(async (trx) => {
+    try {
+      const squads = await trx('Squads').where({ ID });
+      if (squads.length <= 0) throw new Error('NotFound');
+
+      return trx('Squads AS S')
+        .join('Teams AS T', 'S.ID', 'T.SquadID')
+        .where('S.ID', ID)
+        .orderBy('T.Num', 'asc');
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  });
 };
 
 module.exports = {

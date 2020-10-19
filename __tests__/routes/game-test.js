@@ -276,24 +276,6 @@ module.exports = () => {
         expect(res.body).toEqual([]);
       });
 
-      it('returns a 404 on invalid member ID', async () => {
-        const res = await request(server).get(
-          '/game/votes?squadId=1&memberId=20'
-        );
-
-        expect(res.status).toBe(404);
-        expect(res.body.error).toEqual('NotFound');
-      });
-
-      it('returns a 404 on invalid squad ID', async () => {
-        const res = await request(server).get(
-          '/game/votes?squadId=15&memberId=1'
-        );
-
-        expect(res.status).toBe(404);
-        expect(res.body.error).toEqual('NotFound');
-      });
-
       it('returns a 400 on missing squad ID', async () => {
         const res = await request(server).get('/game/votes?memberId=1');
 
@@ -313,6 +295,24 @@ module.exports = () => {
 
         expect(res.status).toBe(400);
         expect(res.body.error).toEqual('Missing parameters.');
+      });
+
+      it('returns a 404 on invalid member ID', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=1&memberId=20'
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toEqual('NotFound');
+      });
+
+      it('returns a 404 on invalid squad ID', async () => {
+        const res = await request(server).get(
+          '/game/votes?squadId=15&memberId=1'
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toEqual('NotFound');
       });
     });
 
@@ -437,13 +437,27 @@ module.exports = () => {
       });
     });
 
-    describe('GET /game/results?squadId', () => {
+    describe('GET /game/results?squadId=:id', () => {
       it('should return the results of a squad', async () => {
         const res = await request(server).get('/game/results?squadId=1');
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(2);
         expect(res.body[0].Winner).toBeDefined();
+      });
+
+      it('should return a 400 on missing squadId', async () => {
+        const res = await request(server).get('/game/results');
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('Missing parameters.');
+      });
+
+      it('should return a 404 on invalid squadId', async () => {
+        const res = await request(server).get('/game/results?squadId=15');
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('SquadNotFound');
       });
     });
 
