@@ -133,7 +133,6 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(Object.keys(res.body)).toHaveLength(3);
         res1 = res.body;
-        // console.log({ getTeam: res.body, pages: res.body[1].Pages });
       });
 
       it('returns the same object for their teammate', async () => {
@@ -248,7 +247,6 @@ module.exports = () => {
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
-        console.log(res.body[0].Submission1);
       });
 
       it('returns a 400 when squadId is missing', async () => {
