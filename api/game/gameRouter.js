@@ -211,6 +211,8 @@ const Game = require('./gameModel');
  * /game/squad?childId={id}:
  *  get:
  *    summary: returns the current Squad ID of a given child
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    parameters:
@@ -236,7 +238,7 @@ const Game = require('./gameModel');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/squad', (req, res) => {
+router.get('/squad', authRequired, (req, res) => {
   const childId = req.query.childId;
 
   ops.getById(res, Game.getSquadIDFromChildID, 'Child', childId);
@@ -247,6 +249,8 @@ router.get('/squad', (req, res) => {
  * /game/team?childId={id}:
  *  get:
  *    summary: Gets submissions for a child and their teammate for the purpose of assigning points
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    parameters:
@@ -278,6 +282,8 @@ router.get('/team', authRequired, (req, res) => {
  * /game/points:
  *  post:
  *    summary: Send a child's point assignments to the server to be stored
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    requestBody:
@@ -320,6 +326,8 @@ router.post('/points', authRequired, (req, res) => {
  * /game/faceoffs?squadId={id}:
  *  get:
  *    summary: Returns an array of a squad's 4 faceoffs after they've been calculated
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    parameters:
@@ -342,7 +350,7 @@ router.post('/points', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/faceoffs', (req, res) => {
+router.get('/faceoffs', authRequired, (req, res) => {
   const squadId = req.query.squadId;
 
   ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
@@ -353,6 +361,8 @@ router.get('/faceoffs', (req, res) => {
  * /game/votes?squadId={id}&memberId={id}:
  *  get:
  *    summary: Gets a list of a users votes for the current squad to make sure that they can't vote again
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    parameters:
@@ -376,7 +386,7 @@ router.get('/faceoffs', (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/votes', (req, res) => {
+router.get('/votes', authRequired, (req, res) => {
   const squadId = req.query.squadId;
   const memberId = req.query.memberId;
 
@@ -388,6 +398,8 @@ router.get('/votes', (req, res) => {
  * /game/votes:
  *  post:
  *    summary: Submits a user's vote to the database
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    requestBody:
@@ -415,7 +427,7 @@ router.get('/votes', (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/votes', (req, res) => {
+router.post('/votes', authRequired, (req, res) => {
   const vote = req.body;
 
   ops.post(res, Game.submitVote, 'Vote', vote);
@@ -426,6 +438,8 @@ router.post('/votes', (req, res) => {
  * /game/results?squadId={id}:
  *  gett:
  *    summary: Submits a user's vote to the database
+ *    security:
+ *      - okta: []
  *    tags:
  *      - Gamification
  *    parameters:
@@ -446,7 +460,7 @@ router.post('/votes', (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/results', (req, res) => {
+router.get('/results', authRequired, (req, res) => {
   const squadId = req.query.squadId;
 
   ops.getAll(res, Game.getSquadResults, 'Squad', squadId);
