@@ -369,6 +369,20 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ ID: 1 });
       });
+
+      it('returns a 404 on invalid child ID', async () => {
+        const res = await request(server).get(`/game/squad?childId=10`);
+
+        expect(res.status).toBe(404);
+        expect(res.body.error).toBe('ChildNotFound');
+      });
+
+      it('returns a 400 on missing childId', async () => {
+        const res = await request(server).get(`/game/squad`);
+
+        expect(res.status).toBe(400);
+        expect(res.body.error).toBe('Missing parameters.');
+      });
     });
   });
 };
