@@ -3,9 +3,9 @@ exports.up = function (knex) {
     .createTable('Faceoffs', (t) => {
       t.increments('ID');
       t.integer('Points').notNullable();
-      t.enu('Winner', [1, 2], {
+      t.enu('Winner', [0, 1, 2], {
         useNative: true,
-        enumName: 'vote',
+        enumName: 'winner',
       });
       t.enu('Type', ['WRITING', 'DRAWING'], {
         useNative: true,
@@ -23,12 +23,18 @@ exports.up = function (knex) {
         .references('Submissions.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');
+      t.integer('SquadID')
+        .notNullable()
+        .unsigned()
+        .references('Squads.ID')
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT');
     })
     .createTable('Votes', (t) => {
       t.increments('ID');
       t.enu('Vote', null, {
         useNative: true,
-        enumName: 'vote',
+        enumName: 'winner',
         existingType: true,
       });
       t.integer('MemberID')
@@ -50,6 +56,6 @@ exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('Votes')
     .dropTableIfExists('Faceoffs')
-    .raw('DROP TYPE vote')
+    .raw('DROP TYPE winner')
     .raw('DROP TYPE subtype');
 };

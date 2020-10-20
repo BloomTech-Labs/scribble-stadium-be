@@ -34,6 +34,64 @@ const Mod = require('./modModel');
  *        - $ref: '#/components/schemas/Cohort'
  */
 
+// Server-Side Transaction Trigger Endpoints
+
+/**
+ * @swagger
+ * /mod/clusters:
+ *  put:
+ *    summary: This endpoint triggers a query to the DSAPI that sends submissions,
+ *      receives clusters, and stores clusters in our database.
+ *    tags:
+ *      - Moderation
+ *    responses:
+ *      200:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.put('/clusters', async (req, res) => {
+  ops.getAll(res, Mod.clusterGeneration, 'Cluster');
+});
+
+/**
+ * @swagger
+ * /mod/faceoffs:
+ *  put:
+ *    summary: An endpoint that triggers a transaction on the server that generates
+ *             faceoffs for every squad.
+ *    tags:
+ *      - Moderation
+ *    responses:
+ *      200:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.put('/faceoffs', (req, res) => {
+  ops.update(res, Mod.generateFaceoffs, 'Faceoff');
+});
+
+/**
+ * @swagger
+ * /mod/results:
+ *  put:
+ *    summary: An endpoint that triggers a transaction on the server that calculates
+ *             the week's results for every squad.
+ *    tags:
+ *      - Moderation
+ *    responses:
+ *      200:
+ *        $ref: '#/components/responses/EmptySuccess'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.put('/results', (req, res) => {
+  ops.update(res, Mod.calculateResultsForTheWeek, 'Results');
+});
+
+// Data Endpoints
+
 /**
  * @swagger
  * /mod/cohorts:
@@ -141,6 +199,12 @@ router.post('/cohorts', (req, res) => {
  *                      example:
  *                        1: http://urlofpage1.com
  *                        2: http://urlofpage2.com
+ *      400:
+ *        $ref: '#/components/responses/InvalidFormat'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/submissions', (req, res) => {
   const cohortId = req.query.cohortId;

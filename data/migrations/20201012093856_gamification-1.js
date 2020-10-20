@@ -13,6 +13,10 @@ exports.up = function (knex) {
     .createTable('Teams', (t) => {
       // A reference that connects team members to their squad
       t.increments('ID');
+      t.enu('Num', [1, 2], {
+        useNative: true,
+        enumName: 'teamnum',
+      });
       t.string('Name');
       t.integer('SquadID')
         .notNullable()
@@ -43,5 +47,6 @@ exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('Members')
     .dropTableIfExists('Teams')
-    .dropTableIfExists('Squads');
+    .dropTableIfExists('Squads')
+    .raw('DROP TYPE teamnum');
 };

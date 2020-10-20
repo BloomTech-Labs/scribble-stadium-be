@@ -16,8 +16,16 @@ module.exports = {
         description: 'API status test.',
       },
       {
+        name: 'Gamification',
+        description: 'Gamification data endpoints',
+      },
+      {
         name: 'Submissions',
         description: 'Operations related to child mission status.',
+      },
+      {
+        name: 'Moderation',
+        description: 'Endpoints for content moderation.',
       },
       {
         name: 'Parents',
@@ -43,14 +51,6 @@ module.exports = {
       {
         name: 'Grade Levels',
         description: 'Operations for grade level data.',
-      },
-      {
-        name: 'Data Science',
-        description: 'Endpoints for data science tasks.',
-      },
-      {
-        name: 'Moderation',
-        description: 'Endpoints for content moderation.',
       },
     ],
     externalDocs: {
