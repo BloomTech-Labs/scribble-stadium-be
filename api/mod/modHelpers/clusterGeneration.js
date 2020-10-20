@@ -12,20 +12,31 @@ const clusterGeneration = () => {
   return db.transaction(async (trx) => {
     try {
       const data = {};
+      // Pull a list of all cohorts
       const cohorts = await trx('Cohorts');
+      // Iterate over the cohorts
       for (let { ID } of cohorts) {
+        // Get all submissions for every cohort
         const unformatted = await dbOps.getAllSubmissionsByCohort(trx, ID);
+        // Store each cohorts' submissions in the data hash table with the key being the cohort id
         data[ID] = formatCohortSubmissions(unformatted);
       }
+      // Send the submissions to data science for clustering
       const clusters = await dsApi.getClusters(data);
 
       // Add the generated clusters to the database
       let members = [];
+      // Iterate over cohorts again
       for (let { ID } of cohorts) {
+        // For every squad returned in each cohort from data science, where squad is an array of 4 submission IDs
         for (let squad of clusters[ID]) {
+          // Create a squad in the database for the current cohort
           const [SquadID] = await addSquad(trx, ID);
+          // Create two teams for the newly created squad
           const [t1, t2] = await addTeams(trx, SquadID);
+          // Create 4 member for 
           const newMembers = await addMembers(trx, t1, t2, squad);
+          // [[1], [2], [3], [4]] => [1, 2, 3, 4]
           members.push([].concat.apply([], newMembers));
         }
       }

@@ -61,7 +61,7 @@ const moderatePost = (ID, changes) => {
 const generateFaceoffs = () => {
   return db.transaction(async (trx) => {
     try {
-      const data = await faceoff.getSubmissionsWithPointSums(trx);
+      const data = await faceoff.getSubmissionsWithPoints(trx);
       const formattedData = faceoff.formatPointSums(data);
       const squads = faceoff.sortBySquad(Object.values(formattedData));
       const matchups = faceoff.groupOnPoints(squads);

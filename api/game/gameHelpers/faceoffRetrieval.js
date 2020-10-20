@@ -1,9 +1,10 @@
 const { dbOps, formatSubForMatchups } = require('../../../lib');
 
 /**
- * This function queries the database for a list of Submission IDs for a given squad's faceoffs.
+ * This function queries the database for a list of faceoffs for a given squad.
  * @param {Object} conn knex client connection
  * @param {number} SquadID unique integer squad id
+ * @returns {Promise} returns a promise that resolves to a list of Faceoff objects
  */
 const getSubIdsForFaceoffs = (conn, SquadID) => {
   return conn('Faceoffs AS F')
