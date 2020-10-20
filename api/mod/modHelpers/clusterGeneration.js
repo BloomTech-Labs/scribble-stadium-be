@@ -34,7 +34,7 @@ const clusterGeneration = () => {
           const [SquadID] = await addSquad(trx, ID);
           // Create two teams for the newly created squad
           const [t1, t2] = await addTeams(trx, SquadID);
-          // Create 4 member for 
+          // Create 4 new team member entries for the database
           const newMembers = await addMembers(trx, t1, t2, squad);
           // [[1], [2], [3], [4]] => [1, 2, 3, 4]
           members.push([].concat.apply([], newMembers));
