@@ -20,9 +20,12 @@ const getSubIdsForFaceoffs = (conn, SquadID) => {
  * @param {Object} faceoffs an object containing faceoffs
  */
 const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
+  // Iterate over the faceoffs passed in on the key f = FaceoffID
   for (let f in faceoffs) {
+    // pulls submissions from the database based on the faceoffs SubmissionIDs
     const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
     const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
+    // Add formatted submissions to the faceoffs object reference passed into the function
     faceoffs[f].Submission1 = formatSubForMatchups(s1);
     faceoffs[f].Submission2 = formatSubForMatchups(s2);
   }
