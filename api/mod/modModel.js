@@ -31,6 +31,7 @@ const getSubmissionsByCohort = async (CohortID) => {
   return db.transaction(async (trx) => {
     try {
       const cohorts = await trx('Cohorts').where({ ID: CohortID });
+      // If the cohort ID is invalid, this will throw a 404 error
       if (cohorts.length <= 0) throw new Error('NotFound');
 
       const data = await dbOps.getAllSubmissionsByCohort(trx, CohortID);
@@ -54,14 +55,15 @@ const moderatePost = (ID, changes) => {
 
 /**
  * A database transaction that runs a series of processes on the server. This should be run
- * every wednesday night after children have assigned points to generate matchups.
+ * every wednesday night after children have assigned points to generate matchups. This is
+ * essentially a saga-patterned transaction with rollback.
  * 1. Gets a list of all submissions, formats, and sorts them by squad
  * 2. Generates 4 matchups for each squad for children to vote on the following day
  */
 const generateFaceoffs = () => {
   return db.transaction(async (trx) => {
     try {
-      const data = await faceoff.getSubmissionsWithPointSums(trx);
+      const data = await faceoff.getSubmissionsWithPoints(trx);
       const formattedData = faceoff.formatPointSums(data);
       const squads = faceoff.sortBySquad(Object.values(formattedData));
       const matchups = faceoff.groupOnPoints(squads);
