@@ -45,7 +45,7 @@ const clusterGeneration = () => {
       // returns a simple 1D array of integers
       return members;
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
   });
 };

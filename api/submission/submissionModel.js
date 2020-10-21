@@ -81,7 +81,7 @@ const submitDrawingTransaction = (drawing, ID) => {
       };
       await dsApi.submitDrawingToDS(drawingProperFormat);
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
     return;
   });
@@ -109,7 +109,7 @@ const submitWritingTransaction = (pages, ID, storyId) => {
       const { data } = await dsApi.submitWritingToDS(storyId, ID, pages);
       dsResponse = data;
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
 
     await trx('Submissions')
