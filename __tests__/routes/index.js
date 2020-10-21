@@ -7,6 +7,7 @@ const ModTests = require('./mod-test');
 const ChildTests = require('./children-test');
 const SubmissionTests = require('./submissions-test');
 const GameTests = require('./game-test');
+const VizTests = require('./viz-tests');
 
 const db = require('../../data/db-config');
 
@@ -65,6 +66,8 @@ const TestStorySquadAPI = () => {
     ModTests();
 
     GameTests();
+
+    VizTests();
   });
 };
 

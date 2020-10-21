@@ -71,6 +71,12 @@ const Parents = require('./parentModel');
  *        type: integer
  */
 
+router.get('/viz', (req, res) => {
+  const childId = req.query.childId;
+
+  ops.getAll(res, Parents.getVisualizations, 'Child', childId);
+});
+
 /**
  * @swagger
  * /parents:

@@ -80,6 +80,22 @@ module.exports = {
         },
       ],
     },
+    {
+      pages: [
+        {
+          Location: faker.image.sports(),
+          Checksum: faker.random.alphaNumeric(20),
+        },
+      ],
+    },
+    {
+      pages: [
+        {
+          Location: faker.image.technics(),
+          Checksum: faker.random.alphaNumeric(20),
+        },
+      ],
+    },
   ],
   drawings: [
     {

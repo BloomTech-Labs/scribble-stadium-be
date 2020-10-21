@@ -1,5 +1,5 @@
 const db = require('../../data/db-config');
-const { formatProfiles } = require('../../lib');
+const { formatProfiles, dsApi } = require('../../lib');
 
 /**
  * A method to get all parents from the database
@@ -106,6 +106,37 @@ const findOrCreate = async (parent) => {
   }
 };
 
+const getVisualizations = async (ChildID) => {
+  try {
+    return db.transaction(async (trx) => {
+      const complexities = await trx('Children AS C')
+        .leftJoin('Submissions AS S', 'C.ID', 'S.ChildID')
+        .where('C.ID', ChildID)
+        .orderBy('S.ID', 'asc')
+        .select(['C.Name', 'Complexity']);
+      console.log({ complexities });
+
+      const lineGraphData = formatLineGraphBody(complexities);
+      const { data } = await dsApi.getLineGraph(lineGraphData);
+      const res = JSON.parse(data);
+      return res;
+    });
+  } catch (err) {
+    console.log({ err: err.message });
+    throw new Error(err.message);
+  }
+};
+
+const formatLineGraphBody = (complexities) => {
+  const res = {};
+  complexities.forEach((score) => {
+    if (!res.StudentName) res.StudentName = score.Name;
+    if (!res.ScoreHistory) res.ScoreHistory = [];
+    res.ScoreHistory.push(score.Complexity);
+  });
+  return res;
+};
+
 module.exports = {
   getAll,
   getById,
@@ -115,4 +146,5 @@ module.exports = {
   remove,
   getProfilesByEmail,
   findOrCreate,
+  getVisualizations,
 };
