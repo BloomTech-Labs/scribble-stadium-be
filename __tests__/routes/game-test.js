@@ -248,6 +248,12 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
       });
+      it("should now return a child's name and AvatarURL with each submission", async () => {
+        const res = await request(server).get('/game/faceoffs?squadId=1');
+
+        expect(res.body[0].Submission1).toHaveProperty('Name');
+        expect(res.body[0].Submission1).toHaveProperty('AvatarURL');
+      });
 
       it('returns a 400 when squadId is missing', async () => {
         const res = await request(server).get('/game/faceoffs');
