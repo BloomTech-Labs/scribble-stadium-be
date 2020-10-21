@@ -73,7 +73,7 @@ const generateFaceoffs = () => {
       return IDs;
     } catch (err) {
       console.log({ err: err.message });
-      trx.rollback();
+      throw new Error(err.message);
     }
   });
 };
@@ -93,7 +93,7 @@ const calculateResultsForTheWeek = () => {
       await result.updateTeamsAndSquads(trx, squadTotals);
     } catch (err) {
       console.log({ err: err.message });
-      trx.rollback();
+      throw new Error(err.message);
     }
   });
 };
