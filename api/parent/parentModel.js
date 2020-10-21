@@ -1,5 +1,5 @@
 const db = require('../../data/db-config');
-const { formatProfiles, dsApi } = require('../../lib');
+const { formatProfiles, formatLineGraphBody, dsApi } = require('../../lib');
 
 /**
  * A method to get all parents from the database
@@ -106,18 +106,31 @@ const findOrCreate = async (parent) => {
   }
 };
 
+/**
+ * Takes in a child's ID and runs a transactional query that pulls info of a child's
+ * complexities from their submissions and sends that to the Data Science API along
+ * with the child's name.
+ * @param {number} ChildID a unique integer ID of a child
+ * @returns {Object} returns an object with properties { data, layout } to be plugged
+ *                   into a Plotly graph component
+ */
 const getVisualizations = async (ChildID) => {
   try {
     return db.transaction(async (trx) => {
+      // Returns an array of objects with { Name, Complexity }
       const complexities = await trx('Children AS C')
-        .leftJoin('Submissions AS S', 'C.ID', 'S.ChildID')
+        .join('Submissions AS S', 'C.ID', 'S.ChildID')
         .where('C.ID', ChildID)
         .orderBy('S.ID', 'asc')
         .select(['C.Name', 'Complexity']);
-      console.log({ complexities });
+      if (complexities.length <= 0) throw new Error('NotFound');
 
+      // Formats the array into a single object with { StudentName, ScoreHistory: [] }
       const lineGraphData = formatLineGraphBody(complexities);
+      // Sends the formatted data to the DS API
       const { data } = await dsApi.getLineGraph(lineGraphData);
+
+      // Parses that data into a JS object and returns it to the client
       const res = JSON.parse(data);
       return res;
     });
@@ -125,16 +138,6 @@ const getVisualizations = async (ChildID) => {
     console.log({ err: err.message });
     throw new Error(err.message);
   }
-};
-
-const formatLineGraphBody = (complexities) => {
-  const res = {};
-  complexities.forEach((score) => {
-    if (!res.StudentName) res.StudentName = score.Name;
-    if (!res.ScoreHistory) res.ScoreHistory = [];
-    res.ScoreHistory.push(score.Complexity);
-  });
-  return res;
 };
 
 module.exports = {
