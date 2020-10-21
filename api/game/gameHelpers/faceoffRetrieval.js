@@ -25,7 +25,6 @@ const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
     // pulls submissions from the database based on the faceoffs SubmissionIDs
     const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
     const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
-    console.log({ s1, s2 });
     // Add formatted submissions to the faceoffs object reference passed into the function
     faceoffs[f].Submission1 = formatSubForMatchups(s1);
     faceoffs[f].Submission2 = formatSubForMatchups(s2);
