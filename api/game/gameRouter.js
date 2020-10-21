@@ -51,6 +51,14 @@ const Game = require('./gameModel');
  *          ImgURL:
  *            type: string
  *            example: http://imgurl.com
+ *          Name:
+ *            type: string
+ *            description: Name of the child
+ *            example: Voldemort
+ *          AvatarURL:
+ *            type: string
+ *            description: the URL of the avatar for the child whose submission it is
+ *            example: http://someavatar.com
  *          Pages:
  *            $ref: '#/components/schemas/ArrayOfPages'
  *      GetTeam:
