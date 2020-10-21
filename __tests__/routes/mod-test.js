@@ -71,7 +71,7 @@ module.exports = (flag) => {
 
           expect(res.status).toBe(200);
           expect(Object.keys(res.body)).toHaveLength(1);
-          expect(res.body[1].status).toBe('CLEAR');
+          expect(res.body[1].Status).toBe('CLEAR');
         });
 
         it('should return a 404 on invalid id', async () => {
@@ -133,7 +133,7 @@ module.exports = (flag) => {
 
           expect(res.status).toBe(200);
           expect(Object.keys(res.body)).toHaveLength(1);
-          expect(res.body[1].status).toBe('APPROVED');
+          expect(res.body[1].Status).toBe('APPROVED');
         });
       });
     }

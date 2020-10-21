@@ -11,18 +11,19 @@ const { dsApi, dbOps, formatCohortSubmissions } = require('../../../lib');
 const clusterGeneration = () => {
   return db.transaction(async (trx) => {
     try {
-      const data = {};
+      const dsReq = {};
       // Pull a list of all cohorts
       const cohorts = await trx('Cohorts');
       // Iterate over the cohorts
       for (let { ID } of cohorts) {
         // Get all submissions for every cohort
         const unformatted = await dbOps.getAllSubmissionsByCohort(trx, ID);
-        // Store each cohorts' submissions in the data hash table with the key being the cohort id
-        data[ID] = formatCohortSubmissions(unformatted);
+        // Store each cohorts' submissions in the dsReq hash table with the key being the cohort id
+        dsReq[ID] = formatCohortSubmissions(unformatted);
       }
       // Send the submissions to data science for clustering
-      const clusters = await dsApi.getClusters(data);
+      const { data } = await dsApi.getClusters(dsReq);
+      const clusters = JSON.parse(data);
 
       // Add the generated clusters to the database
       let members = [];
