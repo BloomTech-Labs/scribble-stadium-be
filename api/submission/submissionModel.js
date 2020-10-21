@@ -79,6 +79,7 @@ const submitDrawingTransaction = (drawing, ID) => {
         ...drawing[0],
         Checksum: drawing[0].checksum,
       };
+      console.log({ dsDrawingRequestBody: drawingProperFormat });
       await dsApi.submitDrawingToDS(drawingProperFormat);
     } catch (err) {
       throw new Error(err.message);
