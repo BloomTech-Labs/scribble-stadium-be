@@ -72,18 +72,18 @@ const markAsRead = (ID, flag = true) => {
  */
 const submitDrawingTransaction = (drawing, ID) => {
   return db.transaction(async (trx) => {
-    await trx('Submissions').where({ ID }).update({ HasDrawn: true });
-    await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
     try {
+      await trx('Submissions').where({ ID }).update({ HasDrawn: true });
+      await trx('Drawing').insert(_omit(drawing[0], 'checksum'));
       const drawingProperFormat = {
         ...drawing[0],
         Checksum: drawing[0].checksum,
       };
+      console.log({ dsDrawingRequestBody: drawingProperFormat });
       await dsApi.submitDrawingToDS(drawingProperFormat);
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
-    return;
   });
 };
 
@@ -101,25 +101,24 @@ const submitDrawingTransaction = (drawing, ID) => {
  */
 const submitWritingTransaction = (pages, ID, storyId) => {
   return db.transaction(async (trx) => {
-    await trx('Writing').insert(pages.map((x) => _omit(x, 'checksum')));
-
-    let dsResponse;
-
     try {
+      await trx('Writing').insert(pages.map((x) => _omit(x, 'checksum')));
+
+      let dsResponse;
+
       const { data } = await dsApi.submitWritingToDS(storyId, ID, pages);
       dsResponse = data;
+
+      await trx('Submissions')
+        .where({ ID })
+        .update({
+          HasWritten: true,
+          LowConfidence: dsResponse.LowConfidence,
+          Complexity: Math.round(dsResponse.Complexity),
+        });
     } catch (err) {
-      trx.rollback();
+      throw new Error(err.message);
     }
-
-    await trx('Submissions')
-      .where({ ID })
-      .update({
-        HasWritten: true,
-        LowConfidence: dsResponse.LowConfidence,
-        Complexity: Math.round(dsResponse.Complexity),
-      });
-
     return;
   });
 };
