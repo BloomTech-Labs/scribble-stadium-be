@@ -70,7 +70,7 @@ const Game = require('./gameModel');
  *      GetTeam:
  *        type: object
  *        properties:
- *          Name:
+ *          name:
  *            type: string
  *            description: Name of the team
  *            example: Team 1
@@ -224,7 +224,7 @@ const Game = require('./gameModel');
  * @swagger
  * /game/squad?childId={id}:
  *  get:
- *    summary: returns the current Squad ID of a given child
+ *    summary: returns the current Squad ID and Member ID of a given child
  *    security:
  *      - okta: []
  *    tags:
@@ -241,8 +241,13 @@ const Game = require('./gameModel');
  *              properties:
  *                ID:
  *                  type: integer
+ *                  description: this child's squad ID
+ *                MemberID:
+ *                  type: integer
+ *                  description: this child's member ID
  *              example:
  *                ID: 1
+ *                MemberID: 2
  *      400:
  *        $ref: '#/components/responses/InvalidFormat'
  *      401:

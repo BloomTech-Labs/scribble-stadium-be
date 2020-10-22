@@ -14,7 +14,7 @@ const getSquadIDFromChildID = (ChildID) => {
     .join('Submissions AS Sub', 'Sub.ID', 'M.SubmissionID')
     .join('Children AS C', 'C.ID', 'Sub.ChildID')
     .where('C.ID', ChildID)
-    .select('S.ID');
+    .select(['S.ID', 'M.ID AS MemberID']);
 };
 
 /**
