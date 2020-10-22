@@ -135,7 +135,7 @@ module.exports = () => {
         res1 = res.body;
       });
 
-      it('includes ', async () => {
+      it('includes the newly added data to the endpoint', async () => {
         const res = await request(server).get(
           `/game/team?childId=${childIds[0]}`
         );
