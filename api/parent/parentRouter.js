@@ -73,6 +73,44 @@ const Parents = require('./parentModel');
 
 /**
  * @swagger
+ * /parent/viz?childId={id}:
+ *  get:
+ *    summary: gets a Plotly line graph object for a child's squad score over time
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - Parents
+ *    parameters:
+ *      - $ref: '#/components/parameters/childId'
+ *    responses:
+ *      200:
+ *        description: A plotly graph object whose property values can be passed into plotly
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                data:
+ *                  type: object
+ *                  description: plug this into the "data" attribute of the plotly component
+ *                layout:
+ *                  type: object
+ *                  description: plug this into the "layout" attribute of the plotly component
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      500:
+ *        $ref: '#/components/responses/DatabaseError'
+ */
+router.get('/viz', authRequired, (req, res) => {
+  const childId = req.query.childId;
+
+  ops.getAll(res, Parents.getVisualizations, 'Child', childId);
+});
+
+/**
+ * @swagger
  * /parents:
  *  get:
  *    summary: Attempts to query the database for a list of all parents.
