@@ -29,6 +29,12 @@ const Game = require('./gameModel');
  *          ChildID:
  *            type: integer
  *            example: 1
+ *          AvatarURL:
+ *            type: string
+ *            example: http://avatarurl.com
+ *          ChildName:
+ *            type: string
+ *            example: WhiteFox
  *          MemberID:
  *            type: integer
  *            description: the child's membership ID to their squad/team

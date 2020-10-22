@@ -24,9 +24,15 @@ const getSquadIDFromChildID = (ChildID) => {
  */
 const getFormattedTeam = (ChildID) => {
   return db.transaction(async (trx) => {
-    const team = await points.getTeamIDByChild(trx, ChildID);
-    const submissions = await points.getTeamByID(trx, team.TeamID);
-    return formatTeam(submissions);
+    try {
+      const team = await points.getTeamIDByChild(trx, ChildID);
+      const submissions = await points.getTeamByID(trx, team.TeamID);
+      console.log({ submissions });
+      return formatTeam(submissions);
+    } catch (err) {
+      console.log({ err: err.message });
+      throw new Error(err.message);
+    }
   });
 };
 
