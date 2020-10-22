@@ -135,6 +135,16 @@ module.exports = () => {
         res1 = res.body;
       });
 
+      it('includes the newly added data to the endpoint', async () => {
+        const res = await request(server).get(
+          `/game/team?childId=${childIds[0]}`
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body[1]).toHaveProperty('AvatarURL');
+        expect(res.body[1]).toHaveProperty('ChildName');
+      });
+
       it('returns the same object for their teammate', async () => {
         const res = await request(server).get('/game/team?childId=1');
 

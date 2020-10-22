@@ -25,6 +25,8 @@ const getTeamByID = (conn, TeamID) => {
     .where({ TeamID })
     .join('Writing AS W', 'S.ID', 'W.SubmissionID')
     .join('Drawing AS D', 'S.ID', 'D.SubmissionID')
+    .join('Children AS C', 'S.ChildID', 'C.ID')
+    .join('Avatars AS A', 'A.ID', 'C.AvatarID')
     .select([
       'M.ID AS MemberID',
       'W.PageNum',
@@ -35,6 +37,8 @@ const getTeamByID = (conn, TeamID) => {
       'T.Num',
       'S.ID AS SubmissionID',
       'S.ChildID',
+      'C.Name AS ChildName',
+      'A.AvatarURL',
     ]);
 };
 
