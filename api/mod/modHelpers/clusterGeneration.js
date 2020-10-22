@@ -23,6 +23,8 @@ const clusterGeneration = () => {
       }
       // Send the submissions to data science for clustering
       const { data } = await dsApi.getClusters(dsReq);
+
+      // Parse the JSON response
       const clusters = JSON.parse(data);
 
       // Add the generated clusters to the database
@@ -46,7 +48,8 @@ const clusterGeneration = () => {
       // returns a simple 1D array of integers
       return members;
     } catch (err) {
-      trx.rollback();
+      console.log(err.message);
+      throw new Error(err.message);
     }
   });
 };

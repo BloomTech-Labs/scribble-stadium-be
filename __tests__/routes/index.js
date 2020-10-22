@@ -27,7 +27,7 @@ jest.mock('../../api/middleware/dsAuthMiddleware', () =>
 
 // DS Request Mocking
 jest.mock('../../lib/dsRequests', () => ({
-  ...jest.requireActual('../../lib/dsRequests'),
+  // ...jest.requireActual('../../lib/dsRequests'),
   submitWritingToDS: (StoryId, SubmissionID) =>
     Promise.resolve({
       data: {
@@ -40,6 +40,17 @@ jest.mock('../../lib/dsRequests', () => ({
   submitDrawingToDS: (image) =>
     Promise.resolve({
       data: { SubmissionID: image.SubmissionID, IsFlagged: false, reason: [] },
+    }),
+  getClusters: (submissions) => {
+    const res = {};
+    for (let CohortID in submissions) {
+      res[CohortID] = [Object.keys(submissions[CohortID])];
+    }
+    return Promise.resolve({ data: JSON.stringify(res) });
+  },
+  getLineGraph: () =>
+    Promise.resolve({
+      data: JSON.stringify({ data: {}, layout: {} }),
     }),
 }));
 
