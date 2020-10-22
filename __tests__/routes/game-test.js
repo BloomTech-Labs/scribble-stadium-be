@@ -226,31 +226,6 @@ module.exports = () => {
       });
     });
 
-    describe('GET /game/squad?childId=:id', () => {
-      it('returns the squad ID for a given child', async () => {
-        const res = await request(server).get(
-          `/game/squad?childId=${childIds[0]}`
-        );
-
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual({ ID: 1 });
-      });
-
-      it('returns a 404 on invalid child ID', async () => {
-        const res = await request(server).get('/game/squad?childId=10');
-
-        expect(res.status).toBe(404);
-        expect(res.body.error).toBe('ChildNotFound');
-      });
-
-      it('returns a 400 on missing child ID', async () => {
-        const res = await request(server).get('/game/squad');
-
-        expect(res.status).toBe(400);
-        expect(res.body.error).toBe('Missing parameters.');
-      });
-    });
-
     describe('GET /game/faceoffs>squadId=:id', () => {
       it('returns the newly-generated faceoffs', async () => {
         const res = await request(server).get('/game/faceoffs?squadId=1');
@@ -482,7 +457,16 @@ module.exports = () => {
         );
 
         expect(res.status).toBe(200);
-        expect(res.body).toEqual({ ID: 1 });
+        expect(res.body.ID).toEqual(1);
+      });
+
+      it('should return a MemberID on this endpoint now as well', async () => {
+        const res = await request(server).get(
+          `/game/squad?childId=${childIds[0]}`
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty('MemberID');
       });
 
       it('returns a 404 on invalid child ID', async () => {
