@@ -1,4 +1,5 @@
 const db = require('../../data/db-config');
+const { hashPin } = require('../../lib');
 
 /**
  * A method to get all children from the database
@@ -52,7 +53,12 @@ const getById = (ID) => {
  * @returns {Promise} promise that resolves to ID of new child or an error message
  */
 const add = (child) => {
-  return db('Children').insert(child).returning('ID');
+  return db('Children')
+    .insert({
+      ...child,
+      PIN: hashPin(child.PIN),
+    })
+    .returning('ID');
 };
 
 /**
