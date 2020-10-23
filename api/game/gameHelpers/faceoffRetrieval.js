@@ -10,7 +10,9 @@ const getSubIdsForFaceoffs = (conn, SquadID) => {
   return conn('Faceoffs AS F')
     .join('Squads AS S', 'S.ID', 'F.SquadID')
     .where('S.ID', SquadID)
-    .select('F.*');
+    .select('F.*')
+    .orderBy('F.Points', 'desc')
+    .orderBy('F.ID', 'asc');
 };
 
 /**
