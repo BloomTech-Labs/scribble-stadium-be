@@ -15,7 +15,7 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
 
 ## Getting Started
 
-### Enviornment Variables
+### Environment Variables
 
 - `PORT` - API port (optional, but helpful with FE running as well)
   - The following ports are whitelisted for use with okta
@@ -25,9 +25,15 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
 - `DS_API_URL` - URL to a data science api. (eg. <https://ds-bw-test.herokuapp.com/>)
 - `DS_API_TOKEN` - authorization header token for data science api (eg. SUPERSECRET)
 - `DATABASE_URL` - connection string for postgres database
-- `OKTA_URL_ISSUER` - The complete issuer URL for verifying okta access tokens. `https://example.okta.com/oauth2/default`
+- `OKTA_URL_ISSUER` - The complete issuer URL for verifying okta access tokens. `https://auth.lambdalabs.dev/oauth2/default`
 - `OKTA_CLIENT_ID` - the okta client ID.
-- `TEST_DATABASE_URL` - the URL of the database to run tests on
+- `TEST_DATABASE_URL` - the URL of the testing database
+- `OKTA_ORG_URL`  - the URL of your Okta organization
+- `NODE_ENV` - The environment to use for knex scripts, should be development on local and production on live server
+- `AWS_ACCESS_KEY_ID` - A special access key from AWS
+- `AWS_SECRET_ACCESS_KEY` - A secret AWS access key that should not be shared with anyone
+- `CI_DATABASE_URL` - the URL of the web-hosted database (I used [ElephantSQL](http://elephantsql.com)) that your CI tests are ran on. This must be set in order to use the `knex:ci` script in the `package.json` !
+- `S3_BUCKET` - the name of the S3 bucket used for file storage
 
 See .env.sample for example values
 
@@ -66,7 +72,10 @@ There are 3 options to get postgresql installed locally [Choose one]:
 > Make sure to update the details of the app name, description and version in
 > the `package.json` and `config/jsdoc.js` files.
 
-## Contributing
+## Useful Info
 
-See the [contributing doc](https://github.com/Lambda-School-Labs/labs-api-starter/blob/main/CONTRIBUTING.md)
-for more info.
+- Walkthrough video explaining some of the features can be seen [here](https://www.youtube.com/watch?v=K5k19qWKHbI&feature=youtu.be)
+- View a detailed explanation of the S3 upload middleware [here](https://medium.com/@bran.ramirez.don/s3-file-upload-from-antdesign-394b9ca05de2)
+- The S3 upload middleware was designed to play nicely with the frontend UploadDocs component
+- Many of the database queries use `knex.transaction()`, something we didn't see in our time at Lambda
+- Endpoint request/response data is thoroughly documented using swagger, so once the server is running make sure to check out `localhost:8000/api-docs` to see all server capabilities
