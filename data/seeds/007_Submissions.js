@@ -1,5 +1,3 @@
-const fake = require('faker');
-
 const submissions = [...new Array(16)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 1,
