@@ -1,17 +1,3 @@
-// const faker = require('faker');
-
-// const avatars = [...new Array(10)].map(() => ({
-//   AvatarURL: faker.image.avatar(),
-// }));
-
-// exports.seed = function (knex) {
-//   // Inserts seed entries
-//   return knex('Avatars').insert(avatars);
-// };
-
-
-
-
 exports.seed = function(knex) {
 
   return knex('Avatars').insert([
