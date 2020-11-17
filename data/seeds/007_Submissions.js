@@ -1,4 +1,4 @@
-const submissions = [...new Array(16)].map((i, idx) => ({
+const submissions = [...new Array(8)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 1,
   HasRead: true,
@@ -6,10 +6,10 @@ const submissions = [...new Array(16)].map((i, idx) => ({
   HasDrawn: true,
   Complexity: 30,
   LowConfidence: false,
-  Status: 'APPROVED'
+  Status: 'APPROVED',
 }));
 
-exports.seed = function(knex) {
+exports.seed = function (knex) {
   // Inserts seed entries
   return knex('Submissions').insert(submissions);
 };

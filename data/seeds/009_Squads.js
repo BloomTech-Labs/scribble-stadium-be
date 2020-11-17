@@ -1,9 +1,9 @@
-const squads = [...new Array(4)].map((i, idx) => ({
-  CohortID: 1,
-  Winner: null
-}));
+const squads = [
+  { CohortID: 1, Winner: null },
+  { CohortID: 1, Winner: null },
+];
 
-exports.seed = function(knex) {
+exports.seed = function (knex) {
   // Inserts seed entries
   return knex('Squads').insert(squads);
 };
