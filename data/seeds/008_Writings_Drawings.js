@@ -1,5 +1,3 @@
-const faker = require('faker');
-
 const writings = [...new Array(8)].map((i, idx) => ({
   URL: `https://picsum.photos/id/${idx + 1}/400`,
   PageNum: 0,
