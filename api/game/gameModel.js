@@ -111,7 +111,27 @@ const getVotesBySquad = (SquadID, MemberID) => {
  * @returns {Promise} returns a promise that resolves to the newly created Vote ID
  */
 const submitVote = (vote) => {
-  return db('Votes').insert(vote).returning('ID');
+  // return db('Votes').insert(vote).returning('ID');
+  return db.transaction(async (trx) => {
+    try {
+      const { Vote, MemberID, FaceoffID, subEmojis1, subEmojis2 } = vote;
+      const returning = await trx('Votes').insert({ Vote, MemberID, FaceoffID }).returning('ID');
+      const faceoff = await trx('Faceoffs').select("*").where({ ID: FaceoffID }).first();
+      let faceoffType = faceoff.Type;
+      faceoffType = (faceoffType === "WRITING") ? "Writing" : "Drawing";
+      const emojis1 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID1 }).first());
+      const emojis2 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID2 }).first());
+      console.log(emojis1);
+      console.log(emojis2);
+      const emojiToReturn1 = (emojis1[0] !== "") ? subEmojis1 + emojis1 : subEmojis1;
+      const emojiToReturn2 = (emojis2[0] !== "") ? subEmojis2 + emojis2 : subEmojis2;
+      await trx(faceoffType).update({ Emoji: emojiToReturn1 }).where({ SubmissionID: faceoff.SubmissionID1 });
+      await trx(faceoffType).update({ Emoji: emojiToReturn2 }).where({ SubmissionID: faceoff.SubmissionID2 });
+      return returning;
+    } catch (error) {
+      console.log(error);
+    }
+  })
 };
 
 /**
