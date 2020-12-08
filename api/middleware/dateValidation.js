@@ -1,23 +1,25 @@
+const currentDate = new Date();
+const currentDayOfTheWeek = currentDate.getDay();
 
-const dateValidation = (request, response, next) => {
-    const currentDate = new Date();
-    const currentDayOfTheWeek = currentDate.getDay();
-    if (currentDayOfTheWeek === 0) {
-        console.log("Sunday")
-    } else if (currentDayOfTheWeek === 1 ||
+const readWriteDrawDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 1 ||
         currentDayOfTheWeek === 2 ||
-        currentDayOfTheWeek === 3) {
-            console.log("It is either Monday, Tuesday, or Wednesday!!!")
-    } else if (currentDayOfTheWeek === 4) {
-        console.log("It is Thursday")
-    } else if (currentDayOfTheWeek === 5) {
-        console.log("Friday!!! Friday!!!")
-    } else if (currentDayOfTheWeek === 6) {
-        console.log("time to reset")
-    }
+        currentDayOfTheWeek === 3) console.log('It is either Monday, Tuesday, or Wednesday!!!');
     next();
-};
+}
+
+const pointShareDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 4) console.log('It is Thursday');
+    next();
+}
+
+const faceOffDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 5) console.log('Friday, Friday');
+    next();
+}
 
 module.exports = {
-    dateValidation,
+    readWriteDrawDateValidation,
+    pointShareDateValidation,
+    faceOffDateValidation
 };
