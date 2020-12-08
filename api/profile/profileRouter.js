@@ -4,6 +4,10 @@ const Parents = require('../parent/parentModel');
 
 const { ops } = require('../../lib');
 
+const {
+  dateValidation,
+} = require('../middleware');
+
 /**
  * Schemas for typed profiles.
  * @swagger
@@ -95,7 +99,7 @@ const { ops } = require('../../lib');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
+router.get('/', authRequired, dateValidation, async (req, res) => {
   const { Email } = req.profile;
 
   ops.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
