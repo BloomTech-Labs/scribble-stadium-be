@@ -1,18 +1,46 @@
+const { whereNull } = require('../../../data/db-config');
 const { dbOps, formatSubForMatchups } = require('../../../lib');
 
 /**
- * This function queries the database for a list of faceoffs for a given squad.
+ * This function queries the database for a list of faceoffs for a given squad with emoji feedback for all submissions.
  * @param {Object} conn knex client connection
  * @param {number} SquadID unique integer squad id
+ * @param {number} ChildID (optional) unique integer child id, for getting emoji feedback for a given child
  * @returns {Promise} returns a promise that resolves to a list of Faceoff objects
  */
-const getSubIdsForFaceoffs = (conn, SquadID) => {
-  return conn('Faceoffs AS F')
+const getSubIdsForFaceoffs = async (conn, SquadID, ChildID=null) => {
+  // return conn('Faceoffs AS F')
+  //   .join('Squads AS S', 'S.ID', 'F.SquadID')
+  //   .where('S.ID', SquadID)
+  //   .select('F.*')
+  //   .orderBy('F.Points', 'desc')
+  //   .orderBy('F.ID', 'asc');
+
+  //From Team E repo so users can view feedback on their submissions.
+  let faceoffs = await conn('Faceoffs AS F')
     .join('Squads AS S', 'S.ID', 'F.SquadID')
     .where('S.ID', SquadID)
     .select('F.*')
     .orderBy('F.Points', 'desc')
     .orderBy('F.ID', 'asc');
+  // if a ChildID is supplied, attach emoji feedback for this child's submissions
+  if (ChildID) {
+  faceoffs = Promise.all(faceoffs.map(async faceoff => {
+      const faceoffType = (faceoff.Type === "WRITING") ? "Writing" : "Drawing";
+      faceoff.Emojis1 = await conn(`${faceoffType} AS T`)
+        .join("Submissions AS S", "S.ID", "T.SubmissionID")
+        .where("S.ID", faceoff.SubmissionID1)
+        .where("S.ChildID", ChildID)
+        .select("T.Emoji").first();
+      faceoff.Emojis2 = await conn(`${faceoffType} AS T`)
+        .join("Submissions AS S", "S.ID", "T.SubmissionID")
+        .where("S.ID", faceoff.SubmissionID2)
+        .where("S.ChildID", ChildID)
+        .select("T.Emoji").first();
+      return faceoff;
+  }));
+}
+return faceoffs;
 };
 
 /**
