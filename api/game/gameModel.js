@@ -52,14 +52,53 @@ const assignPoints = (points) => {
 /**
  * This query returns the matchups for a given squad.
  * @param {number} SquadID unique integer ID of the squad to retrieve data for
+ * @param {number} ChildID (optional) unique integer ID of the child to retrieve emoji feedback for
  * @returns {Array} returns an array of 4 faceoffs that will be documented in swagger
  */
 const getFaceoffsForSquad = (SquadID) => {
+  // return db.transaction(async (trx) => {
+  //   try {
+  //     // Get the faceoffs from the Faceoffs table in the db
+  //     const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
+  //     if (faceoffs.length <= 0) throw new Error('NotFound');
+  //     // Add submission data to the faceoffs pulled from the DB
+  //     await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
+
+  //     return faceoffs;
+  //   } catch (err) {
+  //     throw new Error(err.message);
+  //   }
+  // });
+
+  // From Team E
   return db.transaction(async (trx) => {
     try {
       // Get the faceoffs from the Faceoffs table in the db
-      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
-      if (faceoffs.length <= 0) throw new Error('NotFound');
+ 
+      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID, ChildID);
+
+      // Check the length of faceoffs if it is less than 0 return an error
+      if (faceoffs.length <= 0) {
+        throw new Error('NotFound');
+        // if the length is less than 4 
+        // return the difference between the length and 4
+        // the number of ghost users to add is the difference 
+        // between the length and 4
+      } else {
+        if (faceoffs.length < 4) {
+          const faceoffLengthDifference = (4 - faceoffs.length);
+
+          // generate the ghost users and add the number of ghost users
+          // equal to the value of faceoffLengthDifference
+          for (let i = 0; i <= faceoffLengthDifference; i++) {
+            getSquadIDForBots(SquadID)
+          }
+
+        }
+
+      }
+
+      
       // Add submission data to the faceoffs pulled from the DB
       await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
 
