@@ -35,7 +35,8 @@ const weekendDateValidation = (request, response, next) => {
         currentDayOfTheWeek === 6) {
             const payload = {message: "It's the weekend", day: currentDayOfTheWeek};
             response.payload = payload;
-        } else throw new Error("It is not the weekend!")
+        } else throw new Error("It is not the weekend!");
+    next();
 }
 
 module.exports = {
