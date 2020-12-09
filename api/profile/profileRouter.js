@@ -1,10 +1,5 @@
 const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
-const {
-  readWriteDrawDateValidation,
-  pointShareDateValidation,
-  faceOffDateValidation,
-} = require('../middleware/dateValidation');
 const Parents = require('../parent/parentModel');
 
 const { ops } = require('../../lib');
@@ -102,7 +97,7 @@ const { ops } = require('../../lib');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', readWriteDrawDateValidation, authRequired, async (req, res) => {
+router.get('/', authRequired, async (req, res) => {
   const { Email } = req.profile;
 
   ops.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
