@@ -371,8 +371,8 @@ router.post('/points', authRequired, (req, res) => {
  */
 router.get('/faceoffs', authRequired, (req, res) => {
   const squadId = req.query.squadId;
-
-  ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
+  const childId = req.query.childId || null;
+  ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId, childId);
 });
 
 /**

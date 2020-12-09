@@ -49,17 +49,75 @@ const assignPoints = (points) => {
   return db('Points').insert(points).returning('ID');
 };
 
+// From Team E
+/**
+ * The goal of this query is to get all the 
+ * submissions from the entire database, join
+ * the squads table and submissions table together
+ * only adding submissions from squads that are not 
+ * in the current squad
+ * @param {number} SquadID 
+ * @returns {Promise} returns a problems that resolves to an ID
+ */
+const getSquadIDForBots = (SquadID) => {
+  return db('Submissions as Sub')
+    .join('Squads as S', 'Sub.ID', '=', 'S.ID' )
+    .whereNot({
+      ID: SquadID
+    })
+    .select('S.ID')
+}
+
 /**
  * This query returns the matchups for a given squad.
  * @param {number} SquadID unique integer ID of the squad to retrieve data for
+ * @param {number} ChildID (optional) unique integer ID of the child to retrieve emoji feedback for
  * @returns {Array} returns an array of 4 faceoffs that will be documented in swagger
  */
-const getFaceoffsForSquad = (SquadID) => {
+const getFaceoffsForSquad = (SquadID, ChildID = null) => {
+  // return db.transaction(async (trx) => {
+  //   try {
+  //     // Get the faceoffs from the Faceoffs table in the db
+  //     const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
+  //     if (faceoffs.length <= 0) throw new Error('NotFound');
+  //     // Add submission data to the faceoffs pulled from the DB
+  //     await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
+
+  //     return faceoffs;
+  //   } catch (err) {
+  //     throw new Error(err.message);
+  //   }
+  // });
+
+  // From Team E
   return db.transaction(async (trx) => {
     try {
       // Get the faceoffs from the Faceoffs table in the db
-      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID);
-      if (faceoffs.length <= 0) throw new Error('NotFound');
+ 
+      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID, ChildID);
+
+      // Check the length of faceoffs if it is less than 0 return an error
+      if (faceoffs.length <= 0) {
+        throw new Error('NotFound');
+        // if the length is less than 4 
+        // return the difference between the length and 4
+        // the number of ghost users to add is the difference 
+        // between the length and 4
+      } else {
+        if (faceoffs.length < 4) {
+          const faceoffLengthDifference = (4 - faceoffs.length);
+
+          // generate the ghost users and add the number of ghost users
+          // equal to the value of faceoffLengthDifference
+          for (let i = 0; i <= faceoffLengthDifference; i++) {
+            getSquadIDForBots(SquadID)
+          }
+
+        }
+
+      }
+
+      
       // Add submission data to the faceoffs pulled from the DB
       await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
 
@@ -108,10 +166,32 @@ const getVotesBySquad = (SquadID, MemberID) => {
  * @param {number} vote.Vote a value either (1 | 2) to say if they voted for submission 1 or 2
  * @param {number} vote.FaceoffID the unique integer ID of the faceoff being voted on
  * @param {number} vote.MemberID the unique integer ID of the member voting
+ * @param {number} vote.subEmojis1 emoji review given to a writing or drawing #1
+ * @param {number} vote.subEmojis2 emoji review given to a writing or drawing #2
  * @returns {Promise} returns a promise that resolves to the newly created Vote ID
  */
 const submitVote = (vote) => {
-  return db('Votes').insert(vote).returning('ID');
+  // return db('Votes').insert(vote).returning('ID');
+  return db.transaction(async (trx) => {
+    try {
+      const { Vote, MemberID, FaceoffID, subEmojis1, subEmojis2 } = vote;
+      const returning = await trx('Votes').insert({ Vote, MemberID, FaceoffID }).returning('ID');
+      const faceoff = await trx('Faceoffs').select("*").where({ ID: FaceoffID }).first();
+      let faceoffType = faceoff.Type;
+      faceoffType = (faceoffType === "WRITING") ? "Writing" : "Drawing";
+      const emojis1 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID1 }).first());
+      const emojis2 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID2 }).first());
+      console.log(emojis1);
+      console.log(emojis2);
+      const emojiToReturn1 = (emojis1[0] !== "") ? subEmojis1 + emojis1 : subEmojis1;
+      const emojiToReturn2 = (emojis2[0] !== "") ? subEmojis2 + emojis2 : subEmojis2;
+      await trx(faceoffType).update({ Emoji: emojiToReturn1 }).where({ SubmissionID: faceoff.SubmissionID1 });
+      await trx(faceoffType).update({ Emoji: emojiToReturn2 }).where({ SubmissionID: faceoff.SubmissionID2 });
+      return returning;
+    } catch (error) {
+      console.log(error);
+    }
+  })
 };
 
 /**
