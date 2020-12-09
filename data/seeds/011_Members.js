@@ -1,4 +1,4 @@
-const members = [...new Array(8)].map((i, idx) => ({
+const members = [0,0,0,0,0,0,0,0].map((i, idx) => ({
   TeamID: `${Math.floor((idx + 2) / 2)}`,
   SubmissionID: `${idx + 1}`,
 }));
