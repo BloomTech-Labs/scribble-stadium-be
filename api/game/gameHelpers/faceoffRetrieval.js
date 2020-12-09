@@ -1,4 +1,3 @@
-const { whereNull } = require('../../../data/db-config');
 const { dbOps, formatSubForMatchups } = require('../../../lib');
 
 /**
@@ -8,7 +7,7 @@ const { dbOps, formatSubForMatchups } = require('../../../lib');
  * @param {number} ChildID (optional) unique integer child id, for getting emoji feedback for a given child
  * @returns {Promise} returns a promise that resolves to a list of Faceoff objects
  */
-const getSubIdsForFaceoffs = async (conn, SquadID, ChildID=null) => {
+const getSubIdsForFaceoffs = async (conn, SquadID, ChildID = null) => {
   // return conn('Faceoffs AS F')
   //   .join('Squads AS S', 'S.ID', 'F.SquadID')
   //   .where('S.ID', SquadID)
