@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const Mod = require('./modModel');
 
@@ -51,7 +51,7 @@ const Mod = require('./modModel');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/clusters', async (req, res) => {
-  ops.getAll(res, Mod.clusterGeneration, 'Cluster');
+  crudOperationsManager.getAll(res, Mod.clusterGeneration, 'Cluster');
 });
 
 /**
@@ -69,7 +69,7 @@ router.put('/clusters', async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/faceoffs', (req, res) => {
-  ops.update(res, Mod.generateFaceoffs, 'Faceoff');
+  crudOperationsManager.update(res, Mod.generateFaceoffs, 'Faceoff');
 });
 
 /**
@@ -87,7 +87,7 @@ router.put('/faceoffs', (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put('/results', (req, res) => {
-  ops.update(res, Mod.calculateResultsForTheWeek, 'Results');
+  crudOperationsManager.update(res, Mod.calculateResultsForTheWeek, 'Results');
 });
 
 // Data Endpoints
@@ -112,7 +112,7 @@ router.put('/results', (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/cohorts', (req, res) => {
-  ops.getAll(res, Mod.getCohorts, 'Cohort');
+  crudOperationsManager.getAll(res, Mod.getCohorts, 'Cohort');
 });
 
 /**
@@ -148,7 +148,7 @@ router.get('/cohorts', (req, res) => {
 router.post('/cohorts', (req, res) => {
   const newCohort = req.body;
 
-  ops.postMult(res, Mod.addCohort, 'Cohort', newCohort);
+  crudOperationsManager.postMult(res, Mod.addCohort, 'Cohort', newCohort);
 });
 
 /**
@@ -209,7 +209,7 @@ router.post('/cohorts', (req, res) => {
 router.get('/submissions', (req, res) => {
   const cohortId = req.query.cohortId;
 
-  ops.getAll(res, Mod.getSubmissionsByCohort, 'Cohort', cohortId);
+  crudOperationsManager.getAll(res, Mod.getSubmissionsByCohort, 'Cohort', cohortId);
 });
 
 /**
@@ -249,7 +249,7 @@ router.put('/submissions/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  ops.update(res, Mod.moderatePost, 'Submission', id, changes);
+  crudOperationsManager.update(res, Mod.moderatePost, 'Submission', id, changes);
 });
 
 module.exports = router;

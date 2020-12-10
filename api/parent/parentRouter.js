@@ -5,7 +5,7 @@ const {
   parentValidation,
   parentUpdateValidation,
 } = require('../middleware');
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const Parents = require('./parentModel');
 
@@ -106,7 +106,7 @@ const Parents = require('./parentModel');
 router.get('/viz', authRequired, (req, res) => {
   const childId = req.query.childId;
 
-  ops.getAll(res, Parents.getVisualizations, 'Child', childId);
+  crudOperationsManager.getAll(res, Parents.getVisualizations, 'Child', childId);
 });
 
 /**
@@ -133,7 +133,7 @@ router.get('/viz', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  ops.getAll(res, Parents.getAll, 'Parent');
+  crudOperationsManager.getAll(res, Parents.getAll, 'Parent');
 });
 
 /**
@@ -165,7 +165,7 @@ router.get('/:id', authRequired, (req, res) => {
   // Pull parent ID data out of the URL params
   const { id } = req.params;
 
-  ops.getById(res, Parents.getById, 'Parent', id);
+  crudOperationsManager.getById(res, Parents.getById, 'Parent', id);
 });
 
 /**
@@ -204,7 +204,7 @@ router.post('/', authRequired, parentValidation, async (req, res) => {
   // Pull relevant data out of the request object
   const newParent = req.body;
 
-  ops.post(res, Parents.add, 'Parent', newParent);
+  crudOperationsManager.post(res, Parents.add, 'Parent', newParent);
 });
 
 /**
@@ -241,7 +241,7 @@ router.put('/:id', authRequired, parentUpdateValidation, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  ops.update(res, Parents.update, 'Parent', id, changes);
+  crudOperationsManager.update(res, Parents.update, 'Parent', id, changes);
 });
 
 /**
@@ -269,7 +269,7 @@ router.delete('/:id', authRequired, (req, res) => {
   // Pull submission ID out of the URL parameter
   const { id } = req.params;
 
-  ops.update(res, Parents.remove, 'Parent', id);
+  crudOperationsManager.update(res, Parents.remove, 'Parent', id);
 });
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { authRequired, fileUpload } = require('../middleware');
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const Submissions = require('./submissionModel');
 
@@ -172,7 +172,7 @@ router.get('/', authRequired, async (req, res) => {
   // Pull intersection IDs out of the URL querystring
   const { childId, storyId } = req.query;
 
-  ops.getAll(
+  crudOperationsManager.getAll(
     res,
     Submissions.getOrInitSubmission,
     'Submission',
@@ -210,7 +210,7 @@ router.get('/child/:id', authRequired, async (req, res) => {
   // Pull child ID out of URL parameter
   const { id } = req.params;
 
-  ops.getAll(res, Submissions.getAllSubmissionsByChild, 'Submission', id);
+  crudOperationsManager.getAll(res, Submissions.getAllSubmissionsByChild, 'Submission', id);
 });
 
 /**
@@ -238,7 +238,7 @@ router.put('/read/:id', authRequired, async (req, res) => {
   // Pull submission ID out of URL parameter
   const { id } = req.params;
 
-  ops.update(res, Submissions.markAsRead, 'Submission', id);
+  crudOperationsManager.update(res, Submissions.markAsRead, 'Submission', id);
 });
 
 /**
@@ -290,7 +290,7 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
     checksum: x.Checksum,
   });
 
-  ops.submission(
+  crudOperationsManager.submission(
     res,
     Submissions.submitWritingTransaction,
     'Submission',
@@ -348,7 +348,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
     checksum: x.Checksum,
   });
 
-  ops.submission(
+  crudOperationsManager.submission(
     res,
     Submissions.submitDrawingTransaction,
     'Submission',
@@ -383,7 +383,7 @@ router.delete('/write/:id', authRequired, async (req, res) => {
   // Pull submission ID out of the URL parameter
   const { id } = req.params;
 
-  ops.update(res, Submissions.deleteWritingSubmission, 'Submission', id);
+  crudOperationsManager.update(res, Submissions.deleteWritingSubmission, 'Submission', id);
 });
 
 /**
@@ -411,7 +411,7 @@ router.delete('/draw/:id', authRequired, async (req, res) => {
   // Pull submission ID out of the URL parameter
   const { id } = req.params;
 
-  ops.update(res, Submissions.deleteDrawingSubmission, 'Submission', id);
+  crudOperationsManager.update(res, Submissions.deleteDrawingSubmission, 'Submission', id);
 });
 
 module.exports = router;

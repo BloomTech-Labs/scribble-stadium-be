@@ -5,7 +5,7 @@ const {
   storyValidation,
   storyUpdateValidation,
 } = require('../middleware');
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const Stories = require('./storyModel');
 
@@ -102,7 +102,7 @@ const Stories = require('./storyModel');
 router.get('/', authRequired, async (req, res) => {
   const cohortId = req.query.cohortId;
 
-  ops.getById(res, Stories.getByCohortId, 'Story', cohortId);
+  crudOperationsManager.getById(res, Stories.getByCohortId, 'Story', cohortId);
 });
 
 /**
@@ -134,7 +134,7 @@ router.get('/:id', authRequired, (req, res) => {
   // Pull story ID out of the URL params
   const { id } = req.params;
 
-  ops.getById(res, Stories.getById, 'Story', id);
+  crudOperationsManager.getById(res, Stories.getById, 'Story', id);
 });
 
 /**
@@ -171,7 +171,7 @@ router.post('/', authRequired, storyValidation, async (req, res) => {
   // Pull relevant data out of the request object
   const newStory = req.body;
 
-  ops.post(res, Stories.add, 'Story', newStory);
+  crudOperationsManager.post(res, Stories.add, 'Story', newStory);
 });
 
 /**
@@ -208,7 +208,7 @@ router.put('/:id', authRequired, storyUpdateValidation, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  ops.update(res, Stories.update, 'Story', id, changes);
+  crudOperationsManager.update(res, Stories.update, 'Story', id, changes);
 });
 
 /**
@@ -236,7 +236,7 @@ router.delete('/:id', authRequired, (req, res) => {
   // Pull story ID out of the URL params
   const { id } = req.params;
 
-  ops.update(res, Stories.remove, 'Story', id);
+  crudOperationsManager.update(res, Stories.remove, 'Story', id);
 });
 
 module.exports = router;

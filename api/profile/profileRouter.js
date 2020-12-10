@@ -2,7 +2,7 @@ const router = require('express').Router();
 const authRequired = require('../middleware/authRequired');
 const Parents = require('../parent/parentModel');
 
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 
 
@@ -100,7 +100,7 @@ const { ops } = require('../../lib');
 router.get('/', authRequired, async (req, res) => {
   const { Email } = req.profile;
 
-  ops.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
+  crudOperationsManager.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
 });
 
 module.exports = router;

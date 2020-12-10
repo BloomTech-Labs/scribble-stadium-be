@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 const { authRequired } = require('../middleware');
 
 const Game = require('./gameModel');
@@ -260,7 +260,7 @@ const Game = require('./gameModel');
 router.get('/squad', authRequired, (req, res) => {
   const childId = req.query.childId;
 
-  ops.getById(res, Game.getSquadIDFromChildID, 'Child', childId);
+  crudOperationsManager.getById(res, Game.getSquadIDFromChildID, 'Child', childId);
 });
 
 /**
@@ -293,7 +293,7 @@ router.get('/squad', authRequired, (req, res) => {
 router.get('/team', authRequired, (req, res) => {
   const childId = req.query.childId;
 
-  ops.getAll(res, Game.getFormattedTeam, 'ChildID', childId);
+  crudOperationsManager.getAll(res, Game.getFormattedTeam, 'ChildID', childId);
 });
 
 /**
@@ -337,7 +337,7 @@ router.get('/team', authRequired, (req, res) => {
 router.post('/points', authRequired, (req, res) => {
   const points = req.body;
 
-  ops.postMult(res, Game.assignPoints, 'Submission', points);
+  crudOperationsManager.postMult(res, Game.assignPoints, 'Submission', points);
 });
 
 /**
@@ -372,7 +372,7 @@ router.post('/points', authRequired, (req, res) => {
 router.get('/faceoffs', authRequired, (req, res) => {
   const squadId = req.query.squadId;
 
-  ops.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
+  crudOperationsManager.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId);
 });
 
 /**
@@ -409,7 +409,7 @@ router.get('/votes', authRequired, (req, res) => {
   const squadId = req.query.squadId;
   const memberId = req.query.memberId;
 
-  ops.getAll(res, Game.getVotesBySquad, '', squadId, memberId);
+  crudOperationsManager.getAll(res, Game.getVotesBySquad, '', squadId, memberId);
 });
 
 /**
@@ -449,7 +449,7 @@ router.get('/votes', authRequired, (req, res) => {
 router.post('/votes', authRequired, (req, res) => {
   const vote = req.body;
 
-  ops.post(res, Game.submitVote, 'Vote', vote);
+  crudOperationsManager.post(res, Game.submitVote, 'Vote', vote);
 });
 
 /**
@@ -482,7 +482,7 @@ router.post('/votes', authRequired, (req, res) => {
 router.get('/results', authRequired, (req, res) => {
   const squadId = req.query.squadId;
 
-  ops.getAll(res, Game.getSquadResults, 'Squad', squadId);
+  crudOperationsManager.getAll(res, Game.getSquadResults, 'Squad', squadId);
 });
 
 module.exports = router;
