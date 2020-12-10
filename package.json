@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@okta/jwt-verifier": "^1.0.0",
-    "@okta/okta-sdk-nodejs": "^4.1.1",
+    "@okta/okta-sdk-nodejs": "^4.3.1",
     "aws-sdk": "^2.753.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
@@ -72,6 +72,7 @@
     "lodash.pick": "^4.4.0",
     "morgan": "~1.9.1",
     "multiparty": "^4.2.2",
+    "node-cron": "^2.0.3",
     "pg": "^8.2.1",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"

@@ -9,6 +9,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const jsdocConfig = require('../config/jsdoc');
 const dotenv = require('dotenv');
 const config_result = dotenv.config();
+
 if (process.env.NODE_ENV != 'production' && config_result.error) {
   throw config_result.error;
 }
@@ -30,6 +31,7 @@ const submissionRouter = require('./submission/submissionRouter');
 const oktaRouter = require('./okta/oktaRouter');
 const modRouter = require('./mod/modRouter');
 const gameRouter = require('./game/gameRouter');
+const resetRouter = require('./reset/resetRouter');
 
 const app = express();
 
@@ -67,6 +69,7 @@ app.use(['/submit', '/submission', '/submissions'], submissionRouter);
 app.use('/mod', modRouter);
 app.use('/register', oktaRouter);
 app.use('/game', gameRouter);
+app.use('/reset', resetRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
