@@ -22,7 +22,7 @@ cron.schedule('* * * * 4-5', () => {
 })
 
 // Reveal (Friday Night)
-cron.schedule('* * * * 5', () => {
+cron.schedule('0 17 * * 5', () => {
     console.log("It is working!!!", "Friday Reveal");
 })
 
