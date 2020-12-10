@@ -2,46 +2,46 @@ const currentDate = new Date();
 const currentDayOfTheWeek = currentDate.getDay();
 
 const readWriteDrawDateValidation = (request, response, next) => {
-    if (currentDayOfTheWeek === 1 ||
-        currentDayOfTheWeek === 2 ||
-        currentDayOfTheWeek === 3) {
-            console.log('It is either Monday, Tuesday, or Wednesday!!!');
-            const payload = {message: 'It is either Monday, Tuesday, or Wednesday!!!', day: currentDayOfTheWeek};
+    if (currentDayOfTheWeek === 6 ||
+        currentDayOfTheWeek === 0 ||
+        currentDayOfTheWeek === 1) {
+            console.log('It is either Saturday, Sunday, or Monday!!!');
+            const payload = {message: 'It is either Saturday, Sunday, or Monday!!!', day: currentDayOfTheWeek};
             response.payload = payload;
-    } else throw new Error("It is not Monday, Tuesday, or Wednesday!");
+    } else throw new Error("It is not Saturday, Sunday, or Monday!");
     next();
 }
 
-const pointShareDateValidation = (request, response, next) => {
-    if (currentDayOfTheWeek === 4) {
-        console.log('It is Thursday');
-        const payload = {message: 'It is Thursday', day: currentDayOfTheWeek};
+const moderationDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 2) {
+        console.log('It is Tuesday');
+        const payload = {message: 'It is Tuesday', day: currentDayOfTheWeek};
         response.payload = payload;
-    } else throw new Error("It is not Thrusday!")
+    } else throw new Error("It is not Tuesday!")
     next();
 }
 
-const faceOffDateValidation = (request, response, next) => {
-    if (currentDayOfTheWeek === 5) {
-        console.log('Friday, Friday');
-        const payload = {message: 'Friday, Friday', day: currentDayOfTheWeek};
+const pointsShareDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 3) {
+        console.log('It is Wednesday');
+        const payload = {message: 'It is Wednesday', day: currentDayOfTheWeek};
         response.payload = payload;
-    } else throw new Error("It is not Friday!")
+    } else throw new Error("It is not Wednesday!")
     next();
 }
 
-const weekendDateValidation = (request, response, next) => {
-    if (currentDayOfTheWeek === 0 ||
-        currentDayOfTheWeek === 6) {
-            const payload = {message: "It's the weekend", day: currentDayOfTheWeek};
+const independentVotingDateValidation = (request, response, next) => {
+    if (currentDayOfTheWeek === 4 ||
+        currentDayOfTheWeek === 5) {
+            const payload = {message: "It's Thursday or Friday", day: currentDayOfTheWeek};
             response.payload = payload;
-        } else throw new Error("It is not the weekend!");
+        } else throw new Error("It is not Thursday or Friday!");
     next();
 }
 
 module.exports = {
     readWriteDrawDateValidation,
-    pointShareDateValidation,
-    faceOffDateValidation,
-    weekendDateValidation
+    moderationDateValidation,
+    pointsShareDateValidation,
+    independentVotingDateValidation,
 };

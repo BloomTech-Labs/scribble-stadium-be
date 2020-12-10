@@ -4,8 +4,6 @@ const Parents = require('../parent/parentModel');
 
 const { crudOperationsManager } = require('../../lib');
 
-
-
 /**
  * Schemas for typed profiles.
  * @swagger

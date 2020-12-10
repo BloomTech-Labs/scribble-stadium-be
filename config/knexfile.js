@@ -6,7 +6,7 @@ module.exports = {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: { directory: '../data/migrations' },
-    seeds: { directory: '/c/Users/ajgeb/Desktop/My_Projects/labs/story-squad-be-b/data/seeds' },
+    seeds: { directory: '../data/seeds' },
     pool: {
       min: 2,
       max: 10,
