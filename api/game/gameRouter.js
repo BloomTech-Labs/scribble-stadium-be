@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { ops } = require('../../lib');
-const { authRequired } = require('../middleware');
+const { authRequired, emojiValidation } = require('../middleware');
 
 const Game = require('./gameModel');
 
@@ -446,8 +446,16 @@ router.get('/votes', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/votes', authRequired, (req, res) => {
+router.post('/votes', authRequired, emojiValidation, (req, res) => {
   const vote = req.body;
+  const subEmojis1 = vote.subEmojis1
+  const subEmojis2 = vote.subEmojis2
+
+  console.log('POST VOTES', vote)
+  console.log('SUBEMOJIS1', vote.subEmojis1)
+  console.log('SUBEMOJIS2', vote.subEmojis2)
+  console.log('req.body.subEmojis1',req.body.subEmojis1 )
+
 
   ops.post(res, Game.submitVote, 'Vote', vote);
 });
