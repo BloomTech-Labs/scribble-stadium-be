@@ -10,7 +10,6 @@ const getById = ID => {
 }
 
 const add = faceoff => {
-    console.log(faceoff)
     return db('Faceoffs').insert({...faceoff}).returning('ID');
 };
 

@@ -23,8 +23,7 @@ router.post('/', (request, response) => {
 router.put('/:id', (request, response) => {
     const { id } = request.params;
     const changes = request.body;
-    
-    crudOperationsManager.update(response, Faceoffs.update, 'Faceoffs', changes);
+    crudOperationsManager.update(response, Faceoffs.update, 'Faceoffs', id, changes);
 })
 
 
