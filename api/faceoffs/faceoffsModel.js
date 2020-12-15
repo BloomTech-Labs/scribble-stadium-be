@@ -17,14 +17,10 @@ const update = (ID, changes) => {
     return db('Faceoffs').where({ ID }).update(changes);
 };
 
-const remove = ID => {
-    return db('Faceoffs').where({ ID }).del();
-}
 
 module.exports = {
     getAll,
     getById,
     add,
-    update,
-    remove
+    update
 }
