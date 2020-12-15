@@ -1,32 +1,10 @@
 const cron = require('node-cron');
-const CronJob = require('./cronModel');
-
-// RWD (Saturday-Monday)
-cron.schedule('* * * * 6,0,1', () => {
-    console.log("It is working!!!", "Saturday-Monday");
-})
-
-// Moderation (Tuesday)
-cron.schedule('* * * * 2', () => {
-    console.log("It is working!!!", "Tuesday");
-})
-
-// Points Share (Wednesday)
-cron.schedule('* * * * 3', () => {
-    console.log("It is working!!!", "Wednesday");
-})
-
-// Independent Voting (Thursday - Friday Evening)
-cron.schedule('* * * * 4-5', () => {
-    console.log("It is working!!!", "Thursday-Friday Evening");
-})
-
-// Reveal (Friday Night)
-cron.schedule('0 17 * * 5', () => {
-    console.log("It is working!!!", "Friday Reveal");
-})
+const CronTasks = require('./cronTasks');
 
 // Reset (Saturday Morning)
-cron.schedule('* * * * 6', () => {
-    console.log("It is working!!!");
+cron.schedule('0 17 * * 6', () => {
+    CronTasks.addPointsToChildren()
+    // Go into the CHildren's table and adding points to the Total_Points
+    // How do we go through and update TOtal_Points
+    // Make a query on the db, 
 })
