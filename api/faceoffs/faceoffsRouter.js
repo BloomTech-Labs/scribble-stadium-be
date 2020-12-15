@@ -11,8 +11,14 @@ router.get('/', (request, response) => {
 });
 
 router.get('/:id', (request, response) => {
-    crudOperationsManager.getById(response, Faceoffs.getById, 'Faceoffs')
-})
+    const { id } = request.params;
+    crudOperationsManager.getById(response, Faceoffs.getById, 'Faceoffs', id);
+});
+
+router.post('/', (request, response) => {
+    const newFaceoff = request.body;
+    crudOperationsManager.post(response, Faceoffs.add, 'Faceoffs', newFaceoff);
+});
 
 
 module.exports = router;

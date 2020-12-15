@@ -6,11 +6,12 @@ const getAll = () => {
 };
 
 const getById = ID => {
-    return db('Faceoffs').where({ ID }).first();
+    return db('Faceoffs').where({ ID });
 }
 
 const add = faceoff => {
-    return db('Faceoffs').insert({...faceoff});
+    console.log(faceoff)
+    return db('Faceoffs').insert({...faceoff}).returning('ID');
 };
 
 const update = (ID, changes) => {
