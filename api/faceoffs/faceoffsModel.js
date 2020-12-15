@@ -2,23 +2,23 @@ const db = require('../../data/db-config');
 
 
 const getAll = () => {
-    return db('faceoffs');
+    return db('Faceoffs');
 };
 
 const getById = ID => {
-    return db('faceoffs').where({ ID }).first();
+    return db('Faceoffs').where({ ID }).first();
 }
 
 const add = faceoff => {
-    return db('faceoffs').insert({...faceoff})
+    return db('Faceoffs').insert({...faceoff});
 };
 
 const update = (ID, changes) => {
-    return db('faceoffs').where({ ID }).update(changes);
+    return db('Faceoffs').where({ ID }).update(changes);
 };
 
 const remove = ID => {
-    return db('faceoffs').where({ ID }).del();
+    return db('Faceoffs').where({ ID }).del();
 }
 
 module.exports = {
