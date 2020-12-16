@@ -9,6 +9,7 @@ const children = [...new Array(8)].map((i, idx) => ({
   GradeLevelID: `${faker.random.number({ min: 1, max: 6 })}`,
   CohortID: 1,
   IsDyslexic: `${faker.random.boolean()}`,
+  // Total_Points: 0
 }));
 
 exports.seed = function (knex) {

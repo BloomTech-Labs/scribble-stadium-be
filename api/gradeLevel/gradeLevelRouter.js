@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { authRequired, gradeLevelValidation } = require('../middleware');
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const GradeLevels = require('./gradeLevelModel');
 
@@ -63,7 +63,7 @@ const GradeLevels = require('./gradeLevelModel');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  ops.getAll(res, GradeLevels.getAll, 'GradeLevel');
+  crudOperationsManager.getAll(res, GradeLevels.getAll, 'GradeLevel');
 });
 
 /**
@@ -101,7 +101,7 @@ router.get('/', authRequired, (req, res) => {
 router.post('/', authRequired, gradeLevelValidation, (req, res) => {
   const newGrades = req.body;
 
-  ops.postMult(res, GradeLevels.add, 'GradeLevel', newGrades);
+  crudOperationsManager.postMult(res, GradeLevels.add, 'GradeLevel', newGrades);
 });
 
 module.exports = router;
