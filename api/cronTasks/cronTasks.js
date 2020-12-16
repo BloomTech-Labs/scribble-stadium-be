@@ -8,11 +8,12 @@ const addTotalPointsToChildren = async () => {
                             .join('Submissions', 'Children.ID', '=', 'Submissions.ChildID')
                             .join('Faceoffs', 'Submissions.ID', '=', 'Faceoffs.Winner')
                             .groupBy('Children.ID')
-    return derivedTable.map(child => {
+
+    for (const child of derivedTable) {
         const ID = child.ID;
         const sum = child.sum;
-        return db('Children').where({ ID }).update({ Total_Points: sum })
-    })
+        db('Children').where({ ID }).update({ Total_Points: Total_Points + sum })
+    }
 }
 
 // update "Children" as "c"
