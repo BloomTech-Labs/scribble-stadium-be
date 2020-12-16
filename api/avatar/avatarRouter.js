@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { authRequired, avatarValidation, fileUpload } = require('../middleware');
-const { ops } = require('../../lib');
+const { crudOperationsManager } = require('../../lib');
 
 const Avatars = require('./avatarModel');
 
@@ -57,7 +57,7 @@ const Avatars = require('./avatarModel');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  ops.getAll(res, Avatars.getAll, 'Avatar');
+  crudOperationsManager.getAll(res, Avatars.getAll, 'Avatar');
 });
 
 /**
@@ -110,7 +110,7 @@ router.post(
       AvatarURL: x.Location,
     });
 
-    ops.submission(res, Avatars.add, 'Avatar', avatars, cb);
+    crudOperationsManager.submission(res, Avatars.add, 'Avatar', avatars, cb);
   }
 );
 

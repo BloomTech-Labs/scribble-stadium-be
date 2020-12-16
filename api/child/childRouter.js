@@ -5,7 +5,7 @@ const {
   childValidation,
   childUpdateValidation,
 } = require('../middleware');
-const { ops } = require('../../lib/');
+const { crudOperationsManager } = require('../../lib/');
 
 const Children = require('./childModel');
 
@@ -111,7 +111,7 @@ const Children = require('./childModel');
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/', authRequired, (req, res) => {
-  ops.getAll(res, Children.getAll, 'Child');
+  crudOperationsManager.getAll(res, Children.getAll, 'Child');
 });
 
 /**
@@ -143,7 +143,7 @@ router.get('/:id', authRequired, (req, res) => {
   // Pull child ID out of the URL params
   const { id } = req.params;
 
-  ops.getById(res, Children.getById, 'Child', id);
+  crudOperationsManager.getById(res, Children.getById, 'Child', id);
 });
 
 /**
@@ -177,7 +177,7 @@ router.get('/:id/complexity', authRequired, async (req, res) => {
   // Pull the relevant child ID out of the URL params
   const { id } = req.params;
 
-  ops.getAll(res, Children.getComplexityList, 'Child', id);
+  crudOperationsManager.getAll(res, Children.getComplexityList, 'Child', id);
 });
 
 /**
@@ -214,7 +214,7 @@ router.post('/', authRequired, childValidation, (req, res) => {
   // Pull relevant data out of the request object
   const newChild = req.body;
 
-  ops.post(res, Children.add, 'Child', newChild);
+  crudOperationsManager.post(res, Children.add, 'Child', newChild);
 });
 
 /**
@@ -251,7 +251,7 @@ router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  ops.update(res, Children.update, 'Child', id, changes);
+  crudOperationsManager.update(res, Children.update, 'Child', id, changes);
 });
 
 /**
@@ -279,7 +279,7 @@ router.delete('/:id', authRequired, (req, res) => {
   // Pull child ID out of the URL params
   const { id } = req.params;
 
-  ops.update(res, Children.remove, 'Child', id);
+  crudOperationsManager.update(res, Children.remove, 'Child', id);
 });
 
 module.exports = router;
