@@ -14,11 +14,11 @@ function emojiValidation(req, res, next) {
   }
  
     // slicing off the last item in the string because it will always be a comma, and the function will return false for the emoji string because it takes the comma into account.
-    if (
-      isOnlyEmojis(emojiString1.slice(0, emojiString1.length - 1)) && isOnlyEmojis(emojiString2))
+    if (isOnlyEmojis(emojiString1.slice(0, emojiString1.length - 1)) && isOnlyEmojis(emojiString2.slice(0, emojiString2.length - 1)))
      {
       next()
     } else {
+      console.log('not working')
       res.status(403).json({ message: 'feedback must be a string of no more than 6 emojis'})
     }
 }
