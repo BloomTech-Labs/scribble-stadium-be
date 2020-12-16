@@ -446,7 +446,7 @@ router.get('/votes', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/votes', authRequired, emojiValidation, (req, res) => {
+router.post('/votes', authRequired, (req, res) => {
   const vote = req.body;
 
   crudOperationsManager.post(res, Game.submitVote, 'Vote', vote);
