@@ -38,8 +38,7 @@ function emojiValidation(req, res, next) {
      {
       next()
     } else {
-      console.log('not working')
-      res.status(403).json({ string: 'feedback must be a string of strictly emojis, no other characters allowed'})
+      res.status(403).json({ message: 'feedback must be a string of strictly emojis, no other characters allowed'})
     }
 }
 
