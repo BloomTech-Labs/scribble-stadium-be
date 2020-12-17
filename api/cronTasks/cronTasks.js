@@ -19,13 +19,14 @@ const addTotalPointsToChildren = async () => {
 
 const getTotalVotesByTeam = async () => {
     const derivedTable = await db
-                            .select('*')
+                            .select('T.ID')
+                            .count('*')
                             .from('Votes as V')
                             .join('Members as M', 'V.Vote', '=', 'M.ID')
                             .join('Teams as T', 'T.ID', '=', 'M.ID')
-                            .groupBy('V.ID', 'M.ID', 'T.ID')
-                            .orderBy('T.ID')
-    console.log(derivedTable);
+                            .groupBy('T.ID')
+                            .orderBy('T.ID', 'asc')
+    console.log(derivedTable)
 }
 getTotalVotesByTeam();
 
