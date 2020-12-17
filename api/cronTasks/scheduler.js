@@ -1,9 +1,6 @@
 const cron = require('node-cron');
 const CronTasks = require('./cronTasks');
 
-CronTasks.addTotalPointsToChildren()
-
-
 
 // Reset (Saturday Morning)
 cron.schedule('0 17 * * 6', () => {

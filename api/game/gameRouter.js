@@ -448,7 +448,6 @@ router.get('/votes', authRequired, (req, res) => {
  */
 router.post('/votes', authRequired, (req, res) => {
   const vote = req.body;
-  console.log("Bonjour", vote)
 
   crudOperationsManager.post(res, Game.submitVote, 'Vote', vote);
 });
