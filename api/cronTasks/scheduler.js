@@ -4,7 +4,8 @@ const CronTasks = require('./cronTasks');
 
 // Reveal (Friday Afternoon)
 cron.schedule('0 17 * * 5', () => {
-    CronTasks.setWinningTeam();
+    CronTasks.getWinningTeam();
+    CronTasks.getLosingTeam();
 }) 
 
 // Reset (Saturday Morning)

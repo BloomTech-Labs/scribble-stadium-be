@@ -17,7 +17,7 @@ const addTotalPointsToChildren = async () => {
     }
 }
 
-const setWinningTeam = async () => {
+const getWinningTeam = async () => {
         const winningTeam = await db
                                 .select('T.ID')
                                 .count('*')
@@ -27,22 +27,24 @@ const setWinningTeam = async () => {
                                 .groupBy('T.ID')
                                 .orderBy('T.count', 'desc')
                                 .limit(1)
-        console.log("winner:", winningTeam[0])
-        const losingTeams = await db
-                        .select('T.ID')
-                        .count('*')
-                        .from('Votes as V')
-                        .join('Members as M', 'V.Vote', '=', 'M.ID')
-                        .join('Teams as T', 'T.ID', '=', 'M.ID')
-                        .groupBy('T.ID')
-                        .orderBy('T.count', 'desc')
-                        .offset(1)
-        console.log("loser:", losingTeams[0])
+        console.log("winner:", winningTeam)
 }
 
-setWinningTeam();
+const getLosingTeam = async () => {
+    const losingTeams = await db
+                                .select('T.ID')
+                                .count('*')
+                                .from('Votes as V')
+                                .join('Members as M', 'V.Vote', '=', 'M.ID')
+                                .join('Teams as T', 'T.ID', '=', 'M.ID')
+                                .groupBy('T.ID')
+                                .orderBy('T.count', 'desc')
+                                .offset(1)
+        console.log("loser:", losingTeams)
+}
 
 module.exports = {
     addTotalPointsToChildren,
-    setWinningTeam
+    getWinningTeam,
+    getLosingTeam
 }
