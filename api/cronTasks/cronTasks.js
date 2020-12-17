@@ -25,7 +25,8 @@ const getTotalVotesByTeam = async () => {
                             .join('Members as M', 'V.Vote', '=', 'M.ID')
                             .join('Teams as T', 'T.ID', '=', 'M.ID')
                             .groupBy('T.ID')
-                            .orderBy('T.ID', 'asc')
+                            .orderBy('T.count', 'desc')
+                            .limit(1)
     console.log(derivedTable)
 }
 getTotalVotesByTeam();
