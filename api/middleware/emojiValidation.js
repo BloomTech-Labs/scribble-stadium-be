@@ -26,7 +26,7 @@ function emojiValidation(req, res, next) {
     /*
     At this point, strings of strictly emojis will be reduced to an empty string ""
     Empty strings are falsy
-    Use the not (!) operator to return truthy for strictly emoji strings (that are repesented by a variable (noSpace) that is an empty string) and falsy for anything else
+    Use the not (!) operator to return true for strictly emoji strings (that are repesented by a variable (noSpace) that is an empty string) and false for anything else
     */
     return !noSpace
   }
