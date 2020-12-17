@@ -28,16 +28,15 @@ const setWinningTeam = async () => {
                                 .orderBy('T.count', 'desc')
                                 .limit(1)
         console.log("winner:", winningTeam[0])
-        let teams = await db
-                                .select('T.ID')
-                                .count('*')
-                                .from('Votes as V')
-                                .join('Members as M', 'V.Vote', '=', 'M.ID')
-                                .join('Teams as T', 'T.ID', '=', 'M.ID')
-                                .groupBy('T.ID')
-                                .orderBy('T.count', 'asc')
-        teams.pop();
-        const losingTeams = teams;
+        const losingTeams = await db
+                        .select('T.ID')
+                        .count('*')
+                        .from('Votes as V')
+                        .join('Members as M', 'V.Vote', '=', 'M.ID')
+                        .join('Teams as T', 'T.ID', '=', 'M.ID')
+                        .groupBy('T.ID')
+                        .orderBy('T.count', 'desc')
+                        .offset(1)
         console.log("loser:", losingTeams[0])
 }
 
