@@ -17,7 +17,9 @@ const addTotalPointsToChildren = async () => {
     }
 }
 
-
+const getTotalVotesByTeam = async () => {
+    
+}
 
 
 module.exports = {

@@ -173,13 +173,18 @@ const getVotesBySquad = (SquadID, MemberID) => {
 const submitVote = (vote) => {
   // return db('Votes').insert(vote).returning('ID');
   return db.transaction(async (trx) => {
+    
+    // const updateWinner = (vote, faceoffID) => {
+    //   db('Faceoffs').where({ FaceoffID }).update({ Winner: Vote }) 
+    // }
+
     try {
       const { Vote, MemberID, FaceoffID, subEmojis1, subEmojis2 } = vote;
       const returning = await trx('Votes').insert({ Vote, MemberID, FaceoffID }).returning('ID');
       // This is where I need to reference the child voted for and connect the two tables
       // Take faceoffID find the submissionID and then find the ChildId
       const faceoff = await trx('Faceoffs').select("*").where({ ID: FaceoffID }).first();
-      
+      // updateWinner(Vote, FaceoffID);
       let faceoffType = faceoff.Type;
       faceoffType = (faceoffType === "WRITING") ? "Writing" : "Drawing";
       const emojis1 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID1 }).first());
