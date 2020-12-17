@@ -173,11 +173,6 @@ const getVotesBySquad = (SquadID, MemberID) => {
 const submitVote = (vote) => {
   // return db('Votes').insert(vote).returning('ID');
   return db.transaction(async (trx) => {
-    
-    // const updateWinner = (vote, faceoffID) => {
-    //   db('Faceoffs').where({ faceoffID }).update({ Winner: vote }) 
-    // }
-
     try {
       const { Vote, MemberID, FaceoffID, subEmojis1, subEmojis2 } = vote;
       const returning = await trx('Votes').insert({ Vote, MemberID, FaceoffID }).returning('ID');
