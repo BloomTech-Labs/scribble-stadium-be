@@ -18,10 +18,18 @@ const addTotalPointsToChildren = async () => {
 }
 
 const getTotalVotesByTeam = async () => {
-    
+    const derivedTable = await db
+                            .select('*')
+                            .from('Votes')
+                            .join('Members', 'Votes.Vote', '=', 'Members.ID')
+                            .join('Teams', 'Teams.ID', '=', 'Members.ID')
+                            .groupBy('Votes.ID', 'Members.ID', 'Teams.ID')
+                            .orderBy('Votes', 'desc')
+    console.log(derivedTable)
 }
-
+getTotalVotesByTeam();
 
 module.exports = {
-    addTotalPointsToChildren
+    addTotalPointsToChildren,
+    getTotalVotesByTeam
 }

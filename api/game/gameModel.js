@@ -175,7 +175,7 @@ const submitVote = (vote) => {
   return db.transaction(async (trx) => {
     
     // const updateWinner = (vote, faceoffID) => {
-    //   db('Faceoffs').where({ FaceoffID }).update({ Winner: Vote }) 
+    //   db('Faceoffs').where({ faceoffID }).update({ Winner: vote }) 
     // }
 
     try {
