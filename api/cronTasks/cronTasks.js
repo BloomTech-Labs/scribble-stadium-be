@@ -7,6 +7,7 @@ const addTotalPointsToChildren = async () => {
                             .from('Children')
                             .join('Submissions', 'Children.ID', '=', 'Submissions.ChildID')
                             .join('Faceoffs', 'Submissions.ID', '=', 'Faceoffs.Winner')
+                            // TODO: where datediff is less than 7 to only update faceoffs within the last week
                             .groupBy('Children.ID')
 
     for (const child of derivedTable) {
@@ -17,34 +18,53 @@ const addTotalPointsToChildren = async () => {
     }
 }
 
-const getWinningTeam = async () => {
-        const winningTeam = await db
-                                .select('T.ID')
-                                .count('*')
-                                .from('Votes as V')
-                                .join('Members as M', 'V.Vote', '=', 'M.ID')
-                                .join('Teams as T', 'T.ID', '=', 'M.ID')
-                                .groupBy('T.ID')
-                                .orderBy('T.count', 'desc')
-                                .limit(1)
-        console.log("winner:", winningTeam)
+const updateWinsForChildren = async () => {
+    const winningTeam = await getWinningTeam()
+    const children = await getChildrenWithTeam()
+    const winningChildren = children.filter(child => child.TeamID === winningTeam[0].ID)
+    for (const winningChild of winningChildren) {
+        await db('Children').where({ ID: winningChild.ChildID }).increment('Wins')
+    }
 }
 
-const getLosingTeam = async () => {
-    const losingTeams = await db
-                                .select('T.ID')
-                                .count('*')
-                                .from('Votes as V')
-                                .join('Members as M', 'V.Vote', '=', 'M.ID')
-                                .join('Teams as T', 'T.ID', '=', 'M.ID')
-                                .groupBy('T.ID')
-                                .orderBy('T.count', 'desc')
-                                .offset(1)
-        console.log("loser:", losingTeams)
+const updateLosesForChildren = async () => {
+    const winningTeam = await getWinningTeam()
+    const children = await getChildrenWithTeam()
+    const losingChildren = children.filter(child => child.TeamID !== winningTeam[0].ID)
+    for (const losingChild of losingChildren) {
+        await db('Children').where({ ID: losingChild.ChildID }).increment('Losses')
+    }
+}
+
+const getWinningTeam = async () => {
+    const winningTeam = await db
+                            .select('T.ID')
+                            .count('*')
+                            .from('Votes as V')
+                            .join('Members as M', 'V.Vote', '=', 'M.ID')
+                            .join('Teams as T', 'T.ID', '=', 'M.TeamID')
+                            .groupBy('T.ID')
+                            .orderBy('T.count', 'desc')
+                            .limit(1);
+    return winningTeam
+}
+
+const getChildrenWithTeam = async () => {
+    const children = await db
+                        .select([
+                            'T.ID as TeamID',
+                            'C.Name',
+                            'C.ID as ChildID'
+                        ])
+                        .from('Children as C')
+                        .join('Submissions as S', 'C.ID', '=', 'S.ChildID')
+                        .join('Members as M', 'M.SubmissionID', '=', 'S.ID')
+                        .join('Teams as T', 'T.ID', '=', 'M.TeamID')
+    return children
 }
 
 module.exports = {
     addTotalPointsToChildren,
-    getWinningTeam,
-    getLosingTeam
+    updateWinsForChildren,
+    updateLosesForChildren
 }

@@ -27,7 +27,6 @@ const getFormattedTeam = (ChildID) => {
     try {
       const team = await points.getTeamIDByChild(trx, ChildID);
       const submissions = await points.getTeamByID(trx, team.TeamID);
-      console.log({ submissions });
       return formatTeam(submissions);
     } catch (err) {
       console.log({ err: err.message });
@@ -179,7 +178,6 @@ const submitVote = (vote) => {
       // This is where I need to reference the child voted for and connect the two tables
       // Take faceoffID find the submissionID and then find the ChildId
       const faceoff = await trx('Faceoffs').select("*").where({ ID: FaceoffID }).first();
-      // updateWinner(Vote, FaceoffID);
       let faceoffType = faceoff.Type;
       faceoffType = (faceoffType === "WRITING") ? "Writing" : "Drawing";
       const emojis1 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID1 }).first());
