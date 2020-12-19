@@ -2,123 +2,69 @@ const db = require('../../data/db-config');
 
 const addTotalPointsToChildren = async () => {
     const derivedTable = await db
-                            .select('Children.ID')
+                            .select('Children.ID', 'Children.Total_Points')
                             .sum('Faceoffs.Points')
                             .from('Children')
                             .join('Submissions', 'Children.ID', '=', 'Submissions.ChildID')
                             .join('Faceoffs', 'Submissions.ID', '=', 'Faceoffs.Winner')
+                            // TODO: where datediff is less than 7 to only update faceoffs within the last week
                             .groupBy('Children.ID')
 
     for (const child of derivedTable) {
         const ID = child.ID;
         const sum = child.sum;
-        db('Children').where({ ID }).update({ Total_Points: Total_Points + sum })
+        const totalPoints = child.Total_Points;
+        db('Children').where({ ID }).update({ Total_Points: totalPoints + sum })
     }
 }
 
-// update "Children" as "c"
-// SET "Total_Points" = "Total_Points" + (
-// 	select "d1"."points"
-// 	from
-// 	(
-// 		select "c"."ID" as "childID", sum("f"."Points") as "points"
-// 		from "Children" as "c"
-// 		join "Submissions" as "s"
-// 		on "c"."ID"="s"."ChildID"
-// 		join "Faceoffs" as "f"
-// 		on "s"."ID"="f"."Winner"
-// 		where DATE_PART('day', now()) - DATE_PART('day', "f"."Date") <= 7
-// 		group by "c"."ID"
-// 	) as "d1"
-// 	where "d1"."childID" = "c"."ID"
-// )
-
-
-
-
-//           where DATE_PART('day', now()) - DATE_PART('day', "f"."Date") <= 7
-//           group by "c"."ID"
-
-// Winners are declared.
-// Based on majority of votes the submission gets
-// Make two columns of integers (Wins & Loses)
-// Make a query
-
-// Migration file: change Winner to the Id of the child that won
-/*
-const getAll = () => {
-    return db('Faceoffs');
-};
-
-const getById = ID => {
-    return db('Faceoffs').where({ ID });
+const updateWinsForChildren = async () => {
+    const winningTeam = await getWinningTeam()
+    const children = await getChildrenWithTeam()
+    const winningChildren = children.filter(child => child.TeamID === winningTeam[0].ID)
+    for (const winningChild of winningChildren) {
+        await db('Children').where({ ID: winningChild.ChildID }).increment('Wins')
+    }
 }
 
-const add = faceoff => {
-    return db('Faceoffs').insert({...faceoff}).returning('ID');
-};
+const updateLosesForChildren = async () => {
+    const winningTeam = await getWinningTeam()
+    const children = await getChildrenWithTeam()
+    const losingChildren = children.filter(child => child.TeamID !== winningTeam[0].ID)
+    for (const losingChild of losingChildren) {
+        await db('Children').where({ ID: losingChild.ChildID }).increment('Losses')
+    }
+}
 
-const update = (ID, changes) => {
-    return db('Faceoffs').where({ ID }).update(changes);
-};
+const getWinningTeam = async () => {
+    const winningTeam = await db
+                            .select('T.ID')
+                            .count('*')
+                            .from('Votes as V')
+                            .join('Members as M', 'V.Vote', '=', 'M.ID')
+                            .join('Teams as T', 'T.ID', '=', 'M.TeamID')
+                            .groupBy('T.ID')
+                            .orderBy('T.count', 'desc')
+                            .limit(1);
+    return winningTeam
+}
 
-const getWinner = () => {
-    return db('Faceoffs').join()
-};
-*/
-
-// var teamsIdColumnIdentifier = knex.ref('teams.ID'); // <-- [1]
-
-// var subquery1 = Knex.knex('team_users').count('*')
-//   .where('TeamID', teamsIdColumnIdentifier).as('UserCount');
-// var subquery2 = Knex.knex('team_access').count('*')
-//   .where('TeamID', teamsIdColumnIdentifier).as('AppCount');
-
-// Knex.knex.select('*', subquery1, subquery2).from('teams')
-//   .where("OwnerUserID", ownerId).asCallback(dataSetCallback);
-
-// const subquery1 = db(
-
-// )
-
-// const derivedTable = db('Children').join("Submissions", "Children")
-
-// db('Children').update({ Total_Points: TotalPoints + subquery })
-
-//   update "Children" as "c"
-//   SET "Total_Points" = "Total_Points" + (
-//       select "d1"."points"
-//       from
-//       (
-
-//       ) as "d1"
-//       where "d1"."childID" = "c"."ID"
-//   )
-
-
-
-
-//   update "Children" as "c"
-//   SET "Total_Points" = "Total_Points" + (
-//       select "d1"."points"
-//       from
-//       (
-//           select "c"."ID" as "childID", sum("f"."Points") as "points"
-//           from "Children" as "c"
-//           join "Submissions" as "s"
-//           on "c"."ID"="s"."ChildID"
-//           join "Faceoffs" as "f"
-//           on "s"."ID"="f"."Winner"
-//           where DATE_PART('day', now()) - DATE_PART('day', "f"."Date") <= 7
-//           group by "c"."ID"
-//       ) as "d1"
-//       where "d1"."childID" = "c"."ID"
-//   )
-  
-
-
-
+const getChildrenWithTeam = async () => {
+    const children = await db
+                        .select([
+                            'T.ID as TeamID',
+                            'C.Name',
+                            'C.ID as ChildID'
+                        ])
+                        .from('Children as C')
+                        .join('Submissions as S', 'C.ID', '=', 'S.ChildID')
+                        .join('Members as M', 'M.SubmissionID', '=', 'S.ID')
+                        .join('Teams as T', 'T.ID', '=', 'M.TeamID')
+    return children
+}
 
 module.exports = {
-    addTotalPointsToChildren
+    addTotalPointsToChildren,
+    updateWinsForChildren,
+    updateLosesForChildren
 }
