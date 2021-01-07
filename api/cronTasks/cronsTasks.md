@@ -49,7 +49,11 @@
 
     To Go to the Heroku Terminal:
     1) Log into the story-squad-b-api heroku account
+
     2) On the main account page, click on More
+
     ![heroku main page]("./Screenshot.png)
+
     3) Click on run terminal
+    
     4) type (cd config && knex migrate:latest) to migrate the database or (cd config && knex seed:run) to run seeds
