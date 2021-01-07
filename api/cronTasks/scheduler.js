@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const CronTasks = require('./cronTasks');
 
 // Reveal (Friday Afternoon)
-cron.schedule('0 17 * * 5', () => {
+cron.schedule('0 15 * * 5', () => {
     CronTasks.updateWinsForChildren();
     CronTasks.updateLosesForChildren();
 }) 

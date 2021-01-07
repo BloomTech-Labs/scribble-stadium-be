@@ -7,7 +7,6 @@ const addTotalPointsToChildren = async () => {
                             .from('Children')
                             .join('Submissions', 'Children.ID', '=', 'Submissions.ChildID')
                             .join('Faceoffs', 'Submissions.ID', '=', 'Faceoffs.Winner')
-                            // TODO: where datediff is less than 7 to only update faceoffs within the last week
                             .groupBy('Children.ID')
 
     for (const child of derivedTable) {
