@@ -33,6 +33,7 @@ const oktaRouter = require('./okta/oktaRouter');
 const modRouter = require('./mod/modRouter');
 const gameRouter = require('./game/gameRouter');
 const resetRouter = require('./reset/resetRouter');
+const leadBoard = require('./leaderboard/leadboardRouter');
 
 const app = express();
 
@@ -71,6 +72,7 @@ app.use('/mod', modRouter);
 app.use('/register', oktaRouter);
 app.use('/game', gameRouter);
 app.use('/reset', resetRouter);
+app.use('/leaderboard', leadBoard);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
