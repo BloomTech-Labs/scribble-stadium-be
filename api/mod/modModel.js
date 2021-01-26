@@ -2,6 +2,8 @@ const db = require('../../data/db-config');
 const { dbOps, formatCohortSubmissions } = require('../../lib');
 const faceoff = require('./faceoffGeneration');
 const { result, clusterGeneration } = require('./modHelpers');
+const ballot = require('./BallotGeneration');
+const Children = require('../child/childModel');
 
 /**
  * Queries the database for a list of all current cohorts
@@ -78,6 +80,17 @@ const generateFaceoffs = () => {
   });
 };
 
+
+const generateVSequence = () =>{
+  return db.transaction(async (trx) =>{
+    try {
+      const children = ballot.getChildData(trx);
+      const foData = ballot.getfaceOffData(trx);
+      const squads = ballot.groupBySquad(foData);
+      sequence 
+    }
+  })
+}
 /**
  * A database transaction that can be triggered to run a series of processes on the server.
  * This should be run at the end of every week after the children have voted:
