@@ -67,7 +67,6 @@ const generateFaceoffs = () => {
     try {
       const data = await faceoff.getSubmissionsWithPoints(trx);
       const formattedData = faceoff.formatPointSums(data);
-      console.log(formattedData)
       const squads = faceoff.sortBySquad(Object.values(formattedData));
       const matchups = faceoff.groupOnPoints(squads);
       const IDs = await trx('Faceoffs').insert(matchups).returning('ID');
@@ -89,7 +88,17 @@ const generateVSequence = () =>{
       const foData = await ballot.getfaceOffData(trx);
       let squads = ballot.groupBySquad(foData);
       const childBallots = ballot.VSequence(squads, data);
-      console.log('child ballots', childBallots)
+      for(let childNum in childBallots){
+          let votes = Object.assign(childBallots[childNum])
+          await trx('Children')
+          .where({ID: childNum})
+          .update({
+            Ballots: votes,
+          })
+          console.log(childNum)
+      }
+ 
+      return childBallots
     }
     catch (err) {
       console.log({ err: err.message });

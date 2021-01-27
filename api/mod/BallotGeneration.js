@@ -54,7 +54,6 @@ const VSequence = (squads, data) =>{
             for(let squadNum in n){
                 if(squadNum != child.SquadID){
                     let qualified = leastVotes(n[squadNum], ballots, child.ID)
-                    // console.log('qualified', qualified)
                     let choice = getRandomInt(qualified.length)
                     if(!ballots[child.ID]){
                         ballots[child.ID] = [qualified[choice].ID]
@@ -162,7 +161,6 @@ const leastVotes = (arr, ballots, child) =>{
         //     }
         // }
     })
-    console.log(output)
     return output
 }
 //filters duplicate instances of child and squad
