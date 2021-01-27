@@ -73,8 +73,8 @@ router.put('/faceoffs', (req, res) => {
 });
 
 
-router.put('/votesequence' (req, res) =>{
-  crudOperationsManager.update(res), mod.generateVSequence, '' );
+router.put('/votesequence', (req, res) =>{
+  crudOperationsManager.update(res, Mod.generateVSequence, 'Children' );
 });
 
 /**

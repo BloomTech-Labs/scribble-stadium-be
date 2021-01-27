@@ -67,11 +67,11 @@ const generateFaceoffs = () => {
     try {
       const data = await faceoff.getSubmissionsWithPoints(trx);
       const formattedData = faceoff.formatPointSums(data);
+      console.log(formattedData)
       const squads = faceoff.sortBySquad(Object.values(formattedData));
       const matchups = faceoff.groupOnPoints(squads);
-
       const IDs = await trx('Faceoffs').insert(matchups).returning('ID');
-
+      console.log(IDs)
       return IDs;
     } catch (err) {
       console.log({ err: err.message });
@@ -81,16 +81,22 @@ const generateFaceoffs = () => {
 };
 
 
+
 const generateVSequence = () =>{
   return db.transaction(async (trx) =>{
     try {
-      const children = ballot.getChildData(trx);
-      const foData = ballot.getfaceOffData(trx);
-      const squads = ballot.groupBySquad(foData);
-      sequence 
+      const data = await faceoff.getSubmissionsWithPoints(trx);
+      const foData = await ballot.getfaceOffData(trx);
+      let squads = ballot.groupBySquad(foData);
+      const childBallots = ballot.VSequence(squads, data);
+      console.log('child ballots', childBallots)
     }
-  })
-}
+    catch (err) {
+      console.log({ err: err.message });
+      throw new Error(err.message);
+    }
+  });
+};
 /**
  * A database transaction that can be triggered to run a series of processes on the server.
  * This should be run at the end of every week after the children have voted:
@@ -119,4 +125,5 @@ module.exports = {
   moderatePost,
   generateFaceoffs,
   calculateResultsForTheWeek,
+  generateVSequence,
 };
