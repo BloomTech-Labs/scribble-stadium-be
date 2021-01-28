@@ -1,6 +1,4 @@
 const db = require('../../data/db-config');
-const {crudOperationsManager} = require('../../lib');
-// const Children = require('./childModel')
 
 const getLeaderBoardData = async () =>{
 
@@ -31,9 +29,9 @@ const getLeaderBoardData = async () =>{
         if(outputNames.includes(Name)){
             output.forEach(chil =>{
                 if(chil.Name == Name){
-                    chil.WritingPoints =  WP;
-                    chil.DrawingPoints =  DP;
-                    chil.Total_Points = chil.Total_Points + WP + DP;
+                    chil.WritingPoints = WP;
+                    chil.DrawingPoints = DP;
+                    chil.Total_Points = WP + DP;
                 }
             })
         }else{
