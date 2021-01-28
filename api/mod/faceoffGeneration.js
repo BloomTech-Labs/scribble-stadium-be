@@ -81,6 +81,21 @@ const sortBySquad = (submissions) => {
   return teams;
 };
 
+
+//MAY REMOVE
+// const updateSquadIDs = (squads) =>{
+//   console.log('squad object', squads)
+//   for(let SquadID in squads){ 
+//     console.log('squad ID', SquadID)
+//     for(let TeamID in SquadID){
+//       console.log(TeamID)
+//       // TeamID.forEach(sub =>{
+        
+//       // })
+//     }
+//   }
+// }
+
 /**
  * This function iterates over the submissions sorted by squad/team (returned by sortBySquad()) and then pairs
  * the highest- and lowest-rated writing and drawing submissions from each squad off to be matched up against
@@ -167,4 +182,5 @@ module.exports = {
   formatPointSums,
   sortBySquad,
   groupOnPoints,
+  // updateSquadIDs
 };

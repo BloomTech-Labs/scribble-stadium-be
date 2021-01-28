@@ -72,6 +72,11 @@ router.put('/faceoffs', (req, res) => {
   crudOperationsManager.update(res, Mod.generateFaceoffs, 'Faceoff');
 });
 
+
+router.put('/votesequence', (req, res) =>{
+  crudOperationsManager.update(res, Mod.generateVSequence, 'Children' );
+});
+
 /**
  * @swagger
  * /mod/results:
