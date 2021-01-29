@@ -52,6 +52,14 @@ module.exports = {
         name: 'Grade Levels',
         description: 'Operations for grade level data.',
       },
+      {
+        name: 'Leader Board',
+        description: 'Operations for Leader Board Data'
+      },
+      {
+        name: 'Achievements',
+        description: 'Operations for Achievements Data'
+      }
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',

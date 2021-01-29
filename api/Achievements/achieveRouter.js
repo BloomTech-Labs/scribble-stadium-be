@@ -8,8 +8,8 @@ const{authRequired,
 const {crudOperationsManager} = require('../../lib/');
 const achievements = require('./achieveModel')
 
-
-router.get('/', authRequired, (req, res) =>{
+//put auth require back in
+router.get('/', authRequired (req, res) =>{
     crudOperationsManager.getAll(res, achievements.getAll, 'Achievements');
 });
 
@@ -21,7 +21,7 @@ router.get('/:id', authRequired, (req, res) => {
     crudOperationsManager.getById(res, achievements.getById, 'Achievements', id);
   });
 
-  router.post('/', authRequired, achievementValidation (req, res) => {
+  router.post('/', authRequired, achievementValidation, (req, res) => {
     // Pull relevant data out of the request object
     const newAchievements = req.body;
   
