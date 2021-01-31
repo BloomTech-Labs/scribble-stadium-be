@@ -9,7 +9,7 @@ const {crudOperationsManager} = require('../../lib/');
 const achievements = require('./achieveModel')
 
 //put auth require back in
-router.get('/', authRequired (req, res) =>{
+router.get('/', authRequired, (req, res) =>{
     crudOperationsManager.getAll(res, achievements.getAll, 'Achievements');
 });
 

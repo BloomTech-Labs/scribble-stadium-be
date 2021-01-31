@@ -38,6 +38,13 @@ const getById = (ID) => {
       'C.IsDyslexic',
       'C.ParentID',
       'C.CohortID',
+      'C.AvatarID',
+      'C.Total_Points',
+      'C.Wins',
+      'C.Losses',
+      'C.Ballots',
+      'C.VotesRemaining',
+      'C.Achievements',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);
@@ -74,6 +81,11 @@ const update = (ID, changes) => {
   return db('Children').where({ ID }).update(changes);
 };
 
+
+const updateAchieve = (ID, changes) =>{
+  currentData = getById(ID)
+  console.log(currentData)
+}
 /**
  * Attempts to delete row in Children table with matching ID
  * @param {number} ID ID of the child to delete
@@ -102,4 +114,5 @@ module.exports = {
   update,
   remove,
   getComplexityList,
+  updateAchieve,
 };
