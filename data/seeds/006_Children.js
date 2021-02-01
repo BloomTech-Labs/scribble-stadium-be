@@ -9,6 +9,8 @@ const children = [...new Array(8)].map((i, idx) => ({
   GradeLevelID: `${faker.random.number({ min: 1, max: 6 })}`,
   CohortID: 1,
   IsDyslexic: `${faker.random.boolean()}`,
+  Wins: `${faker.random.number({min:1, max: 10})}`,
+  Losses: `${faker.random.number({min:1, max: 10})}`,
   // Total_Points: 0
 }));
 
