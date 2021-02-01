@@ -81,11 +81,6 @@ const update = (ID, changes) => {
   return db('Children').where({ ID }).update(changes);
 };
 
-
-const updateAchieve = (ID, changes) =>{
-  currentData = getById(ID)
-  console.log(currentData)
-}
 /**
  * Attempts to delete row in Children table with matching ID
  * @param {number} ID ID of the child to delete
@@ -114,5 +109,4 @@ module.exports = {
   update,
   remove,
   getComplexityList,
-  updateAchieve,
 };
