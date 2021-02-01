@@ -1,6 +1,4 @@
 const db = require('../../data/db-config');
-const {crudOperationsManager} = require('../../lib');
-// const Children = require('./childModel')
 
 const getLeaderBoardData = async () =>{
 
@@ -12,9 +10,11 @@ const getLeaderBoardData = async () =>{
             .select([
                 'C.Name',
                 'C.Total_Points',
+                'C.Wins',
+                'C.Losses',
                 'P.ID',
                 'P.WritingPoints',
-                'P.DrawingPoints'
+                'P.DrawingPoints',
             ]);
     
     console.log(derivedTable)
@@ -24,13 +24,14 @@ const getLeaderBoardData = async () =>{
         const Name = child.Name;
         const WP = child.WritingPoints
         const DP = child.DrawingPoints
-        const TP = child.TotalPoints
+        // const TP = child.Total_Points
         const outputNames = output.map(chil => chil.Name)
         if(outputNames.includes(Name)){
             output.forEach(chil =>{
                 if(chil.Name == Name){
-                    chil.WritingPoints = chil.WritingPoints + WP;
-                    chil.DrawingPoints = chil.DrawingPoints + DP;
+                    chil.WritingPoints = WP;
+                    chil.DrawingPoints = DP;
+                    chil.Total_Points = WP + DP;
                 }
             })
         }else{
