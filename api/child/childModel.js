@@ -38,6 +38,13 @@ const getById = (ID) => {
       'C.IsDyslexic',
       'C.ParentID',
       'C.CohortID',
+      'C.AvatarID',
+      'C.Total_Points',
+      'C.Wins',
+      'C.Losses',
+      'C.Ballots',
+      'C.VotesRemaining',
+      'C.Achievements',
       'G.GradeLevel',
       'A.AvatarURL',
     ]);

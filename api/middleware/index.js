@@ -7,7 +7,9 @@ const fileUpload = require('./fileUpload');
 const gradeLevelValidation = require('./gradeLevelValidation');
 const parentValidation = require('./parentValidation');
 const storyValidation = require('./storyValidation');
-const emojiValidation = require('./emojiValidation')
+const emojiValidation = require('./emojiValidation');
+const achieveValidation = require('./achieveValidation');
+
 
 module.exports = {
   authRequired,
@@ -19,5 +21,6 @@ module.exports = {
   ...gradeLevelValidation,
   ...parentValidation,
   ...storyValidation,
-  emojiValidation
+  emojiValidation,
+  ...achieveValidation,
 };
