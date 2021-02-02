@@ -17,6 +17,25 @@ const addTotalPointsToChildren = async () => {
     }
 }
 
+const resetTable = async(table) =>{
+    const IDs = getIDs(table)
+    deleteAll(table, IDs)
+
+
+}
+
+const deleteAll = async(table, IDs) =>{
+    const del = `DELETE FROM ${table} WHERE id = ?`
+    for(const id of IDs){
+        connection.query(del, id, (error, results, fields) => {
+            if (error)
+              return console.error(error.message);
+          
+            console.log('Deleted Row(s):', results.affectedRows);
+          });
+    }
+}
+
 const updateWinsForChildren = async () => {
     const winningTeam = await getWinningTeam()
     const children = await getChildrenWithTeam()
@@ -46,6 +65,13 @@ const getWinningTeam = async () => {
                             .orderBy('T.count', 'desc')
                             .limit(1);
     return winningTeam
+}
+
+const getIDs = async (table) =>{
+    const data = await db
+                        .select(`${table}.ID`)
+        
+    return data          
 }
 
 const getChildrenWithTeam = async () => {
