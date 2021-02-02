@@ -18,21 +18,14 @@ const addTotalPointsToChildren = async () => {
 }
 
 const resetTable = async(table) =>{
-    const IDs = getIDs(table)
-    deleteAll(table, IDs)
-
-
+    const IDs = await getIDs(table)
+    await deleteAll(table, IDs)
 }
 
 const deleteAll = async(table, IDs) =>{
-    const del = `DELETE FROM ${table} WHERE id = ?`
-    for(const id of IDs){
-        connection.query(del, id, (error, results, fields) => {
-            if (error)
-              return console.error(error.message);
-          
-            console.log('Deleted Row(s):', results.affectedRows);
-          });
+    console.log(IDs)
+    for(const id of IDs){  
+        await db(`${table}`).where({ID: id.ID}).del()
     }
 }
 
@@ -67,9 +60,13 @@ const getWinningTeam = async () => {
     return winningTeam
 }
 
+
+
 const getIDs = async (table) =>{
+    console.log(`${table}`)
     const data = await db
-                        .select(`${table}.ID`)
+                        .select([`${table}.ID`])
+                        .from(`${table}`)
         
     return data          
 }
@@ -91,5 +88,6 @@ const getChildrenWithTeam = async () => {
 module.exports = {
     addTotalPointsToChildren,
     updateWinsForChildren,
-    updateLosesForChildren
+    updateLosesForChildren,
+    resetTable,
 }
