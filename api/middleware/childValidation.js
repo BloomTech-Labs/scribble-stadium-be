@@ -5,8 +5,16 @@ const fields = [
   'PIN',
   'ParentID',
   'AvatarID',
+  'ParentID',
   'GradeLevelID',
   'IsDyslexic',
+  'CohortID',
+  'Total_Points',
+  'Wins',
+  'Losses',
+  'Ballots',
+  'VotesRemaining',
+  'Achievements'
 ];
 
 /**
