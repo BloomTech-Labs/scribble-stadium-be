@@ -84,10 +84,11 @@ const generateFaceoffs = () => {
 const generateVSequence = () =>{
   return db.transaction(async (trx) =>{
     try {
-      const data = await faceoff.getSubmissionsWithPoints(trx);
-      const foData = await ballot.getfaceOffData(trx);
+      let data = await faceoff.getSubmissionsWithPoints(trx);
+      let foData = await ballot.getfaceOffData(trx);
       let squads = ballot.groupBySquad(foData);
-      const childBallots = ballot.VSequence(squads, data);
+      let childBallots = ballot.VSequence(squads, data);
+
       for(let childNum in childBallots){
           let votes = Object.assign(childBallots[childNum])
           await trx('Children')
@@ -95,9 +96,7 @@ const generateVSequence = () =>{
           .update({
             Ballots: votes,
           })
-          console.log(childNum)
       }
- 
       return childBallots
     }
     catch (err) {

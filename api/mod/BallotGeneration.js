@@ -33,34 +33,36 @@ const groupBySquad = (faceoffs) =>{
 }
 
 const VSequence = (squads, data) =>{
-
-    let test = null
-    let nsquad = []
-    nsquad.push(squads)
-    let k = Object.keys(squads)
-
-    let newArr = []
-    k.forEach(squad =>{
-        newArr.push(parseInt(squad, 10));
+    //pull squad keys that which are equivilent to squad numbers
+    let allSquadNums = Object.keys(squads)
+    //converts all indecies into integers
+    let formatedSquadNum = []
+    allSquadNums.forEach(squad =>{
+        formatedSquadNum.push(parseInt(squad, 10));
     })
 
-    let children = filterChildren(data, newArr)
+    //remove duplicate children from list of submissions
+    const children = filterChildren(data, formatedSquadNum)
+    
+    //empty object to insert ballot numbers in
     let ballots = {}
     children.forEach(child =>{
+        //aquires current squad ID to compare
         let num = child.SquadID
+        //counter to ensure iteration is only 3 times
         let votesAvailable = 3;
         while(votesAvailable > 0){
-            let n = nsquad[nsquad.length-1]
-            for(let squadNum in n){
+            for(let squadNum in squads){
                 if(squadNum != child.SquadID){
-                    let qualified = leastVotes(n[squadNum], ballots, child.ID)
+                    //screens Face offs to ensure that they one chosen among have not been chosen by this user and prioritzes the least amount of votes within the squad
+                    let qualified = leastVotes(squads[squadNum], ballots[child.ID], child.ID)
                     let choice = getRandomInt(qualified.length)
                     if(!ballots[child.ID]){
                         ballots[child.ID] = [qualified[choice].ID]
                     }else{
                         ballots[child.ID].push(qualified[choice].ID)
                     }
-                    nsquad.push(incrementVotesCasted(n, squadNum, [qualified[choice].ID]))
+                    squads = incrementVotesCasted(squads, squadNum, [qualified[choice].ID])
                     votesAvailable--
                 }
             }            
@@ -115,51 +117,20 @@ const isEmpty = (obj) =>{
     return true
 }
 
-const leastVotes = (arr, ballots, child) =>{
+const leastVotes = (faceoff, ballots, child) =>{
     let output = []
-    let userBallots = []
-
-    for(let ballot in ballots){
-        // console.log(ballots)
-        if(ballot == child){
-            userBallots.push(ballots[ballot])
-        }else{
+    faceoff.forEach(obj =>{
+        if(ballots === undefined || !ballots.includes(obj.ID)){
+            if(output.length == 0){
+                output.push(obj)
+            }
+            else if(output[0].VotesCasted === obj.VotesCasted){
+                output.push(obj)
+            }
+            else if(output[0].VotesCasted > obj.VotesCasted){
+                output = [obj]
+            }
         }
-    }
-
-    // console.log(userBallots[userBallots.length -1])
-
-    arr.forEach(obj =>{
-        if(output.length == 0){
-            output.push(obj)
-        }
-        else if(output[0].VotesCasted === obj.VotesCasted){
-            output.push(obj)
-        }
-        else if(output[0].VotesCasted > obj.VotesCasted){
-            output = [obj]
-        }
-        // if(isEmpty(ballots)){
-        //     if(output.length === 0){
-        //         output.push(obj)
-        //     }
-        //     else if(output[0].VotesCasted === obj.VotesCasted){
-        //         output.push(obj)
-        //     }
-        //     else if(output[0].VotesCasted > obj.VotesCasted){
-        //         output = [obj]
-        //     }
-        // }else if(userBallots[0].includes(obj.ID)){
-        //     if(output.length == 0){
-        //         output.push(obj)
-        //     }
-        //     else if(output[0].VotesCasted === obj.VotesCasted){
-        //         output.push(obj)
-        //     }
-        //     else if(output[0].VotesCasted > obj.VotesCasted){
-        //         output = [obj]
-        //     }
-        // }
     })
     return output
 }
