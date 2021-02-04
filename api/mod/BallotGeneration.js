@@ -144,6 +144,10 @@ const filterChildren = (data, squads) =>{
         }
     })
 
+    children.sort((a, b) => {
+        return a.ChildID - b.ChildID;
+    });
+    
     let count = 1
     children.forEach(sub =>{
         if(count % 2 === 0){
