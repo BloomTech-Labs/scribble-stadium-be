@@ -67,6 +67,37 @@ const getSquadIDForBots = (SquadID) => {
     .select('S.ID')
 }
 
+const getAllFaceOffs = () =>{
+  return db('Faceoffs AS F')
+  .select([
+    'F.ID',
+    'F.Points',
+    'F.Type',
+    'F.SubmissionID1',
+    'F.SubmissionID2',
+    'F.SquadID',
+    'F.Winner',
+    'F.Date',
+    'F.VotesCasted'
+  ])
+}
+
+const getFaceOffByID = (ID) =>{
+  return db('Faceoffs AS F')
+    .where('F.ID', ID)
+    .select([
+      'F.ID',
+      'F.Points',
+      'F.Type',
+      'F.SubmissionID1',
+      'F.SubmissionID2',
+      'F.SquadID',
+      'F.Winner',
+      'F.Date',
+      'F.VotesCasted'
+    ])
+}
+
 /**
  * This query returns the matchups for a given squad.
  * @param {number} SquadID unique integer ID of the squad to retrieve data for
@@ -225,4 +256,6 @@ module.exports = {
   getVotesBySquad,
   submitVote,
   getSquadResults,
+  getAllFaceOffs,
+  getFaceOffByID,
 };
