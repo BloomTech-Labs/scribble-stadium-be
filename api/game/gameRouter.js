@@ -370,10 +370,20 @@ router.post('/points', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/faceoffs', authRequired, (req, res) => {
+  crudOperationsManager.getAll(res, Game.getAllFaceOffs, 'Faceoffs')
+});
+
+router.get('/faceoffs/:id', authRequired, (req, res) =>{
+  const { id } = req.params;
+
+  crudOperationsManager.getById(res, Game.getFaceOffByID, 'Faceoffs', id);
+})
+
+router.get('/faceoffs/squads', (req, res) =>{
   const squadId = req.query.squadId;
   const childId = req.query.childId || null;
   crudOperationsManager.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId, childId);
-});
+})
 
 /**
  * @swagger
