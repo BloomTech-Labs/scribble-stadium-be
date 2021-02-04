@@ -13,8 +13,8 @@ const stories = [
   {
     Title: "Zoom & Boom (Week1, Chapters 1 & 2)",
     URL: 'https://test-image-bucket-14579.s3.amazonaws.com/pdf.pdf',
-    WritingPrompt: ": Imagine and write down a scene from Finn’s Little League tryouts. (In case you’re wondering, flipperball is a lot like soccer, and your job is to imagine how Finn performed as the coaches looked on.) Write your story with a pencil and no more than 5 sheets of loose-leaf paper, then take a photo and upload it to Story Squad.",
-    DrawingPrompt: "draw one scene from Chapters 1-2. For a caption to your picture, write out the sentence from the main story where your picture should appear. Use whatever coloring supplies you want on a loose-leaf sheet of paper, then take a photo and upload it to Story Squad.",
+    WritingPrompt: ": Imagine and write down a scene from Finn’s Little League tryouts. (In case you’re wondering, flipperball is a lot like soccer, and your job is to imagine how Finn performed as the coaches looked on.)",
+    DrawingPrompt: "draw one scene from Chapters 1-2. For a caption to your picture, write out the sentence from the main story where your picture should appear.",
   },
   {
     Title: "Zoom & Boom (Week2, Chapters 3 & 4)",
