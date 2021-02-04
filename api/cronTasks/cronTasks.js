@@ -17,6 +17,18 @@ const addTotalPointsToChildren = async () => {
     }
 }
 
+const resetTable = async(table) =>{
+    const IDs = await getIDs(table)
+    await deleteAll(table, IDs)
+}
+
+const deleteAll = async(table, IDs) =>{
+    console.log(IDs)
+    for(const id of IDs){  
+        await db(`${table}`).where({ID: id.ID}).del()
+    }
+}
+
 const updateWinsForChildren = async () => {
     const winningTeam = await getWinningTeam()
     const children = await getChildrenWithTeam()
@@ -48,6 +60,17 @@ const getWinningTeam = async () => {
     return winningTeam
 }
 
+
+
+const getIDs = async (table) =>{
+    console.log(`${table}`)
+    const data = await db
+                        .select([`${table}.ID`])
+                        .from(`${table}`)
+        
+    return data          
+}
+
 const getChildrenWithTeam = async () => {
     const children = await db
                         .select([
@@ -65,5 +88,6 @@ const getChildrenWithTeam = async () => {
 module.exports = {
     addTotalPointsToChildren,
     updateWinsForChildren,
-    updateLosesForChildren
+    updateLosesForChildren,
+    resetTable,
 }
