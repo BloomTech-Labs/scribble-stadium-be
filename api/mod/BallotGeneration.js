@@ -51,6 +51,7 @@ const VSequence = (squads, data) =>{
         let num = child.SquadID
         //counter to ensure iteration is only 3 times
         let votesAvailable = 3;
+        console.log(squads)
         while(votesAvailable > 0){
             for(let squadNum in squads){
                 if(squadNum != child.SquadID){
@@ -58,9 +59,9 @@ const VSequence = (squads, data) =>{
                     let qualified = leastVotes(squads[squadNum], ballots[child.ID], child.ID)
                     let choice = getRandomInt(qualified.length)
                     if(!ballots[child.ID]){
-                        ballots[child.ID] = [qualified[choice].ID]
+                        ballots[child.ID] = [[qualified[choice].ID, qualified[choice].SquadID]]
                     }else{
-                        ballots[child.ID].push(qualified[choice].ID)
+                        ballots[child.ID].push([qualified[choice].ID, qualified[choice].SquadID])
                     }
                     squads = incrementVotesCasted(squads, squadNum, [qualified[choice].ID])
                     votesAvailable--
