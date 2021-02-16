@@ -55,6 +55,7 @@ const addSubmissionsToFaceoffs = async (conn, faceoffs) => {
     const s1 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID1);
     const s2 = await dbOps.getSubByID(conn, faceoffs[f].SubmissionID2);
     // Add formatted submissions to the faceoffs object reference passed into the function
+    //ERRLOG: submission1 instead of submissionID1(??)
     faceoffs[f].Submission1 = formatSubForMatchups(s1);
     faceoffs[f].Submission2 = formatSubForMatchups(s2);
   }
