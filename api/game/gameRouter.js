@@ -373,11 +373,11 @@ router.get('/faceoffs', authRequired, (req, res) => {
   crudOperationsManager.getAll(res, Game.getAllFaceOffs, 'Faceoffs')
 });
 
-router.get('/faceoffs/:id', authRequired, (req, res) =>{
-  const { id } = req.params;
+// router.get('/faceoffs/:id', authRequired, (req, res) =>{
+//   const { id } = req.params;
 
-  crudOperationsManager.getById(res, Game.getFaceOffByID, 'Faceoffs', id);
-})
+//   crudOperationsManager.getById(res, Game.getFaceOffByID, 'Faceoffs', id);
+// })
 
 router.get('/faceoffs/squads', (req, res) =>{
   const squadId = req.query.squadId;
