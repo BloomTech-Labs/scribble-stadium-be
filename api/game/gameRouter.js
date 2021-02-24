@@ -433,7 +433,7 @@ router.get('/votes', authRequired, (req, res) => {
  *            $ref: '#/components/schemas/PostVote'
  *    responses:
  *      201:
- *        description: Returns an array with the id reference to the new vote (new id where vote is saved in votes table)
+ *        description: Returns an array with the id reference to the new vote
  *        content:
  *          application/json:
  *            schema:
