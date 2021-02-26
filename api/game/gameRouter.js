@@ -342,7 +342,7 @@ router.post('/points', authRequired, (req, res) => {
 
 /**
  * @swagger
- * /game/faceoffs?squadId={id}:
+ * /game/faceoffs/squads/?squadId=${squadId}:
  *  get:
  *    summary: Returns an array of a squad's 4 faceoffs after they've been calculated
  *    security:
@@ -372,12 +372,6 @@ router.post('/points', authRequired, (req, res) => {
 router.get('/faceoffs', authRequired, (req, res) => {
   crudOperationsManager.getAll(res, Game.getAllFaceOffs, 'Faceoffs')
 });
-
-router.get('/faceoffs/:id', authRequired, (req, res) =>{
-  const { id } = req.params;
-
-  crudOperationsManager.getById(res, Game.getFaceOffByID, 'Faceoffs', id);
-})
 
 router.get('/faceoffs/squads', (req, res) =>{
   const squadId = req.query.squadId;
