@@ -19,6 +19,6 @@ exports.down = function(knex) {
     })
     .table('Children',table =>{
         table.dropColumn('Ballots');
-        table.dropColumn('VotesRemaining');
+        // table.dropColumn('VotesRemaining');
     })
 };

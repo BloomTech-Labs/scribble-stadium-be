@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.table('Votes', table => {
-        table.dropColumn('Votes')
+        table.dropColumn('Vote')
     })
 };
 
