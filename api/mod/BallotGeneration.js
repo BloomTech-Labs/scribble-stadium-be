@@ -49,8 +49,8 @@ const VSequence = (squads, data) =>{
     children.forEach(child =>{
         //aquires current squad ID to compare
         let num = child.SquadID
-        //counter to ensure iteration is only 5 times
-        let votesAvailable = 5;
+        //counter to ensure iteration is only 10 times
+        let votesAvailable = 10;
         console.log(squads)
         while(votesAvailable > 0){
             for(let squadNum in squads){
