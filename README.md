@@ -72,6 +72,11 @@ There are 3 options to get postgresql installed locally [Choose one]:
 > Make sure to update the details of the app name, description and version in
 > the `package.json` and `config/jsdoc.js` files.
 
+
+## Making Commits/Pushes/Merges
+**Be sure to read this:** This project is set up to have 3 databases all-in-all.  When working locally, we have our local DB instance which affects no-one but ourself.  Second, we have our "developer-mode" database (updates according to the 'staging' branch).  Third, we will have our production database.  **The workflow for this project differs from some other projects: we will be merging to staging before we merge to main.**  When making pull requests, you will want to first merge them into "staging" instead of "main."  This does two things: first, allows us to keep our developer database up-to-date, and second, gives us the opportunity to test changes first in the staging DB before sending it live to our main DB (which will be attached to the 'main' branch).  It is crucial to keep this workflow, since in production the developer-mode database will need to be functioning identically to our production database, which will allow us to test bugs, simulate game stages, etc.
+
+For information about developer mode, view the front end repository's documentation.
 ## Useful Info
 
 - Walkthrough video explaining some of the features can be seen [here](https://www.youtube.com/watch?v=K5k19qWKHbI&feature=youtu.be)
