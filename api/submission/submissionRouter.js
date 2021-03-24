@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { authRequired, fileUpload } = require('../middleware');
+const { authRequired, fileUpload, validateUpdateAllTasksParams } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 
 const Submissions = require('./submissionModel');
@@ -391,7 +391,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/update-all/:id', authRequired, async (req, res) => {
+router.put('/update-all/:id', authRequired, validateUpdateAllTasksParams, async (req, res) => {
   const { id } = req.params;
   const { hasRead, hasDrawn, hasWritten } = req.body;
 
