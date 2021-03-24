@@ -360,7 +360,7 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
 
 /**
  * @swagger
- * /submit/undi/{id}:
+ * /submit/update-all/{id}:
  *  put:
  *    summary: Attempts to mark the submission with the given ID as hasRead as 'false', hasWritten as 'false', hasDrawn as 'false'
  *    security:
@@ -384,6 +384,16 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
  *    responses:
  *      204:
  *        $ref: '#/components/responses/EmptySuccess'
+ *      400:
+ *        description: Invalid request missing/invalid arguments
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  type: string
+ *                  description: Required inputs hasRead, hasDrawn, and hasWritten must be of boolean type
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      404:
