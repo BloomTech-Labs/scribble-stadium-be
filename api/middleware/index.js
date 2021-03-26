@@ -9,12 +9,14 @@ const parentValidation = require('./parentValidation');
 const storyValidation = require('./storyValidation');
 const emojiValidation = require('./emojiValidation');
 const achieveValidation = require('./achieveValidation');
+const submissionsValidation = require('./submissionsValidation');
 
 
 module.exports = {
   authRequired,
   dsAuthMiddleware,
   fileUpload,
+  ...submissionsValidation,
   ...avatarValidation,
   ...childValidation,
   ...dateValidation,

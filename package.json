@@ -10,9 +10,9 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint --fix .",
     "format": "npx prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md)\"",
-    "knex": "npx knex --knexfile config/knexfile.js",
-    "knex:test": "cross-env NODE_ENV=test npx knex --knexfile config/knexfile.js",
-    "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile config/knexfile.js",
+    "knex": "npx knex --knexfile knexfile.js",
+    "knex:test": "cross-env NODE_ENV=test npx knex --knexfile knexfile.js",
+    "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile knexfile.js",
     "test": "cross-env NODE_ENV=test npx jest --watch --runInBand -- testRunner",
     "tests": "cross-env NODE_ENV=test npx jest --forceExit --coverage --runInBand -- testRunner",
     "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit -- testRunner"
