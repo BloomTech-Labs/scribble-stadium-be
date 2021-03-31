@@ -67,8 +67,10 @@ const markAsRead = (ID, flag = true) => {
  * @param {boolean} hasWritten boolean to indicate whether db should set hasWritten to true or false
  * @returns {Promise} returns a promise that resolves to the count of fields updated
  */
-const updateAll = (ID, hasRead, hasDrawn, hasWritten) => {
-  return db('Submissions').where({ ID }).update({ HasRead: hasRead, HasWritten: hasWritten, HasDrawn: hasDrawn });
+const updateAll = async (ID, hasRead, hasDrawn, hasWritten) => {
+  res = await db('Submissions').where({ ID }).update({ HasRead: hasRead, HasWritten: hasWritten, HasDrawn: hasDrawn });
+  console.log('res: ', res);
+  return res;
 }
 
 /**
