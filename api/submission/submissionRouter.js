@@ -404,7 +404,6 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
 router.put('/update-all/:id', authRequired, validateUpdateAllTasksParams, async (req, res) => {
   const { id } = req.params;
   const { hasRead, hasDrawn, hasWritten } = req.body;
-  console.log('tasks: ', hasRead, hasDrawn, hasWritten);
 
   return crudOperationsManager.update(res, Submissions.updateAll, 'Submission', id, hasRead, hasDrawn, hasWritten);
 })
