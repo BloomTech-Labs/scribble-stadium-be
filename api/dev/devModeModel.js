@@ -21,7 +21,7 @@ const db = require('../../data/db-config');
         const preExistingUserDrawing = await db('Drawing').where({ SubmissionID: ID });
         if(hasDrawn){
           if(preExistingUserDrawing.length < 1){
-            const newDraw = await trx('Drawing').insert({  URL: faker.image.imageUrl(), SubmissionID: ID  });
+            await trx('Drawing').insert({  URL: faker.image.imageUrl(), SubmissionID: ID  });
           }
         } else {
           if(preExistingUserDrawing.length > 0){
