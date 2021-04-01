@@ -15,11 +15,14 @@ const clusterGeneration = () => {
       // Pull a list of all cohorts
       const cohorts = await trx('Cohorts');
       // Iterate over the cohorts
+
       for (let { ID } of cohorts) {
         // Get all submissions for every cohort
         const unformatted = await dbOps.getAllSubmissionsByCohort(trx, ID);
         // Store each cohorts' submissions in the dsReq hash table with the key being the cohort id
-        dsReq[ID] = formatCohortSubmissions(unformatted);
+        if (unformatted.length > 0){
+          dsReq[ID] = formatCohortSubmissions(unformatted);
+        }
       }
       // Send the submissions to data science for clustering
       const { data } = await dsApi.getClusters(dsReq);
@@ -32,15 +35,17 @@ const clusterGeneration = () => {
       // Iterate over cohorts again
       for (let { ID } of cohorts) {
         // For every squad returned in each cohort from data science, where squad is an array of 4 submission IDs
-        for (let squad of clusters[ID]) {
-          // Create a squad in the database for the current cohort
-          const [SquadID] = await addSquad(trx, ID);
-          // Create two teams for the newly created squad
-          const [t1, t2] = await addTeams(trx, SquadID);
-          // Create 4 new team member entries for the database
-          const newMembers = await addMembers(trx, t1, t2, squad);
-          // [[1], [2], [3], [4]] => [1, 2, 3, 4]
-          members.push([].concat.apply([], newMembers));
+        if(clusters[ID]) {
+          for (let squad of clusters[ID]) {
+            // Create a squad in the database for the current cohort
+            const [SquadID] = await addSquad(trx, ID);
+            // Create two teams for the newly created squad
+            const [t1, t2] = await addTeams(trx, SquadID);
+            // Create 4 new team member entries for the database
+            const newMembers = await addMembers(trx, t1, t2, squad);
+            // [[1], [2], [3], [4]] => [1, 2, 3, 4]
+            members.push([].concat.apply([], newMembers));
+          }
         }
       }
 

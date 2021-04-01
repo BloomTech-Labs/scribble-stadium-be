@@ -60,18 +60,6 @@ const markAsRead = (ID, flag = true) => {
 };
 
 /**
- * This query marks the submission with the given ID as having HasRead, HasWritten, and HasDrawn set to false.
- * @param {number} ID the ID of the submission to be marked as read
- * @param {boolean} hasRead boolean to indicate whether db should set hasRead to true or false
- * @param {boolean} hasDrawn boolean to indicate whether db should set hasDrawn to true or false
- * @param {boolean} hasWritten boolean to indicate whether db should set hasWritten to true or false
- * @returns {Promise} returns a promise that resolves to the count of fields updated
- */
-const updateAll = (ID, hasRead, hasDrawn, hasWritten) => {
-  return db('Submissions').where({ ID }).update({ HasRead: hasRead, HasWritten: hasWritten, HasDrawn: hasDrawn });
-}
-
-/**
  * This query is transactional, and runs a series of requests:
  *  - Updates the HasDrawn field for the relevant submission to be true
  *  - Adds the drawing to the Drawing table
@@ -169,7 +157,6 @@ module.exports = {
   getOrInitSubmission,
   getAllSubmissionsByChild,
   markAsRead,
-  updateAll,
   submitDrawingTransaction,
   submitWritingTransaction,
   deleteWritingSubmission,
