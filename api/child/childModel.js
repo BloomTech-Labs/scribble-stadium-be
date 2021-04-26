@@ -54,6 +54,7 @@ const getById = (ID) => {
       'C.Achievements',
       'G.GradeLevel',
       'A.AvatarURL',
+      'C.Streaks',
     ]);
 };
 

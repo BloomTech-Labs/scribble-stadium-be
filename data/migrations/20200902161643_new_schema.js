@@ -26,6 +26,7 @@ exports.up = function (knex) {
         .references('Parents.ID')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT');
+        
     })
     .createTable('Stories', (t) => {
       t.increments('ID');
