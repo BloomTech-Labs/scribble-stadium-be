@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {crudOperationsManager} = require('../../lib');
+const {crudOperationsManager, validationCheckers} = require('../../lib');
 
 const Gallery = require('./GalleryModel');
 
@@ -18,5 +18,18 @@ router.post('/', (req, res) => {
 
     crudOperationsManager.post(res, Gallery.add, "Gallery", submission);
 });
+
+router.put("/:id", (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    crudOperationsManager.update(res, Gallery.update, "Gallery", id, changes)
+})
+
+router.delete("/:id", (req, res) => {
+    const { id } = req.params;
+
+    crudOperationsManager.update(res, Gallery.remove, 'Gallery', id)
+})
 
 module.exports = router;
