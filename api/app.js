@@ -36,6 +36,7 @@ const resetRouter = require('./reset/resetRouter');
 const leadBoard = require('./leaderboard/leadboardRouter');
 const achievements = require('./Achievements/achieveRouter');
 const streaks = require('./Streaks/streaksRouter');
+const gallery = require('./Gallery/GalleryRouter')
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/reset', resetRouter);
 app.use('/leaderboard', leadBoard);
 app.use('/achievements', achievements);
 app.use(['/streaks', 'streak'], streaks);
+app.use('/gallery', gallery)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
