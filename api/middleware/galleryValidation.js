@@ -1,5 +1,5 @@
-const isSubmissionValid = async (sub, next) => {}
+// const isSubmissionValid = async () => {};
 
-const galleryValidation = () => {}
+// const galleryValidation = () => {};
 
-const galleryUploadValidation = () => {}
+// const galleryUploadValidation = () => {};

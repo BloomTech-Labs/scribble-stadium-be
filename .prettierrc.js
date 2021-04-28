@@ -3,6 +3,6 @@ module.exports = {
   tabWidth: 2,
   semi: true,
   singleQuote: true,
-  // Added this 
-  endOfLine: auto
+  // Added this
+  endOfLine: 'auto',
 };
