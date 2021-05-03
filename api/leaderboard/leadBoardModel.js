@@ -12,6 +12,7 @@ const getLeaderBoardData = async () =>{
                 'C.Total_Points',
                 'C.Wins',
                 'C.Losses',
+                'C.AvatarID',
                 'P.ID',
                 'P.WritingPoints',
                 'P.DrawingPoints',
@@ -25,6 +26,7 @@ const getLeaderBoardData = async () =>{
         const WP = child.WritingPoints
         const DP = child.DrawingPoints
         const TP = child.Total_Points
+        const av = child.AvatarID
         const outputNames = output.map(chil => chil.Name)
         if(outputNames.includes(Name)){
             output.forEach(chil =>{
@@ -32,6 +34,7 @@ const getLeaderBoardData = async () =>{
                     chil.WritingPoints = WP;
                     chil.DrawingPoints = DP;
                     chil.Total_Points = WP + DP + TP;
+                    chil.AvatarID = av
                 }
             })
         }else{
