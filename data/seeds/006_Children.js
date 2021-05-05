@@ -2,8 +2,9 @@ const faker = require('faker');
 const bc = require('bcryptjs');
 
 // so much to check in db....
+// (Cohort1)
 const children1 = [...new Array(8)].map((i, idx) => ({
-  Name: `${faker.name.firstName()} (Cohort1)`,
+  Name: `${faker.name.firstName()}`,
   PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`, // 1, 2, 3,
@@ -19,8 +20,9 @@ const children1 = [...new Array(8)].map((i, idx) => ({
   Total_Points: `${faker.random.number({ min: 0, max: 400 }) * 4}`
 }));
 
+// Chort 2
 const children2 = [...new Array(8)].map((i, idx) => ({
-  Name: `${faker.name.firstName()} (Cohort2)`,
+  Name: `${faker.name.firstName()}`,
   PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
@@ -36,8 +38,9 @@ const children2 = [...new Array(8)].map((i, idx) => ({
   Total_Points: `${faker.random.number({ min: 0, max: 400 }) * 3}`
 }));
 
+// Cohort 3
 const children3 = [...new Array(8)].map((i, idx) => ({
-  Name: `${faker.name.firstName()} (Cohort3)`,
+  Name: `${faker.name.firstName()}`,
   PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
@@ -53,8 +56,9 @@ const children3 = [...new Array(8)].map((i, idx) => ({
   Total_Points: `${faker.random.number({ min: 0, max: 400 }) * 1}`
 }));
 
+// Cohort 4 = new kid in week 1
 const children4 = [...new Array(8)].map((i, idx) => ({
-  Name: `${faker.name.firstName()} (Cohort4 = new kid in week1)`,
+  Name: `${faker.name.firstName()}`,
   PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
