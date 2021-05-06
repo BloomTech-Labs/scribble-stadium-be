@@ -1,6 +1,5 @@
-const faker = require('faker');
-const bc = require('bcryptjs');
-
+// const faker = require('faker');
+// const bc = require('bcryptjs');
 // const parents = [...new Array(4)].map((i, idx) => ({
 //   Name: `${faker.name.firstName()} ${faker.name.lastName()}`,
 //   PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,

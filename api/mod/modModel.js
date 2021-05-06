@@ -3,7 +3,6 @@ const { dbOps, formatCohortSubmissions } = require('../../lib');
 const faceoff = require('./faceoffGeneration');
 const { result, clusterGeneration } = require('./modHelpers');
 const ballot = require('./BallotGeneration');
-const Children = require('../child/childModel');
 
 /**
  * Queries the database for a list of all current cohorts

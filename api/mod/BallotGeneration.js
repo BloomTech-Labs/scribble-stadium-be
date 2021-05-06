@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const getfaceOffData = (conn) => {
   return conn('Faceoffs AS F')
     .join('Squads AS S', 'F.SquadID', 'S.ID')
@@ -42,7 +40,6 @@ const VSequence = (squads, data) => {
   let ballots = {};
   children.forEach((child) => {
     //aquires current squad ID to compare
-    let num = child.SquadID;
     //counter to ensure iteration is only 10 times
     let votesAvailable = 10;
     console.log(squads);
@@ -84,7 +81,7 @@ const incrementVotesCasted = (squads, ID, FO) => {
   iSquads.forEach((s) => {
     if (s.ID == FO) {
       let newVoteCount = s.VotesCasted + 1;
-      newObject = {
+      const newObject = {
         ID: FO[0],
         SubmissionID1: s.SubmissionID1,
         SubmissionID2: s.SubmissionID2,
@@ -112,17 +109,17 @@ const incrementVotesCasted = (squads, ID, FO) => {
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
+/* Commenting this function expression as it as unused and throwing errors with the linter */
+// const isEmpty = (obj) => {
+//   for (var key in obj) {
+//     if (obj.hasOwnProperty(key)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// };
 
-const isEmpty = (obj) => {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      return false;
-    }
-  }
-  return true;
-};
-
-const leastVotes = (faceoff, ballots, child) => {
+const leastVotes = (faceoff, ballots) => {
   let output = [];
   faceoff.forEach((obj) => {
     if (ballots === undefined || !ballots.includes(obj.ID)) {

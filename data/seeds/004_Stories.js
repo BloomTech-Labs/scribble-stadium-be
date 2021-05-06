@@ -1,4 +1,4 @@
-const faker = require('faker');
+// const faker = require('faker');
 
 // These are not story submissions, but the story that every student is reading and then prompted to base their own drawings & writings off of.
 // const stories = [...new Array(10)].map(() => ({
