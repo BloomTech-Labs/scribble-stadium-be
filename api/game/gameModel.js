@@ -50,26 +50,25 @@ const assignPoints = (points) => {
 
 // From Team E
 /**
- * The goal of this query is to get all the 
+ * The goal of this query is to get all the
  * submissions from the entire database, join
  * the squads table and submissions table together
- * only adding submissions from squads that are not 
+ * only adding submissions from squads that are not
  * in the current squad
- * @param {number} SquadID 
+ * @param {number} SquadID
  * @returns {Promise} returns a problems that resolves to an ID
  */
 const getSquadIDForBots = (SquadID) => {
   return db('Submissions as Sub')
-    .join('Squads as S', 'Sub.ID', '=', 'S.ID' )
+    .join('Squads as S', 'Sub.ID', '=', 'S.ID')
     .whereNot({
-      ID: SquadID
+      ID: SquadID,
     })
-    .select('S.ID')
-}
+    .select('S.ID');
+};
 
-const getAllFaceOffs = () =>{
-  return db('Faceoffs AS F')
-  .select([
+const getAllFaceOffs = () => {
+  return db('Faceoffs AS F').select([
     'F.ID',
     'F.Points',
     'F.Type',
@@ -78,11 +77,11 @@ const getAllFaceOffs = () =>{
     'F.SquadID',
     'F.Winner',
     'F.Date',
-    'F.VotesCasted'
-  ])
-}
+    'F.VotesCasted',
+  ]);
+};
 
-const getFaceOffByID = (ID) =>{
+const getFaceOffByID = (ID) => {
   return db('Faceoffs AS F')
     .where('F.ID', ID)
     .select([
@@ -94,9 +93,9 @@ const getFaceOffByID = (ID) =>{
       'F.SquadID',
       'F.Winner',
       'F.Date',
-      'F.VotesCasted'
-    ])
-}
+      'F.VotesCasted',
+    ]);
+};
 
 /**
  * This query returns the matchups for a given squad.
@@ -123,31 +122,32 @@ const getFaceoffsForSquad = (SquadID, ChildID = null) => {
   return db.transaction(async (trx) => {
     try {
       // Get the faceoffs from the Faceoffs table in the db
- 
-      const faceoffs = await faceoff.getSubIdsForFaceoffs(trx, SquadID, ChildID);
+
+      const faceoffs = await faceoff.getSubIdsForFaceoffs(
+        trx,
+        SquadID,
+        ChildID
+      );
 
       // Check the length of faceoffs if it is less than 0 return an error
       if (faceoffs.length <= 0) {
         throw new Error('NotFound');
-        // if the length is less than 4 
+        // if the length is less than 4
         // return the difference between the length and 4
-        // the number of ghost users to add is the difference 
+        // the number of ghost users to add is the difference
         // between the length and 4
       } else {
         if (faceoffs.length < 4) {
-          const faceoffLengthDifference = (4 - faceoffs.length);
+          const faceoffLengthDifference = 4 - faceoffs.length;
 
           // generate the ghost users and add the number of ghost users
           // equal to the value of faceoffLengthDifference
           for (let i = 0; i <= faceoffLengthDifference; i++) {
-            getSquadIDForBots(SquadID)
+            getSquadIDForBots(SquadID);
           }
-
         }
-
       }
 
-      
       // Add submission data to the faceoffs pulled from the DB
       await faceoff.addSubmissionsToFaceoffs(trx, faceoffs);
 
@@ -205,27 +205,47 @@ const submitVote = (vote) => {
   return db.transaction(async (trx) => {
     try {
       const { Vote, MemberID, FaceoffID, subEmojis1, subEmojis2 } = vote;
-      const returning = await trx('Votes').insert({ Vote, MemberID, FaceoffID }).returning('ID');
+      const returning = await trx('Votes')
+        .insert({ Vote, MemberID, FaceoffID })
+        .returning('ID');
       // This is where I need to reference the child voted for and connect the two tables
       // Take faceoffID find the submissionID and then find the ChildId
-      const faceoff = await trx('Faceoffs').select("*").where({ ID: FaceoffID }).first();
+      const faceoff = await trx('Faceoffs')
+        .select('*')
+        .where({ ID: FaceoffID })
+        .first();
       let faceoffType = faceoff.Type;
-      faceoffType = (faceoffType === "WRITING") ? "Writing" : "Drawing";
-      const emojis1 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID1 }).first());
-      const emojis2 = Object.values(await trx(faceoffType).select('Emoji').where({ SubmissionID: faceoff.SubmissionID2 }).first());
+      faceoffType = faceoffType === 'WRITING' ? 'Writing' : 'Drawing';
+      const emojis1 = Object.values(
+        await trx(faceoffType)
+          .select('Emoji')
+          .where({ SubmissionID: faceoff.SubmissionID1 })
+          .first()
+      );
+      const emojis2 = Object.values(
+        await trx(faceoffType)
+          .select('Emoji')
+          .where({ SubmissionID: faceoff.SubmissionID2 })
+          .first()
+      );
       // console.log(emojis1);
       // console.log(emojis2);
-      const emojiToReturn1 = (emojis1[0] !== "") ? subEmojis1 + emojis1 : subEmojis1;
-      const emojiToReturn2 = (emojis2[0] !== "") ? subEmojis2 + emojis2 : subEmojis2;
-      await trx(faceoffType).update({ Emoji: emojiToReturn1 }).where({ SubmissionID: faceoff.SubmissionID1 });
-      await trx(faceoffType).update({ Emoji: emojiToReturn2 }).where({ SubmissionID: faceoff.SubmissionID2 });
+      const emojiToReturn1 =
+        emojis1[0] !== '' ? subEmojis1 + emojis1 : subEmojis1;
+      const emojiToReturn2 =
+        emojis2[0] !== '' ? subEmojis2 + emojis2 : subEmojis2;
+      await trx(faceoffType)
+        .update({ Emoji: emojiToReturn1 })
+        .where({ SubmissionID: faceoff.SubmissionID1 });
+      await trx(faceoffType)
+        .update({ Emoji: emojiToReturn2 })
+        .where({ SubmissionID: faceoff.SubmissionID2 });
       return returning;
     } catch (error) {
       console.log(error);
     }
-  })
+  });
 };
-
 
 /**
  * Returns the winner/points total of teams for a given squad

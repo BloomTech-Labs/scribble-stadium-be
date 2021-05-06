@@ -54,12 +54,12 @@ module.exports = {
       },
       {
         name: 'Leader Board',
-        description: 'Operations for Leader Board Data'
+        description: 'Operations for Leader Board Data',
       },
       {
         name: 'Achievements',
-        description: 'Operations for Achievements Data'
-      }
+        description: 'Operations for Achievements Data',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',

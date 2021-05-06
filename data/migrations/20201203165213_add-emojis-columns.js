@@ -1,19 +1,19 @@
-exports.up = function(knex) {
-    return knex.schema
+exports.up = function (knex) {
+  return knex.schema
     .table('Writing', (t) => {
-        t.text('Emoji').defaultTo("");
+      t.text('Emoji').defaultTo('');
     })
     .table('Drawing', (t) => {
-        t.text('Emoji').defaultTo("");
-    })
+      t.text('Emoji').defaultTo('');
+    });
 };
 
-exports.down = function(knex) {
-    return knex.schema
+exports.down = function (knex) {
+  return knex.schema
     .table('Writing', (t) => {
-        t.dropColumn('Emoji');
+      t.dropColumn('Emoji');
     })
     .table('Drawing', (t) => {
-        t.dropColumn('Emoji');
-    })
+      t.dropColumn('Emoji');
+    });
 };

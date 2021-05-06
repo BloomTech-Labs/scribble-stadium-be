@@ -260,7 +260,12 @@ const Game = require('./gameModel');
 router.get('/squad', authRequired, (req, res) => {
   const childId = req.query.childId;
 
-  crudOperationsManager.getById(res, Game.getSquadIDFromChildID, 'Child', childId);
+  crudOperationsManager.getById(
+    res,
+    Game.getSquadIDFromChildID,
+    'Child',
+    childId
+  );
 });
 
 /**
@@ -370,14 +375,20 @@ router.post('/points', authRequired, (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.get('/faceoffs', authRequired, (req, res) => {
-  crudOperationsManager.getAll(res, Game.getAllFaceOffs, 'Faceoffs')
+  crudOperationsManager.getAll(res, Game.getAllFaceOffs, 'Faceoffs');
 });
 
-router.get('/faceoffs/squads', (req, res) =>{
+router.get('/faceoffs/squads', (req, res) => {
   const squadId = req.query.squadId;
   const childId = req.query.childId || null;
-  crudOperationsManager.getAll(res, Game.getFaceoffsForSquad, 'Squad', squadId, childId);
-})
+  crudOperationsManager.getAll(
+    res,
+    Game.getFaceoffsForSquad,
+    'Squad',
+    squadId,
+    childId
+  );
+});
 
 /**
  * @swagger
@@ -413,7 +424,13 @@ router.get('/votes', authRequired, (req, res) => {
   const squadId = req.query.squadId;
   const memberId = req.query.memberId;
 
-  crudOperationsManager.getAll(res, Game.getVotesBySquad, '', squadId, memberId);
+  crudOperationsManager.getAll(
+    res,
+    Game.getVotesBySquad,
+    '',
+    squadId,
+    memberId
+  );
 });
 
 /**

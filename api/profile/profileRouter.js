@@ -98,7 +98,12 @@ const { crudOperationsManager } = require('../../lib');
 router.get('/', authRequired, async (req, res) => {
   const { Email } = req.profile;
 
-  crudOperationsManager.getAll(res, Parents.getProfilesByEmail, 'Profile', Email);
+  crudOperationsManager.getAll(
+    res,
+    Parents.getProfilesByEmail,
+    'Profile',
+    Email
+  );
 });
 
 module.exports = router;

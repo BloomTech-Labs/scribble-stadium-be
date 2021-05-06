@@ -1,4 +1,3 @@
-
 // note: cohorts that started earlier are further along in the story. Cohorts don't have to start every week, so there was a gap week between cohort2 & cohort3 in the example below.
 const cohorts = [
   {
@@ -17,8 +16,7 @@ const cohorts = [
     ID: 4,
     StoryID: 1,
   },
-
-]
+];
 
 exports.seed = function (knex) {
   // Inserts seed entries

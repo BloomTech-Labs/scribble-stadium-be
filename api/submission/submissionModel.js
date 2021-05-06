@@ -68,8 +68,10 @@ const markAsRead = (ID, flag = true) => {
  * @returns {Promise} returns a promise that resolves to the count of fields updated
  */
 const updateAll = (ID, hasRead, hasDrawn, hasWritten) => {
-  return db('Submissions').where({ ID }).update({ HasRead: hasRead, HasWritten: hasWritten, HasDrawn: hasDrawn });
-}
+  return db('Submissions')
+    .where({ ID })
+    .update({ HasRead: hasRead, HasWritten: hasWritten, HasDrawn: hasDrawn });
+};
 
 /**
  * This query is transactional, and runs a series of requests:
