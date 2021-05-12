@@ -4,7 +4,7 @@ const server = require('../../api/app');
 module.exports = () => {
   describe('data visualization tests', () => {
     describe('GET /parent/viz?childId=:id', () => {
-      it('should return a line graph', async () => {
+      test.skip('should return a line graph', async () => {
         const res = await request(server).get('/parent/viz?childId=1');
 
         expect(res.status).toBe(200);

@@ -26,6 +26,7 @@ const getById = (ID) => {
  * @param {String} [gallery.WritingUrl] new item's writing submission link, stored as a string
  * @param {Integer} [gallery.PageNum]
  * @param {String} [gallery.DrawingUrl] new item's drawing submission link, stored as a string
+ * @param {dateTime} [gallery.timestamp] new timestamp for submission in format "YYYY-MM-DD HH:MM:SS" 
  * @returns {Promise} Promise that returns new item's ID
  */
 const add = (sub) => {
