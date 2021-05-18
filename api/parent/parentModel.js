@@ -90,6 +90,7 @@ const getProfilesByEmail = async (Email) => {
       'C.CohortID',
       'G.GradeLevel',
       'A.AvatarURL',
+      'C.AvatarID',
     ]);
   return formatProfiles(data);
 };
