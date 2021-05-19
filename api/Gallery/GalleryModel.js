@@ -1,4 +1,3 @@
-// const { raw } = require('../../data/db-config');
 const db = require('../../data/db-config');
 
 /**
@@ -20,19 +19,35 @@ const getById = (ID) => {
     .select('G.ID', 'G.WritingUrl', 'G.PageNum', 'G.DrawingUrl');
 };
 
+/**
+ * A method that first retrieves a child's gallery submissions from the gallery db
+ * and stores that data in a variable. It will then retrieve the same child's ID and Name
+ * from the Children db and create an childData object using the child's ID, Name and submissions data array.
+ * The childData object is returned.
+ * @param {ID} childId The child id pulled from the request params
+ * @returns {Promise} A promise that resolves to an object of the child submission data
+ */
 const getByChildId = async (childId) => {
+  // create a variable for the gallery submissions data, init as an empty array
   let submissionsData = [];
   await db('Gallary as G')
     .where('G.children_id', childId)
     .select('G.ID', 'G.WritingUrl', 'G.DrawingUrl')
+    // call then to use the data retrieved
+    // An array of objects is returned
     .then((subs) => {
       // console.log('subs: ', subs);
+      // loop through the array to access the object
       subs.forEach((sub) => {
         // console.log('sub: ', sub);
+        // push the object into the empty submissions data array
         submissionsData.push(sub);
       });
     });
   // console.log('submissionsData: ', submissionsData);
+
+  // create a variable for the childData, this will be the output
+  // init as an object with key/value pairs to be updated
   let childData = {
     ID: '',
     Name: '',
@@ -41,13 +56,17 @@ const getByChildId = async (childId) => {
   await db('Children as C')
     .where('C.ID', childId)
     .select('C.ID', 'C.Name')
+    // an array of objects is returned here as well, so we will loop through again
     .then((childArr) => {
       // console.log('childArr: ', childArr);
       childArr.map((child) => {
         // console.log('child: ', child);
+
+        // update the childData object's values
         childData = {
           ID: child.ID,
           Name: child.Name,
+          // spread submissionsData
           Submissions: [...submissionsData],
         };
       });
