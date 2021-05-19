@@ -1,15 +1,15 @@
 // Todo: need to have a rance of complexity. fine for now though.
 const cohortIDer = (idx) => {
   if (idx < 8) {
-    return 1
+    return 1;
   } else if (idx < 16) {
-    return 2
+    return 2;
   } else if (idx < 24) {
-    return 3
+    return 3;
   } else if (idx < 32) {
-    return 4
+    return 4;
   }
-}
+};
 //FYI, each submission number here represents a week that was completed by a number of students.
 //So, cohorts 1,2&3 finished week1. 3 cohorts of 8 students = 24 items in this batch
 const submissions1 = [...new Array(24)].map((i, idx) => ({
@@ -64,7 +64,11 @@ const submissions4 = [...new Array(8)].map((i, idx) => ({
   Status: 'PENDING',
 }));
 
-const submissions = submissions1.concat(submissions2, submissions3, submissions4)
+const submissions = submissions1.concat(
+  submissions2,
+  submissions3,
+  submissions4
+);
 
 exports.seed = function (knex) {
   // Inserts seed entries

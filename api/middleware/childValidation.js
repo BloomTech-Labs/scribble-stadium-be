@@ -14,7 +14,7 @@ const fields = [
   'Losses',
   'Ballots',
   'VotesRemaining',
-  'Achievements'
+  'Achievements',
 ];
 
 /**
