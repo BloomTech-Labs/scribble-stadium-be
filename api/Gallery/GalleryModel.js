@@ -1,3 +1,4 @@
+// const { raw } = require('../../data/db-config');
 const db = require('../../data/db-config');
 
 /**
@@ -17,6 +18,42 @@ const getById = (ID) => {
   return db('Gallary as G')
     .where('G.ID', ID)
     .select('G.ID', 'G.WritingUrl', 'G.PageNum', 'G.DrawingUrl');
+};
+
+const getByChildId = async (childId) => {
+  let submissionsData = [];
+  await db('Gallary as G')
+    .where('G.children_id', childId)
+    .select('G.ID', 'G.WritingUrl', 'G.DrawingUrl')
+    .then((subs) => {
+      // console.log('subs: ', subs);
+      subs.forEach((sub) => {
+        // console.log('sub: ', sub);
+        submissionsData.push(sub);
+      });
+    });
+  // console.log('submissionsData: ', submissionsData);
+  let childData = {
+    ID: '',
+    Name: '',
+    Submissions: [],
+  };
+  await db('Children as C')
+    .where('C.ID', childId)
+    .select('C.ID', 'C.Name')
+    .then((childArr) => {
+      // console.log('childArr: ', childArr);
+      childArr.map((child) => {
+        // console.log('child: ', child);
+        childData = {
+          ID: child.ID,
+          Name: child.Name,
+          Submissions: [...submissionsData],
+        };
+      });
+    });
+  // console.log('childData: ', childData);
+  return childData;
 };
 
 /**
@@ -54,6 +91,7 @@ const remove = (ID) => {
 module.exports = {
   getAll,
   getById,
+  getByChildId,
   add,
   update,
   remove,
