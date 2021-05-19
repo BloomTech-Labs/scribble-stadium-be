@@ -9,7 +9,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const jsdocConfig = require('../config/jsdoc');
 const dotenv = require('dotenv');
 const config_result = dotenv.config();
-const scheduler = require('./cronTasks/scheduler');
+// const scheduler = require('./cronTasks/scheduler');
 
 if (process.env.NODE_ENV != 'production' && config_result.error) {
   throw config_result.error;
@@ -36,7 +36,7 @@ const resetRouter = require('./reset/resetRouter');
 const leadBoard = require('./leaderboard/leadboardRouter');
 const achievements = require('./Achievements/achieveRouter');
 const streaks = require('./Streaks/streaksRouter');
-const gallery = require('./Gallery/GalleryRouter')
+const gallery = require('./Gallery/GalleryRouter');
 
 const app = express();
 
@@ -78,7 +78,7 @@ app.use('/reset', resetRouter);
 app.use('/leaderboard', leadBoard);
 app.use('/achievements', achievements);
 app.use(['/streaks', 'streak'], streaks);
-app.use('/gallery', gallery)
+app.use('/gallery', gallery);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

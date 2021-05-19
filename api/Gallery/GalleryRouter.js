@@ -32,4 +32,20 @@ router.delete('/:id', (req, res) => {
   crudOperationsManager.update(res, Gallery.remove, 'Gallery', id);
 });
 
+router.get('/child/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const child = await Gallery.getByChildId(id);
+    console.log('child: ', child);
+    if (child.ID === '' || child.Name === '') {
+      res.status(404).json({
+        errorMessage: 'The child at the specified ID does not exist.',
+      });
+    }
+    res.status(200).json(child);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
