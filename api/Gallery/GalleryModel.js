@@ -36,15 +36,12 @@ const getByChildId = async (childId) => {
     // call then to use the data retrieved
     // An array of objects is returned
     .then((subs) => {
-      // console.log('subs: ', subs);
       // loop through the array to access the object
       subs.forEach((sub) => {
-        // console.log('sub: ', sub);
         // push the object into the empty submissions data array
         submissionsData.push(sub);
       });
     });
-  // console.log('submissionsData: ', submissionsData);
 
   // create a variable for the childData, this will be the output
   // init as an object with key/value pairs to be updated
@@ -58,10 +55,7 @@ const getByChildId = async (childId) => {
     .select('C.ID', 'C.Name')
     // an array of objects is returned here as well, so we will loop through again
     .then((childArr) => {
-      // console.log('childArr: ', childArr);
       childArr.map((child) => {
-        // console.log('child: ', child);
-
         // update the childData object's values
         childData = {
           ID: child.ID,
@@ -71,7 +65,7 @@ const getByChildId = async (childId) => {
         };
       });
     });
-  // console.log('childData: ', childData);
+
   return childData;
 };
 
