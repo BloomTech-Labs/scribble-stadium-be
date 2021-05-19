@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { hashPin } = require('../../lib');
 
 const {
   authRequired,
@@ -250,6 +251,11 @@ router.put('/:id', authRequired, childUpdateValidation, (req, res) => {
   // Pull relevant data out of the request object
   const { id } = req.params;
   const changes = req.body;
+
+  // Check to see if PIN is provided. If it is, then let's hash the new pin before updating the profile.
+  if (changes.PIN) {
+    changes.PIN = hashPin(changes.PIN);
+  }
 
   crudOperationsManager.update(res, Children.update, 'Child', id, changes);
 });
