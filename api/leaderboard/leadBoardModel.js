@@ -1,9 +1,6 @@
 const db = require('../../data/db-config');
-
 const getLeaderBoardData = async () =>{
-
     const output = []
-
     const derivedTable = await db('Children AS C')
             .join('Submissions AS S', 'C.ID', '=', 'S.ChildID')
             .join('Points AS P', 'S.ID', '=', 'P.SubmissionID')
@@ -13,13 +10,13 @@ const getLeaderBoardData = async () =>{
                 'C.Wins',
                 'C.Losses',
                 'C.AvatarID',
+                'C.SquadPoints',
                 'P.ID',
                 'P.WritingPoints',
                 'P.DrawingPoints',
+                'P.MemberID',
             ]);
-    
     console.log(derivedTable)
-
     // loops through arr of objects adds unique objects to output arr then adds writing and drawing points from non unique objects to their output counterparts.
     for(const child of derivedTable){
         const Name = child.Name;
@@ -27,6 +24,9 @@ const getLeaderBoardData = async () =>{
         const DP = child.DrawingPoints
         const TP = child.Total_Points
         const av = child.AvatarID
+        const sp = child.SquadPoints
+        const mi = child.MemberID
+        
         const outputNames = output.map(chil => chil.Name)
         if(outputNames.includes(Name)){
             output.forEach(chil =>{
@@ -34,16 +34,23 @@ const getLeaderBoardData = async () =>{
                     chil.WritingPoints = WP;
                     chil.DrawingPoints = DP;
                     chil.Total_Points = WP + DP + TP;
+                
+                    chil.SquadPoints = WP + DP + mi;
+                    console.log('sp:',sp)
                     chil.AvatarID = av
                 }
             })
         }else{
             output.push(child)
         }
+        
     }
-    return output
-};
 
+    return output
+
+
+
+};
 module.exports = {
     getLeaderBoardData,
 };
