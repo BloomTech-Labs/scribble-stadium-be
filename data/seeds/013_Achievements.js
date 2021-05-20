@@ -1,6 +1,7 @@
 var faker = require('faker');
 
-const achievements = [...new Array(10)].map((i, idx) => ({
+// removed i and idx from .map's params - tring to resolve an issue with npm run lint
+const achievements = [...new Array(10)].map(() => ({
   Name: faker.fake('{{random.word}} {{random.word}}'),
   Description: faker.fake(
     '{{random.word}} {{random.word}} {{random.word}} {{random.word}}'

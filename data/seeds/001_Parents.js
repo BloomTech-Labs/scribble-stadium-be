@@ -1,5 +1,5 @@
-const faker = require('faker');
-const bc = require('bcryptjs');
+// const faker = require('faker');
+// const bc = require('bcryptjs');
 
 // const parents = [...new Array(4)].map((i, idx) => ({
 //   Name: `${faker.name.firstName()} ${faker.name.lastName()}`,

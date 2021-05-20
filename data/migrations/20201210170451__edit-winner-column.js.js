@@ -4,7 +4,7 @@ exports.up = function (knex) {
   });
 };
 
-exports.down = function (knex) {
+exports.down = function () {
   // return knex.schema.table('Faceoffs', table => {
   //     table.dropColumn('Winner')
   // });

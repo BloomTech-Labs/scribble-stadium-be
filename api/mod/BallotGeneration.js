@@ -1,4 +1,4 @@
-const _ = require('lodash');
+//const _ = require('lodash');
 
 const getfaceOffData = (conn) => {
   return conn('Faceoffs AS F')
@@ -42,7 +42,7 @@ const VSequence = (squads, data) => {
   let ballots = {};
   children.forEach((child) => {
     //aquires current squad ID to compare
-    let num = child.SquadID;
+    //let num = child.SquadID;
     //counter to ensure iteration is only 10 times
     let votesAvailable = 10;
     console.log(squads);
@@ -84,7 +84,7 @@ const incrementVotesCasted = (squads, ID, FO) => {
   iSquads.forEach((s) => {
     if (s.ID == FO) {
       let newVoteCount = s.VotesCasted + 1;
-      newObject = {
+      let newObject = {
         ID: FO[0],
         SubmissionID1: s.SubmissionID1,
         SubmissionID2: s.SubmissionID2,
@@ -113,16 +113,17 @@ const getRandomInt = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
-const isEmpty = (obj) => {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      return false;
-    }
-  }
-  return true;
-};
+// const isEmpty = (obj) => {
+//   for (var key in obj) {
+//     if (obj.hasOwnProperty(key)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// };
 
-const leastVotes = (faceoff, ballots, child) => {
+//removed child from leastVotes params - attempting to fix an issue with npm run lint
+const leastVotes = (faceoff, ballots) => {
   let output = [];
   faceoff.forEach((obj) => {
     if (ballots === undefined || !ballots.includes(obj.ID)) {
