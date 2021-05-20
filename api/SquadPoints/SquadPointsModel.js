@@ -13,27 +13,32 @@ const db = require('../../data/db-config');
 const getSquadPoints = async () => {
     const squads = {}
     const derivedTable = await db('Children AS C')
-                .join('Points AS P')
-                .select([
-                        'C.Name',
-                        'C.SquadPoints',
-                        'P.ID',
-                        'P.WritingPoints',
-                        'P.DrawingPoints',
-                        'P.MemberID',
-                        
-                    ]);
+                        .join('Submissions AS S', 'C.ID', '=', 'S.ChildID')
+                        .join('Points AS P', 'S.ID', '=', 'P.SubmissionID')
+                        .select([
+                              'C.Name',
+                              'C.Total_Points',
+                              'C.Wins',
+                              'C.Losses',
+                              'C.AvatarID',
+                              'C.SquadPoints',
+                              'P.ID',
+                              'P.WritingPoints',
+                              'P.DrawingPoints',
+                              'P.MemberID',
+    ]);
 
-                    derivedTable.forEach((el) => {
-                        if (!squads[el.memberid]) {
-                            squads[el.memberid] = 0
-                        }
-                        squads[el.memberid] += el.writingpoints
-                        squads[el.memberid] += el.drawingpoints
-                    })
-                    console.log(squads)
-return squads
-                
+            
+                derivedTable.forEach((el) => {
+                    if (!squads[el.MemberID]) {
+                        squads[el.MemberID] = 0
+                        } 
+                        squads[el.MemberID] += el.WritingPoints
+                        squads[el.MemberID] += el.DrawingPoints
+                        })
+
+                    console.log("derivedtable", derivedTable)
+                     console.log("squads", squads)               
 };
 
 module.exports = {

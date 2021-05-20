@@ -1,6 +1,7 @@
 const db = require('../../data/db-config');
 const getLeaderBoardData = async () =>{
     const output = []
+   
     const derivedTable = await db('Children AS C')
             .join('Submissions AS S', 'C.ID', '=', 'S.ChildID')
             .join('Points AS P', 'S.ID', '=', 'P.SubmissionID')
@@ -17,6 +18,7 @@ const getLeaderBoardData = async () =>{
                 'P.MemberID',
             ]);
     console.log(derivedTable)
+
     // loops through arr of objects adds unique objects to output arr then adds writing and drawing points from non unique objects to their output counterparts.
     for(const child of derivedTable){
         const Name = child.Name;
@@ -35,7 +37,7 @@ const getLeaderBoardData = async () =>{
                     chil.DrawingPoints = DP;
                     chil.Total_Points = WP + DP + TP;
                 
-                    chil.SquadPoints = WP + DP + mi;
+                    chil.SquadPoints = getSquadPoints(mi)
                     console.log('sp:',sp)
                     chil.AvatarID = av
                 }
@@ -46,11 +48,48 @@ const getLeaderBoardData = async () =>{
         
     }
 
+
     return output
 
 
 
 };
+
+
+const getSquadPoints = async () => {
+    const squads = {}
+    const derivedTable = await db('Children AS C')
+                        .join('Submissions AS S', 'C.ID', '=', 'S.ChildID')
+                        .join('Points AS P', 'S.ID', '=', 'P.SubmissionID')
+                        .select([
+                              'C.Name',
+                              'C.Total_Points',
+                              'C.Wins',
+                              'C.Losses',
+                              'C.AvatarID',
+                              'C.SquadPoints',
+                              'P.ID',
+                              'P.WritingPoints',
+                              'P.DrawingPoints',
+                              'P.MemberID',
+    ]);
+
+            
+                derivedTable.forEach((el) => {
+                    if (!squads[el.MemberID]) {
+                        squads[el.MemberID] = 0
+                        } 
+                        squads[el.MemberID] += el.WritingPoints
+                        squads[el.MemberID] += el.DrawingPoints
+                        })
+
+                    console.log("derivedtable", derivedTable)
+                     console.log("squads", squads)  
+                     
+                return squads.ID
+};
+
 module.exports = {
     getLeaderBoardData,
+    getSquadPoints,
 };
