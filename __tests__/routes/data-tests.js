@@ -8,7 +8,7 @@ const server = require('../../api/app');
 module.exports = () => {
   describe('data science endpoints', () => {
     describe('GET /data/complexity/:id', () => {
-      it('returns an array of complexity objects', async () => {
+      test.skip('returns an array of complexity objects', async () => {
         const res = await request(server).get('/child/1/complexity');
 
         expect(res.status).toBe(200);
@@ -17,7 +17,7 @@ module.exports = () => {
         });
       });
 
-      it('returns an empty 200 when there are no relevant submissions', async () => {
+      test.skip('returns an empty 200 when there are no relevant submissions', async () => {
         const res = await request(server).get('/child/2/complexity');
 
         expect(res.status).toBe(200);
@@ -26,7 +26,7 @@ module.exports = () => {
     });
 
     describe('/complexity/:id?complexity=:complexity', () => {
-      it('should update the complexity of the first submission', async () => {
+      test.skip('should update the complexity of the first submission', async () => {
         const res = await request(server).put(
           '/data/complexity/1?complexity=123'
         );
@@ -34,14 +34,14 @@ module.exports = () => {
         expect(res.status).toBe(204);
       });
 
-      it('should throw a 400 if no score passed', async () => {
+      test.skip('should throw a 400 if no score passed', async () => {
         const res = await request(server).put('/data/complexity/1');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('should throw a 404 on invalid id', async () => {
+      test.skip('should throw a 404 on invalid id', async () => {
         const res = await request(server).put(
           '/data/complexity/5?complexity=123'
         );
@@ -52,7 +52,7 @@ module.exports = () => {
     });
 
     describe('GET /data/complexity/:id', () => {
-      it('should show the updated complexity', async () => {
+      test.skip('should show the updated complexity', async () => {
         const res = await request(server).get('/child/1/complexity');
 
         expect(res.status).toBe(200);

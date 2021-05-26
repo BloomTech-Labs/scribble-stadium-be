@@ -72,9 +72,8 @@ router.put('/faceoffs', (req, res) => {
   crudOperationsManager.update(res, Mod.generateFaceoffs, 'Faceoff');
 });
 
-
-router.put('/votesequence', (req, res) =>{
-  crudOperationsManager.update(res, Mod.generateVSequence, 'Children' );
+router.put('/votesequence', (req, res) => {
+  crudOperationsManager.update(res, Mod.generateVSequence, 'Children');
 });
 
 /**
@@ -214,7 +213,12 @@ router.post('/cohorts', (req, res) => {
 router.get('/submissions', (req, res) => {
   const cohortId = req.query.cohortId;
 
-  crudOperationsManager.getAll(res, Mod.getSubmissionsByCohort, 'Cohort', cohortId);
+  crudOperationsManager.getAll(
+    res,
+    Mod.getSubmissionsByCohort,
+    'Cohort',
+    cohortId
+  );
 });
 
 /**
@@ -254,7 +258,13 @@ router.put('/submissions/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  crudOperationsManager.update(res, Mod.moderatePost, 'Submission', id, changes);
+  crudOperationsManager.update(
+    res,
+    Mod.moderatePost,
+    'Submission',
+    id,
+    changes
+  );
 });
 
 module.exports = router;

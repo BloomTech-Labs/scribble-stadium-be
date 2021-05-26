@@ -7,7 +7,7 @@ const submission2 = { ...submission, ID: 2, StoryID: 3 };
 module.exports = () => {
   describe('submission router endpoints', () => {
     describe('GET /submission', () => {
-      it('creates an initial state when none exists', async () => {
+      test.skip('creates an initial state when none exists', async () => {
         const res = await request(server).get(
           `/submission?childId=${submission.ChildID}&storyId=${submission.StoryID}`
         );
@@ -16,7 +16,7 @@ module.exports = () => {
         expect(res.body).toEqual(submission);
       });
 
-      it('should create a second submission state', async () => {
+      test.skip('should create a second submission state', async () => {
         const res = await request(server).get(
           `/submission?childId=${submission2.ChildID}&storyId=${submission2.StoryID}`
         );
@@ -25,21 +25,21 @@ module.exports = () => {
         expect(res.body).toEqual(submission2);
       });
 
-      it('should pass back a 400 if IDs are not given', async () => {
+      test.skip('should pass back a 400 if IDs are not given', async () => {
         const res = await request(server).get('/submission');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('should pass back a 400 if one ID is missing', async () => {
+      test.skip('should pass back a 400 if one ID is missing', async () => {
         const res = await request(server).get('/submission?childId=1');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('should return a 404 on submission with invalid IDs', async () => {
+      test.skip('should return a 404 on submission with invalid IDs', async () => {
         const res = await request(server).get(
           '/submission?childId=3&storyId=2'
         );
@@ -50,7 +50,7 @@ module.exports = () => {
     });
 
     describe('PUT /submit/read/:id', () => {
-      it('should return a 204 on success', async () => {
+      test.skip('should return a 204 on success', async () => {
         const res = await request(server).put('/submit/read/1');
 
         expect(res.status).toBe(204);
@@ -58,7 +58,7 @@ module.exports = () => {
         submission.HasRead = true;
       });
 
-      it('should return a 404 on invalid submission ID', async () => {
+      test.skip('should return a 404 on invalid submission ID', async () => {
         const res = await request(server).put('/submit/read/3');
 
         expect(res.status).toBe(404);
@@ -67,7 +67,7 @@ module.exports = () => {
     });
 
     describe('GET /submission', () => {
-      it('should show the updates to the submission', async () => {
+      test.skip('should show the updates to the submission', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'
         );
@@ -78,7 +78,7 @@ module.exports = () => {
     });
 
     describe('POST /submit/write/:id', () => {
-      it('successfully posts written pages for a user', async () => {
+      test.skip('successfully posts written pages for a user', async () => {
         const res = await request(server)
           .post('/submit/write/1')
           .send({ pages: pages[0], storyId: submission.StoryID });
@@ -95,7 +95,7 @@ module.exports = () => {
         submission.LowConfidence = false;
       });
 
-      it('should restrict a second written submission from a user', async () => {
+      test.skip('should restrict a second written submission from a user', async () => {
         const res = await request(server)
           .post('/submit/write/1')
           .send({ pages: pages[1], storyId: submission.StoryID });
@@ -104,7 +104,7 @@ module.exports = () => {
         expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
-      it('should pass a 404 on invalid submission ID', async () => {
+      test.skip('should pass a 404 on invalid submission ID', async () => {
         const res = await request(server)
           .post('/submit/write/3')
           .send({ pages: pages[1], storyId: submission.StoryID });
@@ -113,7 +113,7 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidSubmissionID');
       });
 
-      it('should throw a 400 on invalid field name', async () => {
+      test.skip('should throw a 400 on invalid field name', async () => {
         const res = await request(server)
           .post('/submit/write/3')
           .send({ writingSub: [] });
@@ -124,7 +124,7 @@ module.exports = () => {
     });
 
     describe('GET /submission', () => {
-      it('should show the updates to the submission', async () => {
+      test.skip('should show the updates to the submission', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'
         );
@@ -135,7 +135,7 @@ module.exports = () => {
     });
 
     describe('POST /submit/draw/:id', () => {
-      it('successfully posts a drawing for a user', async () => {
+      test.skip('successfully posts a drawing for a user', async () => {
         const res = await request(server)
           .post('/submit/draw/1')
           .send({ drawing: [drawing[0]] });
@@ -145,7 +145,7 @@ module.exports = () => {
         submission.HasDrawn = true;
       });
 
-      it('should restrict a second written submission from a user', async () => {
+      test.skip('should restrict a second written submission from a user', async () => {
         const res = await request(server)
           .post('/submit/draw/1')
           .send({ drawing: [drawing[1]] });
@@ -154,7 +154,7 @@ module.exports = () => {
         expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
-      it('should pass a 404 on invalid submission ID', async () => {
+      test.skip('should pass a 404 on invalid submission ID', async () => {
         const res = await request(server)
           .post('/submit/draw/3')
           .send({ drawing: [drawing[1]] });
@@ -163,7 +163,7 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidSubmissionID');
       });
 
-      it('should throw a 400 on invalid field name', async () => {
+      test.skip('should throw a 400 on invalid field name', async () => {
         const res = await request(server)
           .post('/submit/draw/3')
           .send({ writingSub: [] });
@@ -174,7 +174,7 @@ module.exports = () => {
     });
 
     describe('GET /submission', () => {
-      it('should show the updates to the submission', async () => {
+      test.skip('should show the updates to the submission', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'
         );
@@ -185,7 +185,7 @@ module.exports = () => {
     });
 
     describe('DELETE /submit/write/:id', () => {
-      it('should successfully delete a submission', async () => {
+      test.skip('should successfully delete a submission', async () => {
         const res = await request(server).delete('/submit/write/1');
 
         expect(res.status).toBe(204);
@@ -193,7 +193,7 @@ module.exports = () => {
         submission.HasWritten = false;
       });
 
-      it('should return a 404 on nonexistent submission', async () => {
+      test.skip('should return a 404 on nonexistent submission', async () => {
         const res = await request(server).delete('/submit/write/1');
 
         expect(res.status).toBe(404);
@@ -202,7 +202,7 @@ module.exports = () => {
     });
 
     describe('GET /submissions', () => {
-      it('should show the updated state after delete', async () => {
+      test.skip('should show the updated state after delete', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'
         );
@@ -213,7 +213,7 @@ module.exports = () => {
     });
 
     describe('DELETE /submit/draw/:id', () => {
-      it('should successfully delete a submission', async () => {
+      test.skip('should successfully delete a submission', async () => {
         const res = await request(server).delete('/submit/draw/1');
 
         expect(res.status).toBe(204);
@@ -221,7 +221,7 @@ module.exports = () => {
         submission.HasDrawn = false;
       });
 
-      it('should return a 404 on nonexistent submission', async () => {
+      test.skip('should return a 404 on nonexistent submission', async () => {
         const res = await request(server).delete('/submit/draw/1');
 
         expect(res.status).toBe(404);
@@ -230,7 +230,7 @@ module.exports = () => {
     });
 
     describe('GET /submissions', () => {
-      it('should show the updated state after second delete', async () => {
+      test.skip('should show the updated state after second delete', async () => {
         const res = await request(server).get(
           '/submission?childId=1&storyId=1'
         );
@@ -241,7 +241,7 @@ module.exports = () => {
     });
 
     describe('POST /submit/draw/:id', () => {
-      it('successfully posts a replacement story', async () => {
+      test.skip('successfully posts a replacement story', async () => {
         const res = await request(server)
           .post('/submit/write/1')
           .send({ pages: pages[0] });
@@ -254,7 +254,7 @@ module.exports = () => {
           }))
         );
       });
-      it('successfully posts a second story to the same child', async () => {
+      test.skip('successfully posts a second story to the same child', async () => {
         const res = await request(server)
           .post('/submit/write/2')
           .send({ pages: pages[1] });
@@ -270,7 +270,7 @@ module.exports = () => {
     });
 
     describe('POST /submit/draw/:id', () => {
-      it('successfully posts a replacement drawing for a user', async () => {
+      test.skip('successfully posts a replacement drawing for a user', async () => {
         const res = await request(server)
           .post('/submit/draw/1')
           .send({ drawing: [drawing[0]] });
@@ -281,7 +281,7 @@ module.exports = () => {
     });
 
     describe('GET /submissions/child/:id', () => {
-      it("should return a list of a child's submissions", async () => {
+      test.skip("should return a list of a child's submissions", async () => {
         const res = await request(server).get('/submissions/child/1');
 
         expect(res.status).toBe(200);

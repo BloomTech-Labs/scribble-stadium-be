@@ -106,7 +106,12 @@ const Parents = require('./parentModel');
 router.get('/viz', authRequired, (req, res) => {
   const childId = req.query.childId;
 
-  crudOperationsManager.getAll(res, Parents.getVisualizations, 'Child', childId);
+  crudOperationsManager.getAll(
+    res,
+    Parents.getVisualizations,
+    'Child',
+    childId
+  );
 });
 
 /**
