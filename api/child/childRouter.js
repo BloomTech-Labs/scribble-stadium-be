@@ -288,5 +288,4 @@ router.delete('/:id', authRequired, (req, res) => {
   crudOperationsManager.update(res, Children.remove, 'Child', id);
 });
 
-
 module.exports = router;

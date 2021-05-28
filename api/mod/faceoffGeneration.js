@@ -81,16 +81,15 @@ const sortBySquad = (submissions) => {
   return teams;
 };
 
-
 //MAY REMOVE
 // const updateSquadIDs = (squads) =>{
 //   console.log('squad object', squads)
-//   for(let SquadID in squads){ 
+//   for(let SquadID in squads){
 //     console.log('squad ID', SquadID)
 //     for(let TeamID in SquadID){
 //       console.log(TeamID)
 //       // TeamID.forEach(sub =>{
-        
+
 //       // })
 //     }
 //   }

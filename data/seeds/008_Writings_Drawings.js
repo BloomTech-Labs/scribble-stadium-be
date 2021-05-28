@@ -11,7 +11,7 @@ const writings2 = [...new Array(64)].map((i, idx) => ({
   SubmissionID: `${idx + 1}`,
 }));
 
-const writings = writings1.concat(writings2)
+const writings = writings1.concat(writings2);
 
 const drawings = [...new Array(64)].map((i, idx) => ({
   URL: `https://picsum.photos/id/${idx + 201}/400`,

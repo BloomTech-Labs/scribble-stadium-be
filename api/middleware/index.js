@@ -11,7 +11,6 @@ const emojiValidation = require('./emojiValidation');
 const achieveValidation = require('./achieveValidation');
 const submissionsValidation = require('./submissionsValidation');
 
-
 module.exports = {
   authRequired,
   dsAuthMiddleware,

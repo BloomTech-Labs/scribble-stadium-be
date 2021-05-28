@@ -3,7 +3,7 @@ const { dbOps, formatCohortSubmissions } = require('../../lib');
 const faceoff = require('./faceoffGeneration');
 const { result, clusterGeneration } = require('./modHelpers');
 const ballot = require('./BallotGeneration');
-const Children = require('../child/childModel');
+//const Children = require('../child/childModel');
 
 /**
  * Queries the database for a list of all current cohorts
@@ -70,7 +70,7 @@ const generateFaceoffs = () => {
       const squads = faceoff.sortBySquad(Object.values(formattedData));
       const matchups = faceoff.groupOnPoints(squads);
       const IDs = await trx('Faceoffs').insert(matchups).returning('ID');
-      console.log(IDs)
+      console.log(IDs);
       return IDs;
     } catch (err) {
       console.log({ err: err.message });
@@ -79,27 +79,22 @@ const generateFaceoffs = () => {
   });
 };
 
-
-
-const generateVSequence = () =>{
-  return db.transaction(async (trx) =>{
+const generateVSequence = () => {
+  return db.transaction(async (trx) => {
     try {
       let data = await faceoff.getSubmissionsWithPoints(trx);
       let foData = await ballot.getfaceOffData(trx);
       let squads = ballot.groupBySquad(foData);
       let childBallots = ballot.VSequence(squads, data);
 
-      for(let childNum in childBallots){
-          let votes = Object.assign(childBallots[childNum])
-          await trx('Children')
-          .where({ID: childNum})
-          .update({
-            Ballots: votes,
-          })
+      for (let childNum in childBallots) {
+        let votes = Object.assign(childBallots[childNum]);
+        await trx('Children').where({ ID: childNum }).update({
+          Ballots: votes,
+        });
       }
-      return childBallots
-    }
-    catch (err) {
+      return childBallots;
+    } catch (err) {
       console.log({ err: err.message });
       throw new Error(err.message);
     }

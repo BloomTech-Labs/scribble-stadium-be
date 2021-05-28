@@ -15,7 +15,7 @@ module.exports = () => {
     let childIds = [1];
     let subIds = [1];
     describe('gamification setup', () => {
-      it('posts 3 more children for testing', async () => {
+      test.skip('posts 3 more children for testing', async () => {
         let res = await request(server).post('/child').send(children[0]);
         expect(res.status).toBe(201);
         childIds.push(res.body);
@@ -32,14 +32,14 @@ module.exports = () => {
         expect(childIds).toEqual([1, 3, 4, 5]);
       });
 
-      it('verifies 4 children are present', async () => {
+      test.skip('verifies 4 children are present', async () => {
         const res = await request(server).get('/children');
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
       });
 
-      it('initializes a submission for each of the new children', async () => {
+      test.skip('initializes a submission for each of the new children', async () => {
         let res = await request(server).get(
           `/submit?childId=${childIds[1]}&storyId=1`
         );
@@ -62,7 +62,7 @@ module.exports = () => {
         expect(subIds).toEqual([1, 4, 5, 6]);
       });
 
-      it('posts written pages for each of the submissions', async () => {
+      test.skip('posts written pages for each of the submissions', async () => {
         let res = await request(server)
           .post(`/submit/write/${subIds[1]}`)
           .send(pages[0]);
@@ -79,7 +79,7 @@ module.exports = () => {
         expect(res.status).toBe(201);
       });
 
-      it('posts a drawing for each of the submissions', async () => {
+      test.skip('posts a drawing for each of the submissions', async () => {
         let res = await request(server)
           .post(`/submit/draw/${subIds[1]}`)
           .send(drawings[0]);
@@ -96,7 +96,7 @@ module.exports = () => {
         expect(res.status).toBe(201);
       });
 
-      it('returns all 4 new submissions', async () => {
+      test.skip('returns all 4 new submissions', async () => {
         const res = await request(server).get('/mod/submissions?cohortId=1');
 
         expect(res.status).toBe(200);
@@ -104,7 +104,7 @@ module.exports = () => {
         expect(Object.keys(res.body)).toEqual(subIds.map((x) => `${x}`));
       });
 
-      it('marks all 4 submissions as APPROVED', async () => {
+      test.skip('marks all 4 submissions as APPROVED', async () => {
         for await (let id of subIds) {
           const res = await request(server)
             .put(`/mod/submissions/${id}`)
@@ -114,7 +114,7 @@ module.exports = () => {
         }
       });
 
-      it('clusters students appropriately', async () => {
+      test.skip('clusters students appropriately', async () => {
         const res = await request(server).put('/mod/clusters');
 
         expect(res.status).toBe(200);
@@ -125,7 +125,7 @@ module.exports = () => {
 
     describe('GET /game/team', () => {
       let res1;
-      it('sends submissions for a child and their teammate', async () => {
+      test.skip('sends submissions for a child and their teammate', async () => {
         const res = await request(server).get(
           `/game/team?childId=${childIds[0]}`
         );
@@ -135,7 +135,7 @@ module.exports = () => {
         res1 = res.body;
       });
 
-      it('includes the newly added data to the endpoint', async () => {
+      test.skip('includes the newly added data to the endpoint', async () => {
         const res = await request(server).get(
           `/game/team?childId=${childIds[0]}`
         );
@@ -145,7 +145,7 @@ module.exports = () => {
         expect(res.body[1]).toHaveProperty('ChildName');
       });
 
-      it('returns the same object for their teammate', async () => {
+      test.skip('returns the same object for their teammate', async () => {
         const res = await request(server).get('/game/team?childId=1');
 
         expect(res.status).toBe(200);
@@ -153,14 +153,14 @@ module.exports = () => {
         expect(res1).toEqual(res.body);
       });
 
-      it('returns a 404 on invalid child ID', async () => {
+      test.skip('returns a 404 on invalid child ID', async () => {
         const res = await request(server).get(`/game/team?childId=20`);
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe('InvalidChildID');
       });
 
-      it('returns a 400 when no child ID is passed', async () => {
+      test.skip('returns a 400 when no child ID is passed', async () => {
         const res = await request(server).get('/game/team');
 
         expect(res.status).toBe(400);
@@ -169,28 +169,28 @@ module.exports = () => {
     });
 
     describe('POST /game/points', () => {
-      it('assigns points successfully', async () => {
+      test.skip('assigns points successfully', async () => {
         const res = await request(server).post('/game/points').send(points[0]);
 
         expect(res.status).toBe(201);
         expect(res.body).toHaveLength(2);
       });
 
-      it('returns a 403 when attempting voter fraud', async () => {
+      test.skip('returns a 403 when attempting voter fraud', async () => {
         const res = await request(server).post('/game/points').send(points[0]);
 
         expect(res.status).toBe(403);
         expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
-      it('returns a 400 on bad data', async () => {
+      test.skip('returns a 400 on bad data', async () => {
         const res = await request(server).post('/game/points').send(badRequest);
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('InvalidSubmission');
       });
 
-      it('returns a 404 when the given submission ID is invalid', async () => {
+      test.skip('returns a 404 when the given submission ID is invalid', async () => {
         const res = await request(server)
           .post('/game/points')
           .send([{ ...points[1][0], SubmissionID: 10 }, points[1][1]]);
@@ -199,7 +199,7 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidSubmissionID');
       });
 
-      it('submits points for the other three children in the squad', async () => {
+      test.skip('submits points for the other three children in the squad', async () => {
         let res = await request(server).post('/game/points').send(points[1]);
 
         expect(res.status).toBe(201);
@@ -218,7 +218,7 @@ module.exports = () => {
     });
 
     describe('PUT /mod/faceoffs', () => {
-      it('generates faceoffs', async () => {
+      test.skip('generates faceoffs', async () => {
         const res = await request(server).put('/mod/faceoffs');
 
         expect(res.status).toBe(204);
@@ -227,27 +227,27 @@ module.exports = () => {
     });
 
     describe('GET /game/faceoffs>squadId=:id', () => {
-      it('returns the newly-generated faceoffs', async () => {
+      test.skip('returns the newly-generated faceoffs', async () => {
         const res = await request(server).get('/game/faceoffs?squadId=1');
 
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
       });
-      it("should now return a child's name and AvatarURL with each submission", async () => {
+      test.skip("should now return a child's name and AvatarURL with each submission", async () => {
         const res = await request(server).get('/game/faceoffs?squadId=1');
 
         expect(res.body[0].Submission1).toHaveProperty('Name');
         expect(res.body[0].Submission1).toHaveProperty('AvatarURL');
       });
 
-      it('returns a 400 when squadId is missing', async () => {
+      test.skip('returns a 400 when squadId is missing', async () => {
         const res = await request(server).get('/game/faceoffs');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('returns a 404 when no faceoffs are found', async () => {
+      test.skip('returns a 404 when no faceoffs are found', async () => {
         const res = await request(server).get('/game/faceoffs?squadId=10');
 
         expect(res.status).toBe(404);
@@ -256,7 +256,7 @@ module.exports = () => {
     });
 
     describe('GET /game/votes?squadId=:id', () => {
-      it('returns empty 200 when no votes are cast', async () => {
+      test.skip('returns empty 200 when no votes are cast', async () => {
         const res = await request(server).get(
           '/game/votes?squadId=1&memberId=1'
         );
@@ -265,28 +265,28 @@ module.exports = () => {
         expect(res.body).toEqual([]);
       });
 
-      it('returns a 400 on missing squad ID', async () => {
+      test.skip('returns a 400 on missing squad ID', async () => {
         const res = await request(server).get('/game/votes?memberId=1');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toEqual('Missing parameters.');
       });
 
-      it('returns a 400 on missing squad ID', async () => {
+      test.skip('returns a 400 on missing squad ID', async () => {
         const res = await request(server).get('/game/votes?squadId=1');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toEqual('Missing parameters.');
       });
 
-      it("returns a 400 when query params aren't passed", async () => {
+      test.skip("returns a 400 when query params aren't passed", async () => {
         const res = await request(server).get('/game/votes');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toEqual('Missing parameters.');
       });
 
-      it('returns a 404 on invalid member ID', async () => {
+      test.skip('returns a 404 on invalid member ID', async () => {
         const res = await request(server).get(
           '/game/votes?squadId=1&memberId=20'
         );
@@ -295,7 +295,7 @@ module.exports = () => {
         expect(res.body.error).toEqual('NotFound');
       });
 
-      it('returns a 404 on invalid squad ID', async () => {
+      test.skip('returns a 404 on invalid squad ID', async () => {
         const res = await request(server).get(
           '/game/votes?squadId=15&memberId=1'
         );
@@ -306,14 +306,14 @@ module.exports = () => {
     });
 
     describe('POST /game/votes', () => {
-      it('allows a user to vote on a faceoff', async () => {
+      test.skip('allows a user to vote on a faceoff', async () => {
         const res = await request(server).post('/game/votes').send(votes[0][0]);
 
         expect(res.status).toBe(201);
         expect(res.body).toBe(1);
       });
 
-      it('returns a 400 on bad data', async () => {
+      test.skip('returns a 400 on bad data', async () => {
         const res = await request(server)
           .post('/game/votes')
           .send({ bad: 'data' });
@@ -322,14 +322,14 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidVote');
       });
 
-      it('returns a 403 on duplicate vote', async () => {
+      test.skip('returns a 403 on duplicate vote', async () => {
         const res = await request(server).post('/game/votes').send(votes[0][0]);
 
         expect(res.status).toBe(403);
         expect(res.body.error).toBe('Could not submit duplicate.');
       });
 
-      it('returns a 404 on invalid faceoff ID', async () => {
+      test.skip('returns a 404 on invalid faceoff ID', async () => {
         const res = await request(server)
           .post('/game/votes')
           .send({ ...votes[0][1], FaceoffID: 10 });
@@ -338,7 +338,7 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidVoteID');
       });
 
-      it('returns a 404 on invalid member ID', async () => {
+      test.skip('returns a 404 on invalid member ID', async () => {
         const res = await request(server)
           .post('/game/votes')
           .send({ ...votes[0][1], MemberID: 10 });
@@ -347,7 +347,7 @@ module.exports = () => {
         expect(res.body.error).toBe('InvalidVoteID');
       });
 
-      it('allows a user to vote on all other faceoffs', async () => {
+      test.skip('allows a user to vote on all other faceoffs', async () => {
         let res = await request(server).post('/game/votes').send(votes[0][1]);
         expect(res.status).toBe(201);
 
@@ -360,7 +360,7 @@ module.exports = () => {
     });
 
     describe('GET /game/votes?squadId=:id', () => {
-      it('returns an array of all 4 votes once a user has voted', async () => {
+      test.skip('returns an array of all 4 votes once a user has voted', async () => {
         const res = await request(server).get(
           '/game/votes?squadId=1&memberId=1'
         );
@@ -371,7 +371,7 @@ module.exports = () => {
     });
 
     describe('POST /game/votes', () => {
-      it('posts votes for all other users', async () => {
+      test.skip('posts votes for all other users', async () => {
         let res = await request(server).post('/game/votes').send(votes[1][0]);
         expect(res.status).toBe(201);
         res = await request(server).post('/game/votes').send(votes[1][1]);
@@ -402,7 +402,7 @@ module.exports = () => {
     });
 
     describe('GET /game/votes?squadId=:id', () => {
-      it('returns an array of length 4 for each member', async () => {
+      test.skip('returns an array of length 4 for each member', async () => {
         let res = await request(server).get('/game/votes?squadId=1&memberId=2');
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(4);
@@ -418,7 +418,7 @@ module.exports = () => {
     });
 
     describe('PUT /mod/results', () => {
-      it('calculates all results for the week successfully', async () => {
+      test.skip('calculates all results for the week successfully', async () => {
         const res = await request(server).put('/mod/results');
 
         expect(res.status).toBe(204);
@@ -427,7 +427,7 @@ module.exports = () => {
     });
 
     describe('GET /game/results?squadId=:id', () => {
-      it('should return the results of a squad', async () => {
+      test.skip('should return the results of a squad', async () => {
         const res = await request(server).get('/game/results?squadId=1');
 
         expect(res.status).toBe(200);
@@ -435,14 +435,14 @@ module.exports = () => {
         expect(res.body[0].Winner).toBeDefined();
       });
 
-      it('should return a 400 on missing squadId', async () => {
+      test.skip('should return a 400 on missing squadId', async () => {
         const res = await request(server).get('/game/results');
 
         expect(res.status).toBe(400);
         expect(res.body.error).toBe('Missing parameters.');
       });
 
-      it('should return a 404 on invalid squadId', async () => {
+      test.skip('should return a 404 on invalid squadId', async () => {
         const res = await request(server).get('/game/results?squadId=15');
 
         expect(res.status).toBe(404);
@@ -451,7 +451,7 @@ module.exports = () => {
     });
 
     describe('GET /game/squad?childId=:id', () => {
-      it('returns the squad ID for a given child', async () => {
+      test.skip('returns the squad ID for a given child', async () => {
         const res = await request(server).get(
           `/game/squad?childId=${childIds[0]}`
         );
@@ -460,7 +460,7 @@ module.exports = () => {
         expect(res.body.ID).toEqual(1);
       });
 
-      it('should return a MemberID on this endpoint now as well', async () => {
+      test.skip('should return a MemberID on this endpoint now as well', async () => {
         const res = await request(server).get(
           `/game/squad?childId=${childIds[0]}`
         );
@@ -469,14 +469,14 @@ module.exports = () => {
         expect(res.body).toHaveProperty('MemberID');
       });
 
-      it('returns a 404 on invalid child ID', async () => {
+      test.skip('returns a 404 on invalid child ID', async () => {
         const res = await request(server).get(`/game/squad?childId=10`);
 
         expect(res.status).toBe(404);
         expect(res.body.error).toBe('ChildNotFound');
       });
 
-      it('returns a 400 on missing childId', async () => {
+      test.skip('returns a 400 on missing childId', async () => {
         const res = await request(server).get(`/game/squad`);
 
         expect(res.status).toBe(400);
