@@ -14,7 +14,12 @@ exports.up = function (knex) {
       parentNotifications.string('Type').notNullable().defaultTo('information');
       //"LinksTo" could be a string indicating where the user will be directed when they click on the notification
       parentNotifications.string('LinksTo').notNullable();
+      parentNotifications.integer('ChildID')
+        .references('Children.ID')
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT');
       parentNotifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
+      parentNotifications.timestamp('DueDate');
     })
     .createTable('Child-Notifications', (childNotifications) => {
       childNotifications.increments('ID');
@@ -28,6 +33,7 @@ exports.up = function (knex) {
       childNotifications.string('Type').notNullable().defaultTo('information');
       childNotifications.string('LinksTo').notNullable();
       childNotifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
+      childNotifications.timestamp('DueDate');
     });
 };
 
