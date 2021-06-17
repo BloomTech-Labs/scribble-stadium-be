@@ -37,11 +37,10 @@ router.get('/child/:id', async (req, res, next) => {
   try {
     const child = await Gallery.getByChildId(id);
     if (child.ID === '' || child.Name === '') {
-      res
-        .status(404)
+      res.status(404)
         .json({
           errorMessage: 'The child at the specified ID does not exist.',
-      });
+    });
     }
     res.status(200).json(child);
   } catch (err) {
