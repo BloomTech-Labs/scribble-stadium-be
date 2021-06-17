@@ -3,12 +3,11 @@ exports.up = function (knex) {
     .createTable('Notifications', (notifications) => {
       notifications.increments('ID');
       notifications.string('Text').notNullable();
-      notifications.boolean('Read').notNullable().defaultTo(false);
       //The notification "Type" will be used to style the notification on the front-end
       //possible/example Types: information, warning, goodnews
       notifications.string('Type').notNullable().defaultTo('information');
       //"LinksTo" could be a string indicating where the user will be directed when they click on the notification
-      notifications.string('LinksTo').notNullable();
+      notifications.string('LinksTo');
       notifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
       notifications.timestamp('DueDate');
     })
