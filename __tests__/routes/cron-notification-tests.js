@@ -8,11 +8,11 @@ jest.mock('node-cron', () => {
 describe('test does something', () => {
     it('should do something', () => {
         cron.schedule.mockImplementation(async (frequency, callback) => await callback());
-        require('../../api/cronTasks/scheduler');
+        require('../../api/cronTasks/notificationScheduler');
         expect(cron.schedule).toBeCalledWith('0 9 * * 5', expect.any(Function));
     });
     it('should populate bridge table', async () => {
         const data = await db('Children-Notifications');
-        expect(data).toHaveLength(10);
+        expect(data.length).toBeGreaterThan(10);
     });
  })
