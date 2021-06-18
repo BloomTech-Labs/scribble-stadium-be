@@ -4,13 +4,13 @@ exports.up = function (knex) {
     table.timestamps(true, false);
     table.integer('sprint').notNullable();
     table
-      .interger('children_id')
+      .integer('children_id')
       .references('children_id')
       .inTable('Gallary')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
     table
-      .interger('submissions_id')
+      .integer('submissions_id')
       .references('ID')
       .inTable('Submissions')
       .onUpdate('CASCADE')
