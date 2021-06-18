@@ -12,12 +12,14 @@ exports.up = function (knex) {
       notifications.timestamp('DueDate');
     })
     .createTable('Children-Notifications', (childrenNotifications) => {
-      childrenNotifications.integer('ChildID')
+      childrenNotifications
+        .integer('ChildID')
         .notNullable()
         .references('Children.ID')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
-      childrenNotifications.integer('NotificationID')
+      childrenNotifications
+        .integer('NotificationID')
         .notNullable()
         .references('Notifications.ID')
         .onUpdate('CASCADE')
@@ -25,16 +27,19 @@ exports.up = function (knex) {
       childrenNotifications.boolean('Read').notNullable().defaultTo(false);
     })
     .createTable('Parents-Notifications', (parentsNotifications) => {
-      parentsNotifications.integer('ParentID')
+      parentsNotifications
+        .integer('ParentID')
         .notNullable()
         .references('Parents.ID')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
-      parentsNotifications.integer('ChildID')
+      parentsNotifications
+        .integer('ChildID')
         .references('Children.ID')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
-      parentsNotifications.integer('NotificationID')
+      parentsNotifications
+        .integer('NotificationID')
         .notNullable()
         .references('Notifications.ID')
         .onUpdate('CASCADE')
