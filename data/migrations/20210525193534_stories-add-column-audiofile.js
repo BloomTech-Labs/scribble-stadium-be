@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.table('Stories', (table) => {
-    table.string('Audiofile').notNullable();
+    table.string('Audiofile');
   });
 };
 
