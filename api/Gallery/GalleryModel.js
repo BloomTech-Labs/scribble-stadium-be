@@ -5,7 +5,21 @@ const db = require('../../data/db-config');
  * @returns {Promise} A promise that resolves to an array of all gallery items
  */
 const getAll = () => {
-  return db('Gallary');
+  return db('Submissions as Su')
+    .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
+    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
+    .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
+    .select(
+      'G.ID as GalleryId',
+      'Su.ID as SubmissionId',
+      'C.Name',
+      'C.CharacterName',
+      'St.WritingPrompt',
+      'G.WritingUrl',
+      'G.PageNum',
+      'St.DrawingPrompt',
+      'G.DrawingUrl'
+    );
 };
 
 /**
@@ -14,9 +28,22 @@ const getAll = () => {
  * @returns {Promise} A promise that resolves to a gallery object
  */
 const getById = (ID) => {
-  return db('Gallary as G')
+  return db('Submissions as Su')
+    .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
+    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
+    .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
     .where('G.ID', ID)
-    .select('G.ID', 'G.WritingUrl', 'G.PageNum', 'G.DrawingUrl');
+    .select(
+      'G.ID as GalleryId',
+      'Su.ID as SubmissionId',
+      'C.Name',
+      'C.CharacterName',
+      'St.WritingPrompt',
+      'G.WritingUrl',
+      'G.PageNum',
+      'St.DrawingPrompt',
+      'G.DrawingUrl'
+    );
 };
 
 /**

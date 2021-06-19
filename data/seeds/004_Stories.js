@@ -17,7 +17,7 @@ const stories = [
       ': Imagine and write down a scene from Finn’s Little League tryouts. (In case you’re wondering, flipperball is a lot like soccer, and your job is to imagine how Finn performed as the coaches looked on.)',
     DrawingPrompt:
       'draw one scene from Chapters 1-2. For a caption to your picture, write out the sentence from the main story where your picture should appear.',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week2, Chapters 3 & 4)',
@@ -26,14 +26,14 @@ const stories = [
       'Where would Finn to visit first while wearing his new jersey',
     DrawingPrompt:
       'Where would Finn to visit first while wearing his new jersey',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week3, Chapters 5 & 6)',
     URL: 'https://test-image-bucket-14579.s3.amazonaws.com/pdf.pdf',
     WritingPrompt: 'What did Gilbert do last year to become team captain',
     DrawingPrompt: 'What did Gilbert do last year to become team captain',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week4, Chapters 7 & 8)',
@@ -42,7 +42,7 @@ const stories = [
       'Finn and Gilberts mom was a secret spy. What was her last adventure?',
     DrawingPrompt:
       'Finn and Gilberts mom was a secret spy. What was her last adventure?',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week5, Chapters 9 & 10)',
@@ -51,7 +51,7 @@ const stories = [
       'What went wrong when Finn got his tooth ready for the toothfairy?',
     DrawingPrompt:
       'What went wrong when Finn got his tooth ready for the toothfairy?',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week6, Chapters 11 & 12)',
@@ -60,7 +60,7 @@ const stories = [
       'Finn and Gilbert decide to make the biggest sandwhich possible. What happened next?',
     DrawingPrompt:
       'Finn and Gilbert decide to make the biggest sandwhich possible. What happened next?',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week7, Chapters 13 & 14)',
@@ -69,7 +69,7 @@ const stories = [
       'Gilbert tried to eat an octopus. How did it not go as planned?',
     DrawingPrompt:
       'Gilbert tried to eat an octopus. How did it not go as planned?',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week8, Chapters 15 & 16)',
@@ -78,21 +78,21 @@ const stories = [
       "What does Finn do now that he's the official equipment manager?",
     DrawingPrompt:
       "What does Finn do now that he's the official equipment manager?",
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week9, Chapters 17 & 18)',
     URL: 'https://test-image-bucket-14579.s3.amazonaws.com/pdf.pdf',
     WritingPrompt: "Shopping to 'put on mass,' what does Finn buy?",
     DrawingPrompt: "Shopping to 'put on mass,' what does Finn buy?",
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
   {
     Title: 'Zoom & Boom (Week10, Chapters 19 & 20)',
     URL: 'https://test-image-bucket-14579.s3.amazonaws.com/pdf.pdf',
     WritingPrompt: 'What would have made a crazier ending?',
     DrawingPrompt: 'What would have made a crazier ending?',
-    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a'
+    Audiofile: 'src/assets/audiofiles/Story-Squad-Week-1-READ-Content.m4a',
   },
 ];
 
