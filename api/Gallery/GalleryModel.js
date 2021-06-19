@@ -4,11 +4,6 @@ const db = require('../../data/db-config');
  * Retrieve all items from the gallery database
  * @returns {Promise} A promise that resolves to an array of all gallery items
  */
-// const getAll = () => {
-//   return db('Gallary');
-// };
-
-// personal gallery vs site gallery
 const getAll = () => {
   return db('Submissions as Su')
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
@@ -32,12 +27,6 @@ const getAll = () => {
  * @param {Integer} ID The item id pulled from the request params
  * @returns {Promise} A promise that resolves to a gallery object
  */
-// const getById = (ID) => {
-//   return db('Gallary as G')
-//     .where('G.ID', ID)
-//     .select('G.ID', 'G.WritingUrl', 'G.PageNum', 'G.DrawingUrl');
-
-// };
 const getById = (ID) => {
   return db('Submissions as Su')
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
