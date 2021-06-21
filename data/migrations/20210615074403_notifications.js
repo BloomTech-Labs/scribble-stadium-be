@@ -50,7 +50,7 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return knex.schema
-    .dropTableIfExists('Notifications')
+    .dropTableIfExists('Parents-Notifications')
     .dropTableIfExists('Children-Notifications')
-    .dropTableIfExists('Parents-Notifications');
+    .dropTableIfExists('Notifications');
 };
