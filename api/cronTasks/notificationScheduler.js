@@ -2,8 +2,6 @@ const cron = require('node-cron');
 const cronNotificationTasks = require('./cronNotificationTasks');
 // Create notification for new story to read:
 
-//dates/times not decided, should there be variable values stored so that changes are easier?
-
 cron.schedule('0 9 * * 5', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
@@ -23,3 +21,24 @@ cron.schedule('0 9 * * 5', async () => {
         throw err;
     }
 })
+
+cron.schedule('0 9 * * 1', async () => {
+    try {
+        const notificationID = await cronNotificationTasks.createNotification({
+            "Text": "Draw a picture based on the story you read!",
+            "LinksTo": "[placeholder for draw link]",
+        });
+        if (notificationID[0]) {
+            await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
+        }
+        else {
+            console.log('error in notificationScheduler, line 35');
+        }
+    }
+    catch (err) {
+        console.log(err);
+        throw err;
+    }
+})
+
+//questions: error handling, how to test specific calls to mocked function from same file
