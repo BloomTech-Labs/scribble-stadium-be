@@ -38,7 +38,6 @@ const achievements = require('./Achievements/achieveRouter');
 const streaks = require('./Streaks/streaksRouter');
 const gallery = require('./Gallery/GalleryRouter');
 
-
 const app = express();
 
 process.on('unhandledRejection', (reason, p) => {
@@ -80,7 +79,6 @@ app.use('/leaderboard', leadBoard);
 app.use('/achievements', achievements);
 app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
