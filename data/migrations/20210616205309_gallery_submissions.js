@@ -5,12 +5,14 @@ exports.up = function (knex) {
     table.integer('sprint').notNullable();
     table
       .integer('children_id')
-      .references('children_id')
-      .inTable('Gallary')
+      .unsigned()
+      .references('ID')
+      .inTable('Children')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
     table
-      .integer('submissions_id')
+      .integer('submission_id')
+      .unsigned()
       .references('ID')
       .inTable('Submissions')
       .onUpdate('CASCADE')
