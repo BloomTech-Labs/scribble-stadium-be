@@ -7,7 +7,7 @@ cron.schedule('0 9 * * 6', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
             "Text": "You have a new story to read!",
-            "LinksTo": "[placeholder for link to current story]",
+            "LinksTo": "/child/story",
         });
         if (notificationID[0]) {
             await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
@@ -28,7 +28,7 @@ cron.schedule('0 9 * * 1', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
             "Text": "Draw a picture based on the story you read!",
-            "LinksTo": "[placeholder for draw link]",
+            "LinksTo": "/child/drawing-sub",
         });
         if (notificationID[0]) {
             await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
@@ -48,7 +48,7 @@ cron.schedule('0 9 * * 2', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
             "Text": "Write a story based on the story you read",
-            "LinksTo": "[placeholder for write link]",
+            "LinksTo": "/child/writing-sub",
         });
         if (notificationID[0]) {
             await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
@@ -71,7 +71,7 @@ cron.schedule('0 9 * * 4', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
             "Text": "See who you are paired with, use your points to give your team the best chance to win!",
-            "LinksTo": "[placeholder for pointshare link]",
+            "LinksTo": "/child/point-share",
         });
         if (notificationID[0]) {
             await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
@@ -91,7 +91,7 @@ cron.schedule('0 9 * * 5', async () => {
     try {
         const notificationID = await cronNotificationTasks.createNotification({
             "Text": "Vote for the best writing and drawing!",
-            "LinksTo": "[placeholder for voting link]",
+            "LinksTo": "/child/match-up", /// possibly /child/match-up/squad-vote
         });
         if (notificationID[0]) {
             await cronNotificationTasks.populateBridgeTable('Children', notificationID[0]);
@@ -105,5 +105,5 @@ cron.schedule('0 9 * * 5', async () => {
         throw err;
     }
 })
-
+// get routes: https://github.com/Lambda-School-Labs/story-squad-fe/blob/main/src/index.js
 //questions: error handling, how to test specific calls to mocked function from same file
