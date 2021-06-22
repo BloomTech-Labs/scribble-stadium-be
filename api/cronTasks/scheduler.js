@@ -1,6 +1,5 @@
 const cron = require('node-cron');
 const CronTasks = require('./cronTasks');
-const cronNotificationTasks = require('./cronNotificationTasks');
 
 // Reveal (Friday Afternoon)
 cron.schedule('0 15 * * 5', () => {

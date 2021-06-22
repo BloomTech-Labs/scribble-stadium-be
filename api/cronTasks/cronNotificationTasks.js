@@ -1,15 +1,14 @@
 const db = require('../../data/db-config');
-const knex = require('knex');
 const createNotification = async (notificationObject) => {
   try {
     if (notificationObject["Text"]) {
       return await db('Notifications')
         .insert({
-          "Text": notificationObject["Text"],
-          "Type": notificationObject["Type"] || "information",
-          "LinksTo": notificationObject["LinksTo"] || "",
-          "Date": notificationObject["Date"] || new Date,
-          "DueDate": notificationObject["DueDate"] || null
+          'Text': notificationObject['Text'],
+          'Type': notificationObject['Type'] || 'information',
+          'LinksTo': notificationObject['LinksTo'] || '',
+          'Date': notificationObject['Date'] || new Date,
+          'DueDate': notificationObject['DueDate'] || null
         }).returning('ID');
     }
     console.log('error in cronNotificationTasks.js line 15');
