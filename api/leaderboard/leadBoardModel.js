@@ -5,6 +5,12 @@ const getLeaderBoardData = async () => {
   const derivedTable = await db('Children AS C')
     .join('Submissions AS S', 'C.ID', '=', 'S.ChildID')
     .join('Points AS P', 'S.ID', '=', 'P.SubmissionID')
+    .join(
+      'Gallery_Submissions AS GS',
+      'P.SubmissionID',
+      '=',
+      'GS.submission_id'
+    )
     .select([
       'C.Name',
       'C.Total_Points',
@@ -16,6 +22,7 @@ const getLeaderBoardData = async () => {
       'P.WritingPoints',
       'P.DrawingPoints',
       'P.MemberID',
+      'GS.created_at',
     ]);
   console.log(derivedTable);
 
