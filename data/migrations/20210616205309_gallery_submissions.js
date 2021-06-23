@@ -1,7 +1,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('Gallery_Submissions', (table) => {
     table.increments('children_submissions_id');
-    table.timestamps(true, false);
+    table.timestamps(true, true);
     table.integer('sprint').notNullable();
     table
       .integer('children_id')
