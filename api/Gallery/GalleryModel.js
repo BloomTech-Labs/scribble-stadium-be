@@ -22,7 +22,8 @@ const getAll = () => {
       'G.WritingUrl',
       'G.PageNum',
       'St.DrawingPrompt',
-      'G.DrawingUrl'
+      'G.DrawingUrl',
+      'GS.created_at',
     );
 };
 
@@ -50,7 +51,8 @@ const getById = (ID) => {
       'G.WritingUrl',
       'G.PageNum',
       'St.DrawingPrompt',
-      'G.DrawingUrl'
+      'G.DrawingUrl',
+      'GS.created_at',
     );
 };
 
