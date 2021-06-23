@@ -9,7 +9,7 @@ const getAll = () => {
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
     .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
     .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
-    .innerJoin('Gallery_Submissions as GS','Su.ID','GS.submission_id')
+    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .select(
       'Su.ID as SubmissionId',
       'G.ID as GalleryId',
@@ -36,7 +36,7 @@ const getById = (ID) => {
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
     .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
     .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
-    .innerJoin('Gallery_Submissions as GS','Su.ID','GS.submission_id')
+    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .where('G.ID', ID)
     .select(
       'Su.ID as SubmissionId',

@@ -830,7 +830,7 @@ const gallary = [
     DrawingUrl: 'https://picsum.photos/id/236/4001',
     submission_id: 36,
     children_id: 12,
-  }
+  },
 ];
 
 exports.seed = function (knex) {
