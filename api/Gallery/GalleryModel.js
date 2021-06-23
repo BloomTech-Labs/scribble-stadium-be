@@ -23,7 +23,7 @@ const getAll = () => {
       'G.PageNum',
       'St.DrawingPrompt',
       'G.DrawingUrl',
-      'GS.created_at',
+      'GS.created_at'
     );
 };
 
@@ -52,7 +52,7 @@ const getById = (ID) => {
       'G.PageNum',
       'St.DrawingPrompt',
       'G.DrawingUrl',
-      'GS.created_at',
+      'GS.created_at'
     );
 };
 
