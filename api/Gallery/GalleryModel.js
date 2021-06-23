@@ -9,11 +9,15 @@ const getAll = () => {
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
     .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
     .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
+    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .select(
-      'G.ID as GalleryId',
       'Su.ID as SubmissionId',
+      'G.ID as GalleryId',
+      'C.ID as ChildId',
       'C.Name',
       'C.CharacterName',
+      'St.URL as SprintStory',
+      'GS.sprint as Sprint',
       'St.WritingPrompt',
       'G.WritingUrl',
       'G.PageNum',
@@ -32,12 +36,16 @@ const getById = (ID) => {
     .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
     .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
     .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
+    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .where('G.ID', ID)
     .select(
-      'G.ID as GalleryId',
       'Su.ID as SubmissionId',
+      'G.ID as GalleryId',
+      'C.ID as ChildId',
       'C.Name',
       'C.CharacterName',
+      'St.URL as SprintStory',
+      'GS.sprint as Sprint',
       'St.WritingPrompt',
       'G.WritingUrl',
       'G.PageNum',
