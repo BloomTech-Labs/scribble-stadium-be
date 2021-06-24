@@ -1,38 +1,56 @@
 exports.up = function (knex) {
   return knex.schema
-    .createTable('Parent-Notifications', (parentNotifications) => {
-      parentNotifications.increments('ID');
-      parentNotifications.integer('ParentID')
-        .notNullable()
-        .references('Parents.ID')
-        .onUpdate('CASCADE')
-        .onDelete('RESTRICT');
-      parentNotifications.string('Notification').notNullable();
-      parentNotifications.boolean('Read').notNullable().defaultTo(false);
+    .createTable('Notifications', (notifications) => {
+      notifications.increments('ID');
+      notifications.string('Text').notNullable();
       //The notification "Type" will be used to style the notification on the front-end
       //possible/example Types: information, warning, goodnews
-      parentNotifications.string('Type').notNullable().defaultTo('information');
+      notifications.string('Type').notNullable().defaultTo('information');
       //"LinksTo" could be a string indicating where the user will be directed when they click on the notification
-      parentNotifications.string('LinksTo').notNullable();
-      parentNotifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
+      notifications.string('LinksTo');
+      notifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
+      notifications.timestamp('DueDate');
     })
-    .createTable('Child-Notifications', (childNotifications) => {
-      childNotifications.increments('ID');
-      childNotifications.integer('ChildID')
+    .createTable('Children-Notifications', (childrenNotifications) => {
+      childrenNotifications
+        .integer('ChildID')
         .notNullable()
         .references('Children.ID')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT');
-      childNotifications.string('Notification').notNullable();
-      childNotifications.boolean('Read').notNullable().defaultTo(false);
-      childNotifications.string('Type').notNullable().defaultTo('information');
-      childNotifications.string('LinksTo').notNullable();
-      childNotifications.timestamp('Date').notNullable().defaultTo(knex.fn.now());
+        .onDelete('CASCADE');
+      childrenNotifications
+        .integer('NotificationID')
+        .notNullable()
+        .references('Notifications.ID')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      childrenNotifications.boolean('Read').notNullable().defaultTo(false);
+    })
+    .createTable('Parents-Notifications', (parentsNotifications) => {
+      parentsNotifications
+        .integer('ParentID')
+        .notNullable()
+        .references('Parents.ID')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      parentsNotifications
+        .integer('ChildID')
+        .references('Children.ID')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      parentsNotifications
+        .integer('NotificationID')
+        .notNullable()
+        .references('Notifications.ID')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+      parentsNotifications.boolean('Read').notNullable().defaultTo(false);
     });
 };
 
 exports.down = function (knex) {
   return knex.schema
-    .dropTableIfExists('Parent-Notifications')
-    .dropTableIfExists('Child-Notifications');
+    .dropTableIfExists('Parents-Notifications')
+    .dropTableIfExists('Children-Notifications')
+    .dropTableIfExists('Notifications');
 };
