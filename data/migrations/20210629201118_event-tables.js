@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
     .createTable('Events', (events) => {
       events.increments('ID');
@@ -14,7 +14,7 @@ exports.up = function(knex) {
       events.integer('CloseHour');
       events.integer('CloseMinute');
     })
-    .createTable('Children-Events', (childrenEvents)=>{
+    .createTable('Children-Events', (childrenEvents) => {
       childrenEvents
         .integer('ChildID')
         .notNullable()
@@ -27,16 +27,10 @@ exports.up = function(knex) {
         .references('Events.ID')
         .onUpdate('CASCADE')
         .onDelete('CASCADE');
-      childrenEvents
-        .boolean('Enabled')
-        .notNullable()
-        .defaultTo(true);
-      childrenEvents
-        .boolean('Completed')
-        .notNullable()
-        .defaultTo(false);
+      childrenEvents.boolean('Enabled').notNullable().defaultTo(true);
+      childrenEvents.boolean('Completed').notNullable().defaultTo(false);
     })
-    .createTable('Parents-Events', (parentsEvents)=>{
+    .createTable('Parents-Events', (parentsEvents) => {
       parentsEvents
         .integer('ParentID')
         .notNullable()
@@ -48,19 +42,13 @@ exports.up = function(knex) {
         .notNullable()
         .references('Events.ID')
         .onUpdate('CASCADE')
-        .onDelete('CASCADE')
-      parentsEvents
-        .boolean('Enabled')
-        .notNullable()
-        .defaultTo(true);
-      parentsEvents
-        .boolean('Completed')
-        .notNullable()
-        .defaultTo(false);
-    })
+        .onDelete('CASCADE');
+      parentsEvents.boolean('Enabled').notNullable().defaultTo(true);
+      parentsEvents.boolean('Completed').notNullable().defaultTo(false);
+    });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists('Parents-Events')
     .dropTableIfExists('Children-Events')
