@@ -7,50 +7,38 @@ exports.seed = function (knex) {
         {
           ID: 1,
           Name: 'Read',
-          OpenDayOfWeek: 6, //6=Sat
-          OpenHour: 9,
-          CloseDayOfWeek: 5, //5=Fri
-          CloseHour: 9,
+          Open: '0 9 * * Saturday',
+          Close: '0 9 * * Friday',
         },
         {
           ID: 2,
           Name: 'Draw',
-          OpenDayOfWeek: 1, //1=Mon
-          OpenHour: 9,
-          CloseDayOfWeek: 3, //3=Wed
-          CloseHour: 9,
+          Open: '0 9 * * Monday',
+          Close: '0 9 * * Wednesday',
         },
         {
           ID: 3,
           Name: 'Write',
-          OpenDayOfWeek: 2, //2=Tues
-          OpenHour: 9,
-          CloseDayOfWeek: 3, //3=Wed
-          CloseHour: 9,
+          Open: '0 9 * * Tuesday',
+          Close: '0 9 * * Wednesday',
         },
         {
           ID: 4,
           Name: 'StaffReview',
-          OpenDayOfWeek: 3, //3=Wed
-          OpenHour: 9,
-          CloseDayOfWeek: 4, //4=Thr
-          CloseHour: 9,
+          Open: '0 9 * * Wednesday',
+          Close: '0 9 * * Thursday',
         },
         {
           ID: 5,
           Name: 'PointShare',
-          OpenDayOfWeek: 4,
-          OpenHour: 9,
-          CloseDayOfWeek: 5,
-          CloseHour: 9,
+          Open: '0 9 * * Thursday',
+          Close: '0 9 * * Friday',
         },
         {
           ID: 6,
           Name: 'Vote',
-          OpenDayOfWeek: 5,
-          OpenHour: 9,
-          CloseDayOfWeek: 6,
-          CloseHour: 9,
+          Open: '0 9 * * Friday',
+          Close: '0 9 * * Saturday',
         },
       ]);
     });
