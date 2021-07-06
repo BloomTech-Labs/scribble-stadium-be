@@ -51,7 +51,7 @@ const eventTasks = {
       await createNotification(
         {
           Text: `%username%, you have user submissions to review.`,
-          LinksTo: '/child/drawing-sub',
+          LinksTo: '/staff/review',
         },
         ['Staff']
       );
