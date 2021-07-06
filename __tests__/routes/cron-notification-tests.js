@@ -1,10 +1,8 @@
 const db = require('../../data/db-config');
 const cron = require('node-cron');
-cron.schedule = jest.fn()
-  .mockImplementation(async (frequency,callback) => { 
-    return await callback();
-  });
-
+cron.schedule = jest.fn().mockImplementation(async (frequency, callback) => {
+  return await callback();
+});
 beforeAll(async () => {
   await db('Children-Events').del();
   await db('Notifications').del();

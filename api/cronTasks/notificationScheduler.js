@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const eventTasks = require('./eventTasks.js');
 const db = require('../../data/db-config.js');
 
-db('Events').then(events=>{
+db('Events').then((events) => {
   events.forEach((event) => {
     if (event.Open) {
       if (cron.validate(event.Open)) {
@@ -12,7 +12,9 @@ db('Events').then(events=>{
           }
         });
       } else {
-        console.log(`invalid node-cron string provided for event: ${event.Name}`);
+        console.log(
+          `invalid node-cron string provided for event: ${event.Name}`
+        );
       }
     }
     if (event.Close) {
@@ -23,9 +25,10 @@ db('Events').then(events=>{
           }
         });
       } else {
-        console.log(`invalid node-cron string provided for event: ${event.Name}`);
+        console.log(
+          `invalid node-cron string provided for event: ${event.Name}`
+        );
       }
     }
   });
-
 });
