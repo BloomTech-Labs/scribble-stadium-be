@@ -4,10 +4,8 @@ const db = require('../../data/db-config.js');
 
 db('Events').then(events=>{
   events.forEach((event) => {
-    console.log("**name: ", event.Name);
     if (event.Open) {
       if (cron.validate(event.Open)) {
-        console.log(event.Open);
         cron.schedule(`'${event.Open}'`, async () => {
           if (typeof eventTasks[event.Name].open === 'function') {
             eventTasks[event.Name].open(event);
