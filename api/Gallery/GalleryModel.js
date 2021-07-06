@@ -11,7 +11,6 @@ const getAll = () => {
     .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
     .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .select(
-      'Su.ID as SubmissionId',
       'G.ID as GalleryId',
       'C.ID as ChildId',
       'C.Name',
@@ -40,7 +39,6 @@ const getById = (ID) => {
     .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .where('G.ID', ID)
     .select(
-      'Su.ID as SubmissionId',
       'G.ID as GalleryId',
       'C.ID as ChildId',
       'C.Name',
@@ -68,8 +66,27 @@ const getByChildId = async (childId) => {
   // create a variable for the gallery submissions data, init as an empty array
   let submissionsData = [];
   await db('Gallary as G')
+    .innerJoin('Submissions as Su', 'G.submission_id', 'Su.ID')
+    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
+    .innerJoin(
+      'Gallery_Submissions as GS',
+      'G.submission_id',
+      'GS.submission_id'
+    )
     .where('G.children_id', childId)
-    .select('G.ID', 'G.WritingUrl', 'G.DrawingUrl')
+    .select(
+      'G.ID',
+      'St.URL as sprintStory',
+      'G.submission_id',
+      'St.WritingPrompt',
+      'G.WritingUrl',
+      'G.PageNum',
+      'St.DrawingPrompt',
+      'G.DrawingUrl',
+      'GS.sprint',
+      'GS.created_at'
+    )
+    .orderBy('G.ID')
     // call then to use the data retrieved
     // An array of objects is returned
     .then((subs) => {

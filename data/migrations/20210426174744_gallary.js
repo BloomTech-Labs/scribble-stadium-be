@@ -3,7 +3,7 @@ exports.up = function (knex) {
     t.increments('ID');
     t.string('WritingUrl').notNullable().unique();
     t.integer('PageNum').notNullable();
-    t.string('DrawingUrl').notNullable().unique();
+    t.string('DrawingUrl').notNullable();
   });
 };
 
