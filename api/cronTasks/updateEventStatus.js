@@ -1,5 +1,5 @@
 const db = require('../../data/db-config.js');
-const updateEventStatus = (event, bridgeTableArray, open = true) => {
+const updateEventStatus = (event, bridgeTableArray, enabled = true) => {
   bridgeTableArray.forEach(async (userTable) => {
     const userIDs = await db(userTable).pluck('ID');
     const bridgeTableData = userIDs.map((id) => {
@@ -11,8 +11,8 @@ const updateEventStatus = (event, bridgeTableArray, open = true) => {
       return {
         [userIDStrings[userTable]]: parseInt(id),
         EventID: parseInt(event.ID),
-        open: open,
-        complete: false,
+        Enabled: enabled,
+        Completed: false,
       };
     });
     if (bridgeTableData) {

@@ -48,17 +48,17 @@ const eventTasks = {
   },
   StaffReview: {
     open: async (event) => {
-      await createNotification(
-        {
-          Text: `%username%, you have user submissions to review.`,
-          LinksTo: '/child/drawing-sub',
-        },
-        ['Staff']
-      );
-      updateEventStatus(event, ['Staff'], true);
+      // await createNotification(
+      //   {
+      //     Text: `%username%, you have user submissions to review.`,
+      //     LinksTo: '/child/drawing-sub',
+      //   },
+      //   ['Staff']
+      // );
+      // updateEventStatus(event, ['Staff'], true);
     },
     close: async (event) => {
-      updateEventStatus(event, ['Staff'], false);
+      // updateEventStatus(event, ['Staff'], false);
     },
   },
   PointShare: {
