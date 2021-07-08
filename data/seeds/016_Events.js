@@ -8,7 +8,7 @@ exports.seed = function (knex) {
           ID: 1,
           Name: 'Read',
           Open: '0 9 * * Saturday',
-          Close: '0 9 * * Friday',
+          Close: '0 9 * * Wednesday',
         },
         {
           ID: 2,
