@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
   //this simulates the sequential running of the subset of events between firstEventCronString and mockedCurrentCronString - for development purposes only.
   db('Events').then((events) => {
     const firstEventCronString = "0 9 * * Saturday";
-    const mockedCurrentCronString = "0 9 * * Wednesday";
+    const mockedCurrentCronString = "0 9 * * Tuesday";
     const sortedCronTasks = sortAndFilterCronTasks(events,firstEventCronString,mockedCurrentCronString);
     sortedCronTasks.forEach((task) => {
       const fullTaskName = Object.keys(task)[0];
