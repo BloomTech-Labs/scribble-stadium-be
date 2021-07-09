@@ -58,7 +58,7 @@ const getById = async (ID) => {
     ]);
   const notificationData = await db('Children-Notifications AS B')
     .where('B.ChildID', ID)
-    .join('Notifications AS N','N.ID', 'B.NotificationID')
+    .join('Notifications AS N', 'N.ID', 'B.NotificationID')
     .select('Text', 'Read', 'LinksTo', 'Date');
   childData[0].notifications = notificationData;
   const eventData = await db('Children-Events AS B')
