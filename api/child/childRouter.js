@@ -140,7 +140,10 @@ router.get('/', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/:id', authRequired, (req, res) => {
+
+//!!put authRequired back before pull request!!
+// router.get('/:id', authRequired, (req, res) => {
+router.get('/:id', (req, res) => {
   // Pull child ID out of the URL params
   const { id } = req.params;
 
