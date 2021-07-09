@@ -60,10 +60,15 @@ exports.up = function (knex) {
       staffEvents.boolean('Enabled').notNullable().defaultTo(true);
       staffEvents.boolean('Completed').notNullable().defaultTo(false);
     })
-    // .raw(`CREATE UNIQUE INDEX "UniqueIndex" ON "Children-Events" ("ChildID", "EventID")`);
-    .raw(`ALTER TABLE "Children-Events" ADD CONSTRAINT "ChildID-EventID" UNIQUE ("ChildID", "EventID");`)
-    .raw(`ALTER TABLE "Staff-Events" ADD CONSTRAINT "StaffID-EventID" UNIQUE ("StaffID", "EventID");`)
-    .raw(`ALTER TABLE "Parents-Events" ADD CONSTRAINT "ParentID-EventID" UNIQUE ("ParentID", "EventID");`);
+    .raw(
+      `ALTER TABLE "Children-Events" ADD CONSTRAINT "ChildID-EventID" UNIQUE ("ChildID", "EventID");`
+    )
+    .raw(
+      `ALTER TABLE "Staff-Events" ADD CONSTRAINT "StaffID-EventID" UNIQUE ("StaffID", "EventID");`
+    )
+    .raw(
+      `ALTER TABLE "Parents-Events" ADD CONSTRAINT "ParentID-EventID" UNIQUE ("ParentID", "EventID");`
+    );
 };
 
 exports.down = function (knex) {

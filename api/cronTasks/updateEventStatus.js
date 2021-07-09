@@ -9,11 +9,11 @@ const updateEventStatus = (event, bridgeTableArray, enabled = true) => {
     };
     const userID = userIDStrings[userTable];
     const bridgeTableData = userIDs.map((id) => {
-      return ([parseInt(id), parseInt(event.ID), enabled, false]);
+      return [parseInt(id), parseInt(event.ID), enabled, false];
     });
     if (bridgeTableData && bridgeTableData.length > 0) {
       const tableName = `${userTable}-Events`;
-      const values = `(${bridgeTableData.join("), (")})`;
+      const values = `(${bridgeTableData.join('), (')})`;
       const populate = await db.raw(
         `INSERT INTO "${tableName}"
         ("${userID}", "EventID", "Enabled", "Completed") 

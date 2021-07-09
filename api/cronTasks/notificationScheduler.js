@@ -3,23 +3,29 @@ const eventTasks = require('./eventTasks.js');
 const db = require('../../data/db-config.js');
 const sortAndFilterCronTasks = require('../../lib/sortAndFilterCronTasks.js');
 
-if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
   //this simulates the sequential running of the subset of events between firstEventCronString and mockedCurrentCronString - for development purposes only.
   db('Events').then((events) => {
-    const firstEventCronString = "0 9 * * Saturday";
-    const mockedCurrentCronString = "0 9 * * Tuesday";
-    const sortedCronTasks = sortAndFilterCronTasks(events,firstEventCronString,mockedCurrentCronString);
+    const firstEventCronString = '0 9 * * Saturday';
+    const mockedCurrentCronString = '0 9 * * Tuesday';
+    const sortedCronTasks = sortAndFilterCronTasks(
+      events,
+      firstEventCronString,
+      mockedCurrentCronString
+    );
     sortedCronTasks.forEach((task) => {
       const fullTaskName = Object.keys(task)[0];
-      const taskName = fullTaskName.slice(0,fullTaskName.indexOf("-"));
-      const taskType = fullTaskName.slice(fullTaskName.indexOf("-")+1).toLocaleLowerCase();
+      const taskName = fullTaskName.slice(0, fullTaskName.indexOf('-'));
+      const taskType = fullTaskName
+        .slice(fullTaskName.indexOf('-') + 1)
+        .toLocaleLowerCase();
       if (typeof eventTasks[taskName][taskType] === 'function') {
         const dbEventIndex = events.findIndex((event) => {
           if (event.Name === taskName) return true;
         });
         eventTasks[taskName][taskType](events[dbEventIndex]);
       }
-    })
+    });
   });
 } else {
   db('Events').then((events) => {
@@ -51,5 +57,5 @@ if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development") {
         }
       }
     });
-  })
-};
+  });
+}
