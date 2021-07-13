@@ -74,7 +74,7 @@
     "morgan": "~1.9.1",
     "multiparty": "^4.2.2",
     "node-cron": "^2.0.3",
-    "pg": "^8.2.1",
+    "pg": "^8.6.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"
   },
