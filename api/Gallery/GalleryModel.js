@@ -110,7 +110,7 @@ const getByChildId = async (childId) => {
         };
       });
     });
-  updatedSubmissions = [];
+  let updatedSubmissions = [];
   childData.Submissions.map((sprintId) => {
     updatedSubmissions.push(sprintId);
   });
