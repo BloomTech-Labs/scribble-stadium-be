@@ -6,10 +6,10 @@ const db = require('../../data/db-config');
  */
 const getAll = () => {
   return db('Submissions as Su')
-    .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
-    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
-    .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
-    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
+    .join('Gallary as G', 'Su.ID', 'G.submission_id')
+    .join('Stories as St', 'Su.StoryID', 'St.ID')
+    .join('Children as C', 'Su.ChildID', 'C.ID')
+    .join('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .select(
       'G.ID as GalleryId',
       'C.ID as ChildId',
@@ -33,10 +33,10 @@ const getAll = () => {
  */
 const getById = (ID) => {
   return db('Submissions as Su')
-    .innerJoin('Gallary as G', 'Su.ID', 'G.submission_id')
-    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
-    .innerJoin('Children as C', 'Su.ChildID', 'C.ID')
-    .innerJoin('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
+    .join('Gallary as G', 'Su.ID', 'G.submission_id')
+    .join('Stories as St', 'Su.StoryID', 'St.ID')
+    .join('Children as C', 'Su.ChildID', 'C.ID')
+    .join('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
     .where('G.ID', ID)
     .select(
       'G.ID as GalleryId',
@@ -65,28 +65,16 @@ const getById = (ID) => {
 const getByChildId = async (childId) => {
   // create a variable for the gallery submissions data, init as an empty array
   let submissionsData = [];
-  await db('Gallary as G')
-    .innerJoin('Submissions as Su', 'G.submission_id', 'Su.ID')
-    .innerJoin('Stories as St', 'Su.StoryID', 'St.ID')
-    .innerJoin(
-      'Gallery_Submissions as GS',
-      'G.submission_id',
-      'GS.submission_id'
-    )
-    .where('G.children_id', childId)
+  await db('Submissions as Su')
+    .join('Drawing as D', 'Su.ID', 'D.SubmissionID')
+    .join('Stories as St', 'Su.StoryID', 'St.ID')
+    .where('Su.ChildID', childId)
     .select(
-      'G.ID',
-      'St.URL as sprintStory',
-      'G.submission_id',
+      'Su.ID as SubmissionId',
+      'St.URL as SprintStory',
       'St.WritingPrompt',
-      'G.WritingUrl',
-      'G.PageNum',
-      'St.DrawingPrompt',
-      'G.DrawingUrl',
-      'GS.sprint',
-      'GS.created_at'
+      'St.DrawingPrompt'
     )
-    .orderBy('G.ID')
     // call then to use the data retrieved
     // An array of objects is returned
     .then((subs) => {
@@ -104,12 +92,15 @@ const getByChildId = async (childId) => {
     Name: '',
     Submissions: [],
   };
+  let stuName = '';
+
   await db('Children as C')
     .where('C.ID', childId)
     .select('C.ID', 'C.Name')
     // an array of objects is returned here as well, so we will loop through again
     .then((childArr) => {
       childArr.map((child) => {
+        stuName = child.Name;
         // update the childData object's values
         childData = {
           ID: child.ID,
@@ -118,6 +109,41 @@ const getByChildId = async (childId) => {
           Submissions: [...submissionsData],
         };
       });
+    });
+  let updatedSubmissions = [];
+  childData.Submissions.map((sprintId) => {
+    updatedSubmissions.push(sprintId);
+  });
+  await db('Submissions as Su')
+    .join('Writing as W', 'Su.ID', 'W.SubmissionID')
+    .join('Drawing as D', 'Su.ID', 'D.SubmissionID')
+    .join('Stories as St', 'Su.StoryID', 'St.ID')
+    .where('Su.ChildID', childId)
+    .select('W.URL as WritingUrl', 'W.PageNum', 'D.URL as DrawingUrl', 'Su.ID')
+    .then((sprints) => {
+      sprints.forEach((s) => {
+        let i = s.ID;
+
+        updatedSubmissions.forEach((sub) => {
+          if (sub.SubmissionId === i && sub.Pages) {
+            let PageNum = `Page${Object.keys(sub.Pages).length}`;
+            sub.Pages.Writing[PageNum] = s.WritingUrl;
+            // sub.Pages.Drawing[PageNum]=s.DrawingUrl
+          } else if (sub.SubmissionId === i) {
+            sub['Pages'] = {
+              Writing: { Page1: s.WritingUrl },
+              Drawing: { Page1: s.DrawingUrl },
+            };
+          }
+        });
+      });
+
+      childData = {
+        ID: childId,
+        Name: stuName,
+        // spread submissionsData
+        Submissions: updatedSubmissions,
+      };
     });
 
   return childData;
