@@ -33,8 +33,8 @@ const getAll = () => {
  * @param {number} ID the unique ID to search the database on
  * @returns {Promise} promise that resolves to array of users with matching ID, empty if none found
  */
-const getById = (ID) => {
-  return db('Children AS C')
+const getById = async (ID) => {
+  const childData = await db('Children AS C')
     .where('C.ID', ID)
     .join('Avatars AS A', 'C.AvatarID', 'A.ID')
     .join('GradeLevels AS G', 'C.GradeLevelID', 'G.ID')
@@ -56,6 +56,17 @@ const getById = (ID) => {
       'A.AvatarURL',
       'C.Streaks',
     ]);
+  const notificationData = await db('Children-Notifications AS B')
+    .where('B.ChildID', ID)
+    .join('Notifications AS N', 'N.ID', 'B.NotificationID')
+    .select('Text', 'Read', 'LinksTo', 'Date');
+  childData[0].notifications = notificationData;
+  const eventData = await db('Children-Events AS B')
+    .where('B.ChildID', ID)
+    .join('Events as E', 'E.ID', 'B.EventID')
+    .select('E.Name', 'B.Enabled', 'B.Completed');
+  childData[0].events = eventData;
+  return childData;
 };
 
 /**
