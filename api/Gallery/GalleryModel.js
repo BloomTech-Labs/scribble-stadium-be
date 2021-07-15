@@ -66,14 +66,14 @@ const getByChildId = async (childId) => {
   // create a variable for the gallery submissions data, init as an empty array
   let submissionsData = [];
   await db('Submissions as Su')
-    .join('Drawing as D', 'Su.ID','D.SubmissionID' )
+    .join('Drawing as D', 'Su.ID', 'D.SubmissionID')
     .join('Stories as St', 'Su.StoryID', 'St.ID')
     .where('Su.ChildID', childId)
     .select(
       'Su.ID as SubmissionId',
       'St.URL as SprintStory',
       'St.WritingPrompt',
-      'St.DrawingPrompt',
+      'St.DrawingPrompt'
     )
     // call then to use the data retrieved
     // An array of objects is returned
@@ -92,7 +92,7 @@ const getByChildId = async (childId) => {
     Name: '',
     Submissions: [],
   };
-  let stuName=''
+  let stuName = '';
 
   await db('Children as C')
     .where('C.ID', childId)
@@ -100,7 +100,7 @@ const getByChildId = async (childId) => {
     // an array of objects is returned here as well, so we will loop through again
     .then((childArr) => {
       childArr.map((child) => {
-        stuName=child.Name
+        stuName = child.Name;
         // update the childData object's values
         childData = {
           ID: child.ID,
@@ -108,56 +108,43 @@ const getByChildId = async (childId) => {
           // spread submissionsData
           Submissions: [...submissionsData],
         };
-      });  
-    })
-   updatedSubmissions=[] 
-   childData.Submissions.map((sprintId)=>{
-    updatedSubmissions.push(sprintId)
-   })
-    await db('Submissions as Su')
-    .join('Writing as W','Su.ID','W.SubmissionID')
-    .join('Drawing as D','Su.ID','D.SubmissionID')
+      });
+    });
+  updatedSubmissions = [];
+  childData.Submissions.map((sprintId) => {
+    updatedSubmissions.push(sprintId);
+  });
+  await db('Submissions as Su')
+    .join('Writing as W', 'Su.ID', 'W.SubmissionID')
+    .join('Drawing as D', 'Su.ID', 'D.SubmissionID')
     .join('Stories as St', 'Su.StoryID', 'St.ID')
-    .where('Su.ChildID',childId)
-    .select('W.URL as WritingUrl', 'W.PageNum','D.URL as DrawingUrl','Su.ID')
+    .where('Su.ChildID', childId)
+    .select('W.URL as WritingUrl', 'W.PageNum', 'D.URL as DrawingUrl', 'Su.ID')
     .then((sprints) => {
+      sprints.forEach((s) => {
+        let i = s.ID;
 
-
-      sprints.forEach((s)=>{
-        let i=s.ID
-
-        updatedSubmissions.forEach((sub)=>{
-          
-          
-          if (sub.SubmissionId ===i && sub.Pages){
-            let PageNum=`Page${Object.keys(sub.Pages).length}`
-            sub.Pages.Writing[PageNum]=s.WritingUrl
+        updatedSubmissions.forEach((sub) => {
+          if (sub.SubmissionId === i && sub.Pages) {
+            let PageNum = `Page${Object.keys(sub.Pages).length}`;
+            sub.Pages.Writing[PageNum] = s.WritingUrl;
             // sub.Pages.Drawing[PageNum]=s.DrawingUrl
-            
+          } else if (sub.SubmissionId === i) {
+            sub['Pages'] = {
+              Writing: { Page1: s.WritingUrl },
+              Drawing: { Page1: s.DrawingUrl },
+            };
           }
-          else if(sub.SubmissionId===i){
-            
-                      
-            sub['Pages']={'Writing':{'Page1':s.WritingUrl},
-                      'Drawing':{'Page1':s.DrawingUrl}
-            }
-        }
-        })
-       
-        
-
-
-      })
+        });
+      });
 
       childData = {
-          ID: childId,
-          Name: stuName,
-          // spread submissionsData
-          Submissions: updatedSubmissions
-        };
-
-      
-    })
+        ID: childId,
+        Name: stuName,
+        // spread submissionsData
+        Submissions: updatedSubmissions,
+      };
+    });
 
   return childData;
 };
