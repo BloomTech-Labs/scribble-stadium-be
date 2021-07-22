@@ -21,8 +21,6 @@ const getAll = () => {
 };
 // WritingURL, PageNum, DrawingURL
 
-
-
 /**
  * Retrieves a gallery item object by its ID
  * @param {Integer} ID The item id pulled from the request params
