@@ -6,25 +6,22 @@ const db = require('../../data/db-config');
  */
 const getAll = () => {
   return db('Submissions as Su')
-    .join('Gallary as G', 'Su.ID', 'G.submission_id')
+    .join('Drawing as D', 'Su.ID', 'D.SubmissionID')
     .join('Stories as St', 'Su.StoryID', 'St.ID')
     .join('Children as C', 'Su.ChildID', 'C.ID')
-    .join('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
+    .where('Su.ID')
     .select(
-      'G.ID as GalleryId',
       'C.ID as ChildId',
       'C.Name',
       'C.CharacterName',
       'St.URL as SprintStory',
-      'GS.sprint as Sprint',
       'St.WritingPrompt',
-      'G.WritingUrl',
-      'G.PageNum',
-      'St.DrawingPrompt',
-      'G.DrawingUrl',
-      'GS.created_at'
+      'St.DrawingPrompt'
     );
 };
+// WritingURL, PageNum, DrawingURL
+
+
 
 /**
  * Retrieves a gallery item object by its ID
@@ -33,24 +30,16 @@ const getAll = () => {
  */
 const getById = (ID) => {
   return db('Submissions as Su')
-    .join('Gallary as G', 'Su.ID', 'G.submission_id')
     .join('Stories as St', 'Su.StoryID', 'St.ID')
     .join('Children as C', 'Su.ChildID', 'C.ID')
-    .join('Gallery_Submissions as GS', 'Su.ID', 'GS.submission_id')
-    .where('G.ID', ID)
+    .where('Su.ID', ID)
     .select(
-      'G.ID as GalleryId',
       'C.ID as ChildId',
       'C.Name',
       'C.CharacterName',
       'St.URL as SprintStory',
-      'GS.sprint as Sprint',
       'St.WritingPrompt',
-      'G.WritingUrl',
-      'G.PageNum',
-      'St.DrawingPrompt',
-      'G.DrawingUrl',
-      'GS.created_at'
+      'St.DrawingPrompt'
     );
 };
 
