@@ -2,7 +2,7 @@ const parents = [
   "Alice",
   "Barbara",
   "Christopher",
-  "David",
+  "David"
 ].map((parentName, idx) => ({
   Name: parentName,
   PIN: '0000',

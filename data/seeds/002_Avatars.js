@@ -31,6 +31,6 @@ exports.seed = function (knex) {
     { AvatarURL: 'https://storysquad-main.s3.amazonaws.com/avatars/Green13.svg' },
     { AvatarURL: 'https://storysquad-main.s3.amazonaws.com/avatars/Green14.svg' },
     { AvatarURL: 'https://storysquad-main.s3.amazonaws.com/avatars/Green15.svg' },
-    { AvatarURL: 'https://storysquad-main.s3.amazonaws.com/avatars/Green16.svg' },
+    { AvatarURL: 'https://storysquad-main.s3.amazonaws.com/avatars/Green16.svg' }
   ]); 
 };
