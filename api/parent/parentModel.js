@@ -1,9 +1,5 @@
 const db = require('../../data/db-config');
-const {
-  formatProfiles,
-  formatLineGraphBody,
-  dsApi,
-} = require('../../lib');
+const { formatProfiles, formatLineGraphBody, dsApi } = require('../../lib');
 
 /**
  * A method to get all parents from the database
@@ -40,9 +36,7 @@ const getByEmail = (Email) => {
  * @returns {Promise} promise that resolves to results of db query
  */
 const add = (parent) => {
-  return db('Parents')
-    .insert(parent)
-    .returning('ID');
+  return db('Parents').insert(parent).returning('ID');
 };
 
 /**
