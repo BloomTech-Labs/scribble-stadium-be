@@ -1,5 +1,4 @@
 const faker = require('faker');
-const bc = require('bcryptjs');
 
 // so much to check in db....
 const children1 = [...new Array(8)].map((i, idx) => ({
