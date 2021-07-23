@@ -45,11 +45,10 @@
     ]
   },
   "dependencies": {
-    "@okta/jwt-verifier": "^1.0.0",
-    "@okta/okta-sdk-nodejs": "^4.5.1",
+    "@okta/jwt-verifier": "^2.1.0",
+    "@okta/okta-sdk-nodejs": "^4.6.0",
     "aws-sdk": "^2.753.0",
     "axios": "^0.21.1",
-    "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -75,7 +74,7 @@
     "multiparty": "^4.2.2",
     "node-cron": "^2.0.3",
     "pg": "^8.2.1",
-    "swagger-jsdoc": "^4.0.0",
+    "swagger-jsdoc": "^4.3.2",
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
