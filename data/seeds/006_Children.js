@@ -4,7 +4,7 @@ const bc = require('bcryptjs');
 // so much to check in db....
 const children1 = [...new Array(8)].map((i, idx) => ({
   Name: `${faker.name.firstName()} (Cohort1)`,
-  PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
+  PIN: `0000`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`, // 1, 2, 3,
   AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
@@ -30,7 +30,7 @@ const children1 = [...new Array(8)].map((i, idx) => ({
 
 const children2 = [...new Array(8)].map((i, idx) => ({
   Name: `${faker.name.firstName()} (Cohort2)`,
-  PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
+  PIN: `0000`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
   AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
@@ -55,7 +55,7 @@ const children2 = [...new Array(8)].map((i, idx) => ({
 
 const children3 = [...new Array(8)].map((i, idx) => ({
   Name: `${faker.name.firstName()} (Cohort3)`,
-  PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
+  PIN: `0000`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
   AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
@@ -80,7 +80,7 @@ const children3 = [...new Array(8)].map((i, idx) => ({
 
 const children4 = [...new Array(8)].map((i, idx) => ({
   Name: `${faker.name.firstName()} (Cohort4)`,
-  PIN: `${bc.hashSync(`0000`, process.env.BCRYPT_ROUNDS || 6)}`,
+  PIN: `0000`,
   // ParentID: `${Math.floor((idx + 4) / 4)}`,
   ParentID: `${(idx % 4) + 1}`,
   AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
