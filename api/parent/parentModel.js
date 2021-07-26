@@ -1,10 +1,5 @@
 const db = require('../../data/db-config');
-const {
-  formatProfiles,
-  formatLineGraphBody,
-  dsApi,
-  hashPin,
-} = require('../../lib');
+const { formatProfiles, formatLineGraphBody, dsApi } = require('../../lib');
 
 /**
  * A method to get all parents from the database
@@ -37,13 +32,11 @@ const getByEmail = (Email) => {
  * @param {Object} parent contains the parent's info
  * @param {string} parent.Name parent's name stored in a string
  * @param {string} parent.Email parent's email in a string
- * @param {string} parent.PIN hashed string of parent's 4-digit PIN
+ * @param {string} parent.PIN string of parent's 4-digit PIN
  * @returns {Promise} promise that resolves to results of db query
  */
 const add = (parent) => {
-  return db('Parents')
-    .insert({ ...parent, PIN: hashPin(parent.PIN) })
-    .returning('ID');
+  return db('Parents').insert(parent).returning('ID');
 };
 
 /**
