@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.createTable('StoriesNew', (tbl) => {
+  return knex.schema.createTable('Stories-New', (tbl) => {
     tbl.increments('ID');
     tbl.string('Title').notNullable();
     tbl.string('Description');
@@ -8,5 +8,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('StoriesNew');
+  return knex.schema.dropTableIfExists('Stories-New');
 };
