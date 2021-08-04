@@ -1,6 +1,6 @@
 # Contributing to this scaffold project
 
-All contributions are welcome in the form of a PR or issue.  When making PRs, first make the PR into the 'staging' branch to keep our development database up-to-date.  Once you are content with the changes, make a second PR to merge them into main.
+All contributions are welcome in the form of a PR or issue. When making PRs, first make the PR into the 'staging' branch to keep our development database up-to-date. Once you are content with the changes, make a second PR to merge them into main.
 
 ## ESLint and prettier
 
