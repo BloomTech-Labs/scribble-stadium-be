@@ -4,7 +4,7 @@ exports.up = function (knex) {
     t.integer('StoryID')
       .notNullable()
       .unsigned()
-      .references('StoriesNew.ID')
+      .references('Stories-New.ID')
       .onDelete('CASCADE');
     t.integer('EpisodeNumber');
     t.string('TextURL');
