@@ -3,3 +3,5 @@ exports.up = function (knex) {
     `INSERT INTO "Stories-New"("Title") SELECT distinct regexp_replace(s."Title", '\ \(.*\)', ' & Boom') FROM "Stories" as s;` // eslint-disable-line
   );
 };
+
+exports.down = function () {};
