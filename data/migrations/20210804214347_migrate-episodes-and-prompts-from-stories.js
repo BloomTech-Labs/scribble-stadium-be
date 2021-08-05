@@ -15,4 +15,6 @@ exports.up = function (knex) {
     });
 };
 
-exports.down = function (knex) {};
+exports.down = function (knex) {
+  return knex.raw('TRUNCATE TABLE "Episodes" RESTART IDENTITY CASCADE');
+};
