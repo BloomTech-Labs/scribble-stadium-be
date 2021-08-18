@@ -76,6 +76,7 @@ app.use('/leaderboard', leadBoard);
 app.use('/achievements', achievements);
 app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
+app.use('/singleplayer', singleplayerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
