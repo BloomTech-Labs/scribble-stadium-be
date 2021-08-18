@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 const {
-  authRequired,
-  fileUpload,
-  validateUpdateAllTasksParams,
+    authRequired,
+    fileUpload,
+    validateUpdateAllTasksParams,
 } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 
@@ -172,17 +172,17 @@ const Submissions = require('./submissionModel');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  // Pull intersection IDs out of the URL querystring
-  const { childId, storyId } = req.query;
+router.get('/', authRequired, async(req, res) => {
+    // Pull intersection IDs out of the URL querystring
+    const { childId, storyId } = req.query;
 
-  crudOperationsManager.getAll(
-    res,
-    Submissions.getOrInitSubmission,
-    'Submission',
-    childId,
-    storyId
-  );
+    crudOperationsManager.getAll(
+        res,
+        Submissions.getOrInitSubmission,
+        'Submission',
+        childId,
+        storyId
+    );
 });
 
 /**
@@ -210,16 +210,16 @@ router.get('/', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/child/:id', authRequired, async (req, res) => {
-  // Pull child ID out of URL parameter
-  const { id } = req.params;
+router.get('/child/:id', authRequired, async(req, res) => {
+    // Pull child ID out of URL parameter
+    const { id } = req.params;
 
-  crudOperationsManager.getAll(
-    res,
-    Submissions.getAllSubmissionsByChild,
-    'Submission',
-    id
-  );
+    crudOperationsManager.getAll(
+        res,
+        Submissions.getAllSubmissionsByChild,
+        'Submission',
+        id
+    );
 });
 
 /**
@@ -243,11 +243,11 @@ router.get('/child/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.put('/read/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of URL parameter
-  const { id } = req.params;
+router.put('/read/:id', authRequired, async(req, res) => {
+    // Pull submission ID out of URL parameter
+    const { id } = req.params;
 
-  crudOperationsManager.update(res, Submissions.markAsRead, 'Submission', id);
+    crudOperationsManager.update(res, Submissions.markAsRead, 'Submission', id);
 });
 
 /**
@@ -285,29 +285,29 @@ router.put('/read/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
-  // Pull relevant data out of the request object
-  const { id } = req.params;
-  const storyId = req.body.storyId;
-  const pages = req.body.pages;
+router.post('/write/:id', authRequired, fileUpload, async(req, res) => {
+    // Pull relevant data out of the request object
+    const { id } = req.params;
+    const storyId = req.body.storyId;
+    const pages = req.body.pages;
 
-  // Callback function to pass into map that formats the data properly
-  const cb = (x, i) => ({
-    URL: x.Location,
-    PageNum: i + 1,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  });
+    // Callback function to pass into map that formats the data properly
+    const cb = (x, i) => ({
+        URL: x.Location,
+        PageNum: i + 1,
+        SubmissionID: id,
+        checksum: x.Checksum,
+    });
 
-  crudOperationsManager.submission(
-    res,
-    Submissions.submitWritingTransaction,
-    'Submission',
-    pages,
-    cb,
-    id,
-    storyId
-  );
+    crudOperationsManager.submission(
+        res,
+        Submissions.submitWritingTransaction,
+        'Submission',
+        pages,
+        cb,
+        id,
+        storyId
+    );
 });
 
 /**
@@ -345,26 +345,26 @@ router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
-  // Pull relevant data out of the request object
-  const { id } = req.params;
-  const data = req.body.drawing;
+router.post('/draw/:id', authRequired, fileUpload, async(req, res) => {
+    // Pull relevant data out of the request object
+    const { id } = req.params;
+    const data = req.body.drawing;
 
-  // Callback function to pass into map that formats the data properly
-  const cb = (x) => ({
-    URL: x.Location,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  });
+    // Callback function to pass into map that formats the data properly
+    const cb = (x) => ({
+        URL: x.Location,
+        SubmissionID: id,
+        checksum: x.Checksum,
+    });
 
-  crudOperationsManager.submission(
-    res,
-    Submissions.submitDrawingTransaction,
-    'Submission',
-    data,
-    cb,
-    id
-  );
+    crudOperationsManager.submission(
+        res,
+        Submissions.submitDrawingTransaction,
+        'Submission',
+        data,
+        cb,
+        id
+    );
 });
 
 /**
@@ -411,23 +411,23 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
  *        $ref: '#/components/responses/DatabaseError'
  */
 router.put(
-  '/update-all/:id',
-  authRequired,
-  validateUpdateAllTasksParams,
-  async (req, res) => {
-    const { id } = req.params;
-    const { hasRead, hasDrawn, hasWritten } = req.body;
+    '/update-all/:id',
+    authRequired,
+    validateUpdateAllTasksParams,
+    async(req, res) => {
+        const { id } = req.params;
+        const { hasRead, hasDrawn, hasWritten } = req.body;
 
-    return crudOperationsManager.update(
-      res,
-      Submissions.updateAll,
-      'Submission',
-      id,
-      hasRead,
-      hasDrawn,
-      hasWritten
-    );
-  }
+        return crudOperationsManager.update(
+            res,
+            Submissions.updateAll,
+            'Submission',
+            id,
+            hasRead,
+            hasDrawn,
+            hasWritten
+        );
+    }
 );
 
 /**
@@ -451,16 +451,16 @@ router.put(
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/write/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of the URL parameter
-  const { id } = req.params;
+router.delete('/write/:id', authRequired, async(req, res) => {
+    // Pull submission ID out of the URL parameter
+    const { id } = req.params;
 
-  crudOperationsManager.update(
-    res,
-    Submissions.deleteWritingSubmission,
-    'Submission',
-    id
-  );
+    crudOperationsManager.update(
+        res,
+        Submissions.deleteWritingSubmission,
+        'Submission',
+        id
+    );
 });
 
 /**
@@ -484,16 +484,16 @@ router.delete('/write/:id', authRequired, async (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.delete('/draw/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of the URL parameter
-  const { id } = req.params;
+router.delete('/draw/:id', authRequired, async(req, res) => {
+    // Pull submission ID out of the URL parameter
+    const { id } = req.params;
 
-  crudOperationsManager.update(
-    res,
-    Submissions.deleteDrawingSubmission,
-    'Submission',
-    id
-  );
+    crudOperationsManager.update(
+        res,
+        Submissions.deleteDrawingSubmission,
+        'Submission',
+        id
+    );
 });
 
 module.exports = router;
