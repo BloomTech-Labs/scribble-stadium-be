@@ -6,7 +6,7 @@ const {
 } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 
-const Singleplayers = require('./singleplayerModel.js');
+const Singleplayers = require('./singleplayerModel.js').default;
 /**
  * @swagger
  * /singleplayer/savebot/{id}:

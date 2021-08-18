@@ -1,4 +1,4 @@
-const db = require('../../data/db-config');
+import db from '../../data/db-config';
 
 /**
  * Adds a bot to the database
@@ -7,13 +7,13 @@ const db = require('../../data/db-config');
  * @returns {Promise} promise that resolves to ID of new botdata or an error message
  */
 const add = (botdata) => {
-  return db('Singleplayer')
-    .insert({
-      ...botdata,
-    })
-    .returning('ID');
+    return db('Singleplayer')
+        .insert({
+            ...botdata,
+        })
+        .returning('ID');
 };
 
-module.exports = {
-  add,
+export default {
+    add,
 };
