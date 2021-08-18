@@ -37,6 +37,7 @@ const leadBoard = require('./leaderboard/leadboardRouter');
 const achievements = require('./Achievements/achieveRouter');
 const streaks = require('./Streaks/streaksRouter');
 const gallery = require('./Gallery/GalleryRouter');
+const singleplayerRouter = require('./singleplayer/singleplayerRouter');
 
 const app = express();
 
