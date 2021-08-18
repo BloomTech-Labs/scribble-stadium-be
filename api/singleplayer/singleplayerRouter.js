@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {authRequired, fileUpload } = require('../middleware');
+const { authRequired, fileUpload } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 const Singleplayers = require('./singleplayerModel.js').default;
 /**
