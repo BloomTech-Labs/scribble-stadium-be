@@ -38,11 +38,12 @@ const Singleplayers = require('./singleplayerModel.js').default;
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/savebot/:id', authRequired, fileUpload, async(req, res) => {
-    // Pull relevant data out of the request object;
-    const botdata = req.body; //format for botdata: {botname:string, botstory:string}
+router.post('/savebot/:id', authRequired, fileUpload, async (req, res) => {
+  // Pull relevant data out of the request object;
+  const botdata = req.body; //format for botdata: {botname:string, botstory:string}
 
-    crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
+  crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
 });
+
 
 module.exports = router;
