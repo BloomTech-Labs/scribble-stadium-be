@@ -1,23 +1,22 @@
 const router = require('express').Router();
 
 const {
-    authRequired,
-    fileUpload
+  authRequired,
+  fileUpload,
 } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
-
 const Singleplayers = require('./singleplayerModel.js').default;
 /**
  * @swagger
  * /singleplayer/savebot/{id}:
  *  post:
- *    summary: Attempts to save botname and Stories
+ *    summary: Attempts to upload a drawing for the submission with the given ID
  *    security:
  *      - okta: []
  *    tags:
  *      - Submissions
  *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
+ *      - $ref: '#/components/parameters/singleplayerId'
  *      - in: formData
  *        name: drawing
  *        type: file
@@ -30,7 +29,7 @@ const Singleplayers = require('./singleplayerModel.js').default;
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/DrawnSubmission'
+ *                $ref: '#/components/schemas/singleplayer'
  *      401:
  *        $ref: '#/components/responses/UnauthorizedError'
  *      403:
@@ -42,18 +41,16 @@ const Singleplayers = require('./singleplayerModel.js').default;
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
+router.post('/savebot/:id', authRequired, fileUpload, async (req, res) => {
+  // Pull relevant data out of the request object;
+  const botdata = req.body; //format for botdata: {botname:string, botstory:string}
 
-router.post('/savebot/:id', authRequired, fileUpload, async(req, res) => {
-    // Pull relevant data out of the request object
-    const { id } = req.params;
-    const botdata = req.body; //format for botdata: {botname:string, botstory:string}
-
-    crudOperationsManager.post(
-        res,
-        Singleplayers.add,
-        'Singleplayer',
-        botdata
-    );
+  crudOperationsManager.post(
+    res,
+    Singleplayers.add,
+    'Singleplayer',
+    botdata
+  );
 });
 
 module.exports = router;
