@@ -89,10 +89,3 @@ const add = (botdata) => {
 module.exports = {
     add,
 };
-// module.exports = {
-//   getAll,
-//   getById,
-//   add,
-//   update,
-//   remove,
-// };
