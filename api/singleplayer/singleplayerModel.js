@@ -1,4 +1,4 @@
-import db from '../../data/db-config';
+const db = require('../../data/db-config');
 
 /**
  * Adds a bot to the database
@@ -14,6 +14,6 @@ const add = (botdata) => {
         .returning('ID');
 };
 
-export default {
-    add,
+module.exports = {
+  add,
 };

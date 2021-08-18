@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { authRequired, fileUpload } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
-const Singleplayers = require('./singleplayerModel.js').default;
+const Singleplayers = require('./singleplayerModel.js');
 /**
  * @swagger
  * /singleplayer/savebot/{id}:
@@ -38,11 +38,11 @@ const Singleplayers = require('./singleplayerModel.js').default;
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.post('/savebot/:id', authRequired, fileUpload, async (req, res) => {
-  // Pull relevant data out of the request object;
-  const botdata = req.body; //format for botdata: {botname:string, botstory:string}
+router.post('/savebot/:id', authRequired, fileUpload, async(req, res) => {
+    // Pull relevant data out of the request object;
+    const botdata = req.body; //format for botdata: {botname:string, botstory:string}
 
-  crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
+    crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
 });
 
-export default router;
+module.exports = router;
