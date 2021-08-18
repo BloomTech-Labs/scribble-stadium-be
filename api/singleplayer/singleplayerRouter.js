@@ -1,9 +1,6 @@
 const router = require('express').Router();
 
-const {
-  authRequired,
-  fileUpload,
-} = require('../middleware');
+const {authRequired, fileUpload } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 const Singleplayers = require('./singleplayerModel.js').default;
 /**
@@ -45,12 +42,7 @@ router.post('/savebot/:id', authRequired, fileUpload, async (req, res) => {
   // Pull relevant data out of the request object;
   const botdata = req.body; //format for botdata: {botname:string, botstory:string}
 
-  crudOperationsManager.post(
-    res,
-    Singleplayers.add,
-    'Singleplayer',
-    botdata
-  );
+  crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
 });
 
 module.exports = router;
