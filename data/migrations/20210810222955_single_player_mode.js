@@ -4,10 +4,9 @@ exports.up = function(knex) {
             singleplayer.increments('ID');
             singleplayer.string('Botname').notNullable();
             singleplayer.string('Stories').notNullable();
-        })
+        });
 };
 
 exports.down = function(knex) {
-    return knex.schema
-        .dropTableIfExists('Singleplayer')
+    return knex.schema.dropTableIfExists('Singleplayer')
 };

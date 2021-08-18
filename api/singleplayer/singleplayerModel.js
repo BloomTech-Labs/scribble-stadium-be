@@ -87,7 +87,7 @@ const add = (botdata) => {
 // };
 
 module.exports = {
-    add
+    add,
 };
 // module.exports = {
 //   getAll,
