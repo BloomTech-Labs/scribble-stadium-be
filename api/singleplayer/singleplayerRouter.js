@@ -45,4 +45,5 @@ router.post('/savebot/:id', authRequired, fileUpload, async (req, res) => {
   crudOperationsManager.post(res, Singleplayers.add, 'Singleplayer', botdata);
 });
 
+
 module.exports = router;
