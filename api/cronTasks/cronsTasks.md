@@ -10,19 +10,19 @@
     cron.schedule('0 15 * * 5', () => {
         CronTasks.updateWinsForChildren();
         CronTasks.updateLosesForChildren();
-    }) 
+    })
     ```
 
     -There are 2 parameters, a string that contains time and a callback function which takes what needs to be executed at the specific time
 
     -In the code above, the string translates to 3:00 PM on Friday
-    
+
     -The first value is minutes
 
     -The second value is hours
 
     -The third value is day of the month
-    
+
     -The fourth value is month
 
     -The fifth value is day of the week
@@ -55,5 +55,5 @@
     ![heroku main page]("./Screenshot.png)
 
     3) Click on run terminal
-    
+
     4) type (cd config && knex migrate:latest) to migrate the database or (cd config && knex seed:run) to run seeds
