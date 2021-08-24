@@ -1,14 +1,11 @@
 const router = require('express').Router();
-const db = require('./newStoryModel');
+const { crudOperationsManager } = require('../../lib');
+const Stories = require('./newStoryModel');
 
-router.get('/:id', async (req, res) => {
-  try {
+router.get('/:id', (req, res) => {
     const { id } = req.params;
-    const story = await db.getStoryByID(id);
-    res.json(story[0]);
-  } catch (err) {
-    console.log(err);
-  }
+
+    crudOperationsManager.getById(res, Stories.getStoryByID, 'Story', id);
 });
 
 module.exports = router;
