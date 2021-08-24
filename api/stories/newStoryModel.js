@@ -5,13 +5,9 @@ const db = require('../../data/db-config');
  * @returns {Promise} a promise that resolves to a story object
  */
 const getStoryByID = (ID) => {
-  return db('Stories-New AS S')
-  .where({ID})
-  .select('*')
+  return db('Stories-New AS S').where({ ID }).select('*');
 };
 
-
-
 module.exports = {
-    getStoryByID
+  getStoryByID,
 };

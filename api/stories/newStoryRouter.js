@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('./newStoryModel')
+const db = require('./newStoryModel');
 
 /* const {
   authRequired,
@@ -9,13 +9,13 @@ const db = require('./newStoryModel')
 const { crudOperationsManager } = require('../../lib'); */
 
 router.get('/:id', async (req, res) => {
-    try{
-        const { id } = req.params
-        const story = await db.getStoryByID(id);
-        res.json(story)
-    }catch(err){
-        console.log(err)
-    }
+  try {
+    const { id } = req.params;
+    const story = await db.getStoryByID(id);
+    res.json(story);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
