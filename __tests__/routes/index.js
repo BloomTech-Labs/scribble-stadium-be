@@ -53,9 +53,6 @@ jest.mock('../../lib/dsRequests', () => ({
       data: JSON.stringify({ data: {}, layout: {} }),
     }),
 }));
-jest.mock('../../lib/pinHashing', () => ({
-  hashPin: (pin) => pin,
-}));
 
 const TestStorySquadAPI = () => {
   describe('StorySquad testing suite', () => {
