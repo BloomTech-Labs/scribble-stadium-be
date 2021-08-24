@@ -1,4 +1,5 @@
 const db = require('../../data/db-config');
+
 /**
  * Queries the database for a specific story with given ID
  * @param {number} ID the ID to search for in the database
