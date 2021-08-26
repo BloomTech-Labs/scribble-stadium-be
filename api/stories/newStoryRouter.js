@@ -9,4 +9,11 @@ router.get('/:id', (req, res) => {
   crudOperationsManager.getById(res, Stories.getStoryByID, 'Story', id);
 });
 
+router.get('/:id/episodes', async (req, res) => {
+  
+  const { id } = req.params;
+  crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
+})
+
+
 module.exports = router;

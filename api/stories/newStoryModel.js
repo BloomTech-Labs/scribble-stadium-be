@@ -9,6 +9,14 @@ const getStoryByID = (ID) => {
   return db('Stories-New').where({ ID });
 };
 
+const getEpisodesByStoryID = (storyID) => {
+  return db('Episodes as e')
+  .join('Stories-New as s', 'e.StoryID', 's.ID')
+  .where('s.ID', storyID)
+  .select('e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL')
+}
+
 module.exports = {
   getStoryByID,
+  getEpisodesByStoryID
 };
