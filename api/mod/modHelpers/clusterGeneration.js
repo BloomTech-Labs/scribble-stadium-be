@@ -2,8 +2,8 @@ const db = require('../../../data/db-config');
 const { dsApi, dbOps, formatCohortSubmissions } = require('../../../lib');
 
 //Import Virtual Player List and Assigned Player List
-const virtualPlayers = require('./virtualPlayerList.js')
-const assignedVirtualPlayers = require('./assignedVirtualPlayers.js')
+const virtualPlayers = require('./virtualPlayerList.js');
+const assignedVirtualPlayers = require('./assignedVirtualPlayers.js');
 
 /**
  * This function runs a series of transactional requests to:
@@ -50,37 +50,34 @@ const clusterGeneration = () => {
           console.log(members.length);
           //Check if any squad consists of less than 4 members
           members.forEach((subArray) => {
-            if(subArray.length < 4) {
+            if (subArray.length < 4) {
               //Determine the number of virtual players required
-              let numberOfVirtualPlayers = 4 - subArray.length
-              
+              let numberOfVirtualPlayers = 4 - subArray.length;
               //Build an array of virtual players which can be inserted into each Squad Array to bring number of members in a Squad to 4
-              let virtualPlayersInserted = []
-
-              let virtualIndex = 0
-
+              let virtualPlayersInserted = [];
+              let virtualIndex = 0;
               //Insert virtual players as long as members in a squad are less than 4
               for (let i = numberOfVirtualPlayers; i > 0; i--) {
-                let selectedVirtualPlayer = virtualPlayers[virtualIndex]
-
+                let selectedVirtualPlayer = virtualPlayers[virtualIndex];
                 //Check to see if the selected Virtual Player is already assigned or not
-                while (assignedVirtualPlayers.includes(selectedVirtualPlayer.ID) && (assignedVirtualPlayers.length <= 7)) {
+                while (
+                  assignedVirtualPlayers.includes(selectedVirtualPlayer.ID) &&
+                  assignedVirtualPlayers.length <= 7
+                ) {
                   virtualIndex++;
-                  selectedVirtualPlayer = virtualPlayers[virtualIndex]
+                  selectedVirtualPlayer = virtualPlayers[virtualIndex];
                 }
-
                 //Keep track of virtual players which have been assigned.
                 //Assign only if there are remaining virtual players to be assigned
-                if(assignedVirtualPlayers.length < 7) {
+                if (assignedVirtualPlayers.length < 7) {
                   assignedVirtualPlayers.push(selectedVirtualPlayer.ID);
                   virtualPlayersInserted.push(selectedVirtualPlayer.ID);
                 }
-                
               }
               //Inserts virtual players to bring the number of members in a squad to 4
-              subArray.push(...virtualPlayersInserted)
+              subArray.push(...virtualPlayersInserted);
             }
-          })
+          });
         }
       }
 
