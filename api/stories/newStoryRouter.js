@@ -10,7 +10,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/:id/episodes', async (req, res) => {
-  
+   // Pull story ID out of the URL params
   const { id } = req.params;
   crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
 })
