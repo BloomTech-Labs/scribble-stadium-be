@@ -5,10 +5,10 @@ const db = require('../../data/db-config');
  * @param {number} ID the ID to search for in the database
  * @returns {Promise} a promise that resolves to story object of the given story ID
  */
-const getStoryByID = (ID) => {
+const getById = (ID) => {
   return db('Stories-New').where({ ID });
 };
 
 module.exports = {
-  getStoryByID,
+  getById,
 };
