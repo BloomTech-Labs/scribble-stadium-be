@@ -1,4 +1,5 @@
 const request = require('supertest');
+const server = require('../../api/app');
 
 const {
   storiesNew,
