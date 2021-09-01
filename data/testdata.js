@@ -128,6 +128,18 @@ module.exports = {
         'Draw a scene from your favorite of the alternate timelines.',
     },
   ],
+  storiesNew: [
+    {
+      Title: 'Remedial Chaos Theory',
+      Description: 'Action',
+      Author: 'SS',
+    },
+    {
+      Title: 'Zoom & Boom',
+      Description: 'Horror',
+      Author: 'Aly',
+    },
+  ],
   badRequest: { bad: 'field' },
   submission: {
     ID: 1,
