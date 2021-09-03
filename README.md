@@ -23,7 +23,8 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
     - 8080
 - `DS_API_URL` - URL to a data science api. (eg. <https://ds-bw-test.herokuapp.com/>)
 - `DS_API_TOKEN` - authorization header token for data science api (eg. SUPERSECRET)
-- `DATABASE_URL` - connection string for postgres database
+- `DATABASE_URL` - connection string for postgres database using the knex url format
+- `TEST_DATABASE_URL` - connection string for postgres test database using the knex url format
 - `OKTA_URL_ISSUER` - The complete issuer URL for verifying okta access tokens. `https://auth.lambdalabs.dev/oauth2/default`
 - `OKTA_CLIENT_ID` - the okta client ID.
 - `TEST_DATABASE_URL` - the URL of the testing database
