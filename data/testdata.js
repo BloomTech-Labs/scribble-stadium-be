@@ -127,42 +127,36 @@ module.exports = {
       DrawingPrompt:
         'Draw a scene from your favorite of the alternate timelines.',
     },
-    
   ],
 
-  newStories: [
+  episodes: [
     {
-      Title: 'The standard Lorem Ipsum passage, used since the 1500s',
-      Description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      Author:
-        "John Doe",
+      EpisodeNumber: '1',
+      TextURL:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      AudioURL:
+        'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
     },
     {
-      Title: 'Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC',
-      Description:
-        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam',
-      Author:
-        'Jane Doe',
+      EpisodeNumber: '2',
+      TextURL:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      AudioURL:
+        'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
     },
-],
-episodes: [
-  {
-    EpisodeNumber: '1',
-    TextURL:
-      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    AudioURL:
-      "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
-  },
-  {
-    EpisodeNumber: '2',
-    TextURL:
-      'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    AudioURL:
-      "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
-  },
-  
-],
+  ],
+  storiesNew: [
+    {
+      Title: 'Remedial Chaos Theory',
+      Description: 'Action',
+      Author: 'SS',
+    },
+    {
+      Title: 'Zoom & Boom',
+      Description: 'Horror',
+      Author: 'Aly',
+    },
+  ],
   badRequest: { bad: 'field' },
   submission: {
     ID: 1,
