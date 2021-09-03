@@ -3,11 +3,13 @@ const ParentTests = require('./parents-test');
 const AvatarTests = require('./avatars-test');
 const GradeLevelTests = require('./gradeLevels-test');
 const StoryTests = require('./stories-test');
+const StoryNewTests = require('./storiesNew-test')
 const ModTests = require('./mod-test');
 const ChildTests = require('./children-test');
 const SubmissionTests = require('./submissions-test');
 const GameTests = require('./game-test');
 const VizTests = require('./viz-tests');
+
 
 const db = require('../../data/db-config');
 
@@ -70,6 +72,7 @@ const TestStorySquadAPI = () => {
     AvatarTests();
     GradeLevelTests();
     StoryTests();
+    StoryNewTests();
     ModTests('PRE');
     ChildTests();
 
