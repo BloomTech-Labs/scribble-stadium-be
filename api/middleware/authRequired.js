@@ -4,14 +4,14 @@ const createError = require('http-errors');
 const Express = require('express');
 const app = new Express();
 
-// const Parents = require('../parent/parentModel');
+const Parents = require('../parent/parentModel');
 
-// const makeParentObject = (claims) => {
-//   return {
-//     Email: claims.email,
-//     Name: claims.name,
-//   };
-// };
+const makeParentObject = (user) => {
+  return {
+    Name: user.name, 
+    Email: user.email
+  };
+};
 
 const authRequired = async (req, res, next) => {
   try {
@@ -30,18 +30,15 @@ const authRequired = async (req, res, next) => {
       algorithms: [ 'RS256' ]
     }))
     (req, res, async () => {
-            console.log("jwt req.user", await req.user);
-            // const jwtUserObj = makeParentObject(data.claims);
-            // const parent = await Parents.findOrCreate(jwtUserObj);
-            // if (parent) {
-            //   req.profile = parent;
-            // } else {
-            //   throw new Error('Unable to process idToken');
-            // }
-            // next.apply(this, arguments);
+      const jwtUserObj = makeParentObject(req.user);
+      const parent = await Parents.findOrCreate(jwtUserObj);
+      if (parent) {
+        req.profile = parent;
+        next.apply(req, res)
+      } else {
+        throw new Error('Unable to process idToken');
+      }
     });
-          
-    next.apply(req, res)
     
   } catch (err) {
     next(createError(401, err.message));
