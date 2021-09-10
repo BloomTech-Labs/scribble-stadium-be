@@ -60,10 +60,10 @@ router.put('/:id/episode/:eid', (req, res) => {
 
 router.delete('/:id/episode/:eid', (req, res) => {
   // Pull story ID out of the URL params
-  const { id, eid } = req.params;
+  const { id, eid } = req.params
 
   crudOperationsManager.update(res, Stories.removeEpisode, 'Episode', id, eid)
-});
+})
 
 
 
