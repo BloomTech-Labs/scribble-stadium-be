@@ -33,46 +33,39 @@ const getEpisodesByStoryID = (storyID) => {
   return db('Episodes as e')
     .join('Stories-New as s', 'e.StoryID', 's.ID')
     .where('s.ID', storyID)
-    .select('e.ID','e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL')
-}
+    .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
+};
 
 const getEpisodeByID = (storyID, episodeID) => {
   return db('Episodes as e')
     .where('e.StoryID', storyID)
     .andWhere('e.ID', episodeID)
     .join('Stories-New as s', 'e.StoryID', 's.ID')
-    .select('e.ID','e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL')
-    
+    .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
 const addEpisode = (storyID, episode) => {
   return db('Episodes as e')
-  .where('e.StoryID', storyID )
-  .insert(episode)
-  .returning('ID')
-}
+    .where('e.StoryID', storyID)
+    .insert(episode)
+    .returning('ID');
+};
 
 const updateEpisode = (storyID, episodeID, changes) => {
   return db('Episodes as e')
-  .where('e.StoryID', storyID )
-  .andWhere('e.ID', episodeID)
-  .join('Stories-New as s', 'e.StoryID', 's.ID')
-  .update(changes)
-
-}
+    .where('e.StoryID', storyID)
+    .andWhere('e.ID', episodeID)
+    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .update(changes);
+};
 
 const removeEpisode = (storyID, episodeID) => {
   return db('Episodes as e')
-  .where('e.StoryID', storyID )
-  .andWhere('e.ID', episodeID)
-  .join('Stories-New as s', 'e.StoryID', 's.ID')
-  .del()
-}
-
-
-
-
-
+    .where('e.StoryID', storyID)
+    .andWhere('e.ID', episodeID)
+    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .del();
+};
 
 module.exports = {
   add,
@@ -83,5 +76,5 @@ module.exports = {
   getEpisodeByID,
   addEpisode,
   removeEpisode,
-  updateEpisode
-}
+  updateEpisode,
+};
