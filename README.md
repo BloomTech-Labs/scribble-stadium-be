@@ -24,15 +24,15 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
 - `DS_API_URL` - URL to a data science api. (eg. <https://ds-bw-test.herokuapp.com/>)
 - `DS_API_TOKEN` - authorization header token for data science api (eg. SUPERSECRET)
 - `DATABASE_URL` - connection string for postgres database
-- `OKTA_URL_ISSUER` - The complete issuer URL for verifying okta access tokens. `https://auth.lambdalabs.dev/oauth2/default`
-- `OKTA_CLIENT_ID` - the okta client ID.
 - `TEST_DATABASE_URL` - the URL of the testing database
-- `OKTA_ORG_URL` - the URL of your Okta organization
 - `NODE_ENV` - The environment to use for knex scripts, should be development on local and production on live server
 - `AWS_ACCESS_KEY_ID` - A special access key from AWS
 - `AWS_SECRET_ACCESS_KEY` - A secret AWS access key that should not be shared with anyone
 - `CI_DATABASE_URL` - the URL of the web-hosted database (I used [ElephantSQL](http://elephantsql.com)) that your CI tests are ran on. This must be set in order to use the `knex:ci` script in the `package.json` !
 - `S3_BUCKET` - the name of the S3 bucket used for file storage
+- `AUTH0_CLIENT_ID` - the Auth0 client id
+- `AUTH0_DOMAIN` - the Auth0 domain
+- `AUTH0_AUDIENCE` - the Auth0 audience
 
 See .env.sample for example values
 
