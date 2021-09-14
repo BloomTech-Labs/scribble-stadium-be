@@ -1,43 +1,45 @@
-/* istanbul ignore file */
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 const createError = require('http-errors');
-const OktaJwtVerifier = require('@okta/jwt-verifier');
-const oktaVerifierConfig = require('../../config/okta');
-const Parents = require('../parent/parentModel');
-const oktaJwtVerifier = new OktaJwtVerifier(oktaVerifierConfig.config);
+const Express = require('express');
+const app = new Express();
 
-const makeParentObject = (claims) => {
+const Parents = require('../parent/parentModel');
+
+const makeParentObject = (user) => {
   return {
-    Email: claims.email,
-    Name: claims.name,
+    Name: user.name,
+    Email: user.email,
   };
 };
-/**
- * A simple middleware that asserts valid Okta idToken and sends 401 responses
- * if the token is not present or fails validation. If the token is valid its
- * contents are attached to req.profile
- */
+
 const authRequired = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization || '';
-    const match = authHeader.match(/Bearer (.+)/);
+    app.use(
+      jwt({
+        // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
+        secret: jwksRsa.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+        }),
 
-    if (!match) throw new Error('Missing idToken');
-
-    const idToken = match[1];
-
-    const data = await oktaJwtVerifier.verifyAccessToken(
-      idToken,
-      oktaVerifierConfig.expectedAudience
-    );
-
-    const jwtUserObj = makeParentObject(data.claims);
-    const parent = await Parents.findOrCreate(jwtUserObj);
-    if (parent) {
-      req.profile = parent;
-    } else {
-      throw new Error('Unable to process idToken');
-    }
-    next();
+        // Validate the audience and the issuer.
+        audience: process.env.AUTH0_CLIENT_ID,
+        issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+        algorithms: ['RS256'],
+      })
+    )(req, res, async () => {
+      const jwtUserObj = makeParentObject(req.user);
+      const parent = await Parents.findOrCreate(jwtUserObj);
+      if (parent) {
+        req.profile = parent;
+        next.apply(req, res);
+      } else {
+        throw new Error('Unable to process idToken');
+      }
+    });
   } catch (err) {
     next(createError(401, err.message));
   }
