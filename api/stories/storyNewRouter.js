@@ -37,45 +37,48 @@ router.get('/:id/episodes', async (req, res) => {
   crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
 });
 
-router.get('/:id/episode/:eid', (req, res) => {
-  const { id, eid } = req.params;
+router.get('/episode/:eid', (req, res) => {
+  const { eid } = req.params;
 
   crudOperationsManager.getById(
     res,
     Stories.getEpisodeByID,
     'Episode',
-    id,
     eid
   );
 });
 
-router.post('/:id/episodes', (req, res) => {
+router.post('/episodes', (req, res) => {
   // Pull relevant data out of the request object
-  const { id } = req.params;
-  const newEpisode = req.body;
-  crudOperationsManager.post(res, Stories.addEpisode, 'Story', id, newEpisode);
+  const { StoryID, EpisodeNumber, TextURL, AudioURL} = req.body;
+  const newEpisode = {
+    StoryID: StoryID,
+    EpisodeNumber: EpisodeNumber,
+    TextURL: TextURL,
+    AudioURL: AudioURL
+  }
+  crudOperationsManager.post(res, Stories.addEpisode, 'Story', newEpisode);
 });
 
-router.put('/:id/episode/:eid', (req, res) => {
+router.put('/episode/:eid', (req, res) => {
   // Pull relevant data out of the request object
-  const { id, eid } = req.params;
-  const changes = req.body;
+  const { eid } = req.params;
+  const { StoryID, EpisodeNumber, TextURL, AudioURL} = req.body;
+  const changes = {
+    StoryID: StoryID,
+    EpisodeNumber: EpisodeNumber,
+    TextURL: TextURL,
+    AudioURL: AudioURL
+  }
 
-  crudOperationsManager.update(
-    res,
-    Stories.updateEpisode,
-    'Episode',
-    id,
-    eid,
-    changes
-  );
+  crudOperationsManager.update(res,Stories.updateEpisode,'Episode', eid, changes);
 });
 
-router.delete('/:id/episode/:eid', (req, res) => {
+router.delete('/episode/:eid', (req, res) => {
   // Pull story ID out of the URL params
-  const { id, eid } = req.params;
+  const { eid } = req.params;
 
-  crudOperationsManager.update(res, Stories.removeEpisode, 'Episode', id, eid);
+  crudOperationsManager.update(res, Stories.removeEpisode, 'Episode', eid);
 });
 
 module.exports = router;

@@ -21,14 +21,33 @@ const getById = (ID) => {
   return db('Stories-New').where({ ID });
 };
 
+/**
+ * Queries the database to update row matching ID with the given changes
+ * @param {number} ID the unique row ID to update
+ * @param {Object} changes an object containing the changes
+ * @param {string} [changes.Title] new story title (optional)
+ * @param {string} [changes.Description] the new description of the story (optional)
+ * @param {string} [changes.Author] the new author of the story (optional)
+ * @returns {Promise} a promise that resolves to number of rows updated
+ */
 const update = (ID, changes) => {
   return db('Stories-New').where({ ID }).update(changes);
 };
 
+/**
+ * Queries the database to remove a row
+ * @param {number} ID the ID of the row to delete
+ * @returns {Promise} a promise that resolves to the number of rows deleted
+ */
 const remove = (ID) => {
   return db('Stories-New').where({ ID }).del();
 };
 
+/**
+ * Queries the database to retrieve all episodesfor a specific story with given ID
+ * @param {number} storyID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to story object of the given story ID
+ */
 const getEpisodesByStoryID = (storyID) => {
   return db('Episodes as e')
     .join('Stories-New as s', 'e.StoryID', 's.ID')
@@ -36,34 +55,27 @@ const getEpisodesByStoryID = (storyID) => {
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
-const getEpisodeByID = (storyID, episodeID) => {
+const getEpisodeByID = (episodeID) => {
   return db('Episodes as e')
-    .where('e.StoryID', storyID)
-    .andWhere('e.ID', episodeID)
-    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .where('e.ID', episodeID)
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
-const addEpisode = (storyID, episode) => {
-  return db('Episodes as e')
-    .where('e.StoryID', storyID)
+const addEpisode = (episode) => {
+  return db('Episodes')
     .insert(episode)
     .returning('ID');
 };
 
-const updateEpisode = (storyID, episodeID, changes) => {
+const updateEpisode = (episodeID, changes) => {
   return db('Episodes as e')
-    .where('e.StoryID', storyID)
-    .andWhere('e.ID', episodeID)
-    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .where('e.ID', episodeID)
     .update(changes);
 };
 
-const removeEpisode = (storyID, episodeID) => {
+const removeEpisode = (episodeID) => {
   return db('Episodes as e')
-    .where('e.StoryID', storyID)
-    .andWhere('e.ID', episodeID)
-    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .where('e.ID', episodeID)
     .del();
 };
 
