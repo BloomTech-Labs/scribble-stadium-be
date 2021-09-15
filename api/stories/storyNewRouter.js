@@ -37,7 +37,7 @@ router.get('/:id/episodes', async (req, res) => {
   crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
 });
 
-router.get('/episode/:eid', (req, res) => {
+router.get('/episodes/:eid', (req, res) => {
   const { eid } = req.params;
 
   crudOperationsManager.getById(
@@ -60,7 +60,7 @@ router.post('/episodes', (req, res) => {
   crudOperationsManager.post(res, Stories.addEpisode, 'Story', newEpisode);
 });
 
-router.put('/episode/:eid', (req, res) => {
+router.put('/episodes/:eid', (req, res) => {
   // Pull relevant data out of the request object
   const { eid } = req.params;
   const { StoryID, EpisodeNumber, TextURL, AudioURL} = req.body;
@@ -74,7 +74,7 @@ router.put('/episode/:eid', (req, res) => {
   crudOperationsManager.update(res,Stories.updateEpisode,'Episode', eid, changes);
 });
 
-router.delete('/episode/:eid', (req, res) => {
+router.delete('/episodes/:eid', (req, res) => {
   // Pull story ID out of the URL params
   const { eid } = req.params;
 
