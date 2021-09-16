@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { database } = require('faker/locale/en_CA');
 const { crudOperationsManager } = require('../../lib');
 const Stories = require('./storyNewModel');
 
@@ -46,7 +47,7 @@ router.get('/:id/episodes', async (req, res, next) => {
   }
 })
 
-router.get('/episodes/:eid', async(req, res) => {
+router.get('/episodes/:eid', async(req, res, next) => {
   try {
     const { eid } = req.params;
     const episode = await Stories.getEpisodeByID(eid);
@@ -61,17 +62,12 @@ router.get('/episodes/:eid', async(req, res) => {
       WritingPrompt: writing[0].Prompt,
       DrawingPrompt: drawing[0].Prompt
     }
-    res.status(200).json(data);
+      res.status(200).json(data);
   } catch (error) {
-    console.log(error)
+    res.status(404).json({
+      message: "EpisodeNotFound",
+    })
   }
-
-/*   crudOperationsManager.getById(
-    res,
-    Stories.getEpisodeByID,
-    'Episode',
-    eid
-  ); */
 });
 
 router.post('/episodes', (req, res) => {
