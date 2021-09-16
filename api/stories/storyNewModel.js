@@ -55,12 +55,22 @@ const getEpisodesByStoryID = (storyID) => {
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
+/**
+ * Queries the database for a specific episode with given ID
+ * @param {number} episodeID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to episode object of the given story ID
+ */
 const getEpisodeByID = (episodeID) => {
   return db('Episodes as e')
     .where('e.ID', episodeID)
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
+/**
+ * Queries the database for a specific writing prompt with given episode ID
+ * @param {number} episodeID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to episode object of the given episode ID
+ */
 const getWritingByEpisodeID = (episodeID) => {
   return db('Story-Prompts as sp')
     .where('sp.EpisodeID', episodeID)
@@ -68,6 +78,11 @@ const getWritingByEpisodeID = (episodeID) => {
     .select('sp.Prompt')
 };
 
+/**
+ * Queries the database for a specific drawing prompt with given episode ID
+ * @param {number} episodeID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to drawing prompt object of the given episode ID
+ */
 const getDrawingByEpisodeID = (episodeID) => {
   return db('Story-Prompts as sp')
     .where('sp.EpisodeID', episodeID)
@@ -75,18 +90,41 @@ const getDrawingByEpisodeID = (episodeID) => {
     .select('sp.Prompt')
 };
 
+/**
+ * Queries the database to attempt to add a new episode
+ * @param {Object} episode the episode to be added to the database
+ * @param {string} episode.StoryID the id of the story
+ * @param {string} episode.EpisodeNumber episode number
+ * @param {string} episode.TextURL text url of episode
+ * @param {string} episode.AudioURL audio url of episode
+ * @returns {Promise} a promise that resolves to the ID of the new episode
+ */
 const addEpisode = (episode) => {
   return db('Episodes')
     .insert(episode)
     .returning('ID');
 };
 
+/**
+ * Queries the database to update row matching ID with the given changes
+ * @param {number} episodeID the unique row ID to update
+ * @param {Object} changes the episode to be added to the database
+ * @param {string} changes.EpisodeNumber the description of the story
+ * @param {string} changes.TextURL the author of the story
+ * @param {string} changes.AudioURL the author of the story
+ * @returns {Promise} a promise that resolves to the ID of the new story
+ */
 const updateEpisode = (episodeID, changes) => {
   return db('Episodes as e')
     .where('e.ID', episodeID)
     .update(changes);
 };
 
+/**
+ * Queries the database to remove a row
+ * @param {number} episodeID the ID of the row to delete
+ * @returns {Promise} a promise that resolves to the number of rows deleted
+ */
 const removeEpisode = (episodeID) => {
   return db('Episodes as e')
     .where('e.ID', episodeID)
