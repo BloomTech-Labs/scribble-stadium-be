@@ -61,6 +61,20 @@ const getEpisodeByID = (episodeID) => {
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };
 
+const getWritingByEpisodeID = (episodeID) => {
+  return db('Story-Prompts as sp')
+    .where('sp.EpisodeID', episodeID)
+    .andWhere('sp.Type', 'Writing')
+    .select('sp.Prompt')
+};
+
+const getDrawingByEpisodeID = (episodeID) => {
+  return db('Story-Prompts as sp')
+    .where('sp.EpisodeID', episodeID)
+    .andWhere('sp.Type', 'Drawing')
+    .select('sp.Prompt')
+};
+
 const addEpisode = (episode) => {
   return db('Episodes')
     .insert(episode)
@@ -89,4 +103,6 @@ module.exports = {
   addEpisode,
   removeEpisode,
   updateEpisode,
+  getWritingByEpisodeID,
+  getDrawingByEpisodeID
 };

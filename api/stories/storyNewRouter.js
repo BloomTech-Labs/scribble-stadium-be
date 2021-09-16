@@ -37,15 +37,32 @@ router.get('/:id/episodes', async (req, res) => {
   crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
 });
 
-router.get('/episodes/:eid', (req, res) => {
-  const { eid } = req.params;
+router.get('/episodes/:eid', async(req, res) => {
+  try {
+    const { eid } = req.params;
+    const episode = await Stories.getEpisodeByID(eid);
+    const writing = await Stories.getWritingByEpisodeID(eid);
+    const drawing = await Stories.getDrawingByEpisodeID(eid);
+    const data = {
+      ID: episode[0].ID,
+      StoryID: episode[0].StoryID,
+      EpisodeNumber: episode[0].EpisodeNumber,
+      TextURL: episode[0].TextURL,
+      AudioURL: episode[0].AudioURL,
+      WritingPrompt: writing[0].Prompt,
+      DrawingPrompt: drawing[0].Prompt
+    }
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error)
+  }
 
-  crudOperationsManager.getById(
+/*   crudOperationsManager.getById(
     res,
     Stories.getEpisodeByID,
     'Episode',
     eid
-  );
+  ); */
 });
 
 router.post('/episodes', (req, res) => {
@@ -75,7 +92,7 @@ router.put('/episodes/:eid', (req, res) => {
 });
 
 router.delete('/episodes/:eid', (req, res) => {
-  // Pull story ID out of the URL params
+  // Pull episode ID out of the URL params
   const { eid } = req.params;
 
   crudOperationsManager.update(res, Stories.removeEpisode, 'Episode', eid);
