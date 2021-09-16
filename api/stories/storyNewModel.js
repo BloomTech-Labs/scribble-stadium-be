@@ -75,7 +75,7 @@ const getWritingByEpisodeID = (episodeID) => {
   return db('Story-Prompts as sp')
     .where('sp.EpisodeID', episodeID)
     .andWhere('sp.Type', 'Writing')
-    .select('sp.Prompt')
+    .select('sp.Prompt');
 };
 
 /**
@@ -87,7 +87,7 @@ const getDrawingByEpisodeID = (episodeID) => {
   return db('Story-Prompts as sp')
     .where('sp.EpisodeID', episodeID)
     .andWhere('sp.Type', 'Drawing')
-    .select('sp.Prompt')
+    .select('sp.Prompt');
 };
 
 /**
@@ -100,9 +100,7 @@ const getDrawingByEpisodeID = (episodeID) => {
  * @returns {Promise} a promise that resolves to the ID of the new episode
  */
 const addEpisode = (episode) => {
-  return db('Episodes')
-    .insert(episode)
-    .returning('ID');
+  return db('Episodes').insert(episode).returning('ID');
 };
 
 /**
@@ -115,9 +113,7 @@ const addEpisode = (episode) => {
  * @returns {Promise} a promise that resolves to the ID of the new story
  */
 const updateEpisode = (episodeID, changes) => {
-  return db('Episodes as e')
-    .where('e.ID', episodeID)
-    .update(changes);
+  return db('Episodes as e').where('e.ID', episodeID).update(changes);
 };
 
 /**
@@ -126,9 +122,7 @@ const updateEpisode = (episodeID, changes) => {
  * @returns {Promise} a promise that resolves to the number of rows deleted
  */
 const removeEpisode = (episodeID) => {
-  return db('Episodes as e')
-    .where('e.ID', episodeID)
-    .del();
+  return db('Episodes as e').where('e.ID', episodeID).del();
 };
 
 module.exports = {
@@ -142,5 +136,5 @@ module.exports = {
   removeEpisode,
   updateEpisode,
   getWritingByEpisodeID,
-  getDrawingByEpisodeID
+  getDrawingByEpisodeID,
 };
