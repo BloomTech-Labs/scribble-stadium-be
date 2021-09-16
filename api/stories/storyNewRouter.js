@@ -31,11 +31,20 @@ router.delete('/:id', (req, res) => {
   crudOperationsManager.update(res, Stories.remove, 'Story', id);
 });
 
-router.get('/:id/episodes', async (req, res) => {
-  // Pull story ID out of the URL params
-  const { id } = req.params;
-  crudOperationsManager.getAll(res, Stories.getEpisodesByStoryID, 'Story', id);
-});
+router.get('/:id/episodes', async (req, res, next) => {
+  try{
+       const getEpisodes = await Stories.getEpisodesByStoryID(req.params.id)
+       if (getEpisodes.length <= 0) {
+        res.status(404).json({
+          message: "StoryNotFound",
+        })
+      }
+       res.json(getEpisodes)   
+       
+  } catch(err) {
+     next(err)
+  }
+})
 
 router.get('/episodes/:eid', async(req, res) => {
   try {
