@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { database } = require('faker/locale/en_CA');
 const { crudOperationsManager } = require('../../lib');
 const Stories = require('./storyNewModel');
 
@@ -32,6 +31,7 @@ router.delete('/:id', (req, res) => {
   crudOperationsManager.update(res, Stories.remove, 'Story', id);
 });
 
+//This endpoint is in progress to be merged with GET /storyNew by the new cohort.
 router.get('/:id/episodes', async (req, res, next) => {
   try{
        const getEpisodes = await Stories.getEpisodesByStoryID(req.params.id)
@@ -47,8 +47,10 @@ router.get('/:id/episodes', async (req, res, next) => {
   }
 })
 
+//Does not get episode if reading/writing prompts do not exist.
 router.get('/episodes/:eid', async(req, res, next) => {
   try {
+    // Pull episode ID out of the URL params
     const { eid } = req.params;
     const episode = await Stories.getEpisodeByID(eid);
     const writing = await Stories.getWritingByEpisodeID(eid);
@@ -70,6 +72,7 @@ router.get('/episodes/:eid', async(req, res, next) => {
   }
 });
 
+//Work in progress by next cohort to add constraint to EpisodeNumber to be unique per story ID
 router.post('/episodes', (req, res) => {
   // Pull relevant data out of the request object
   const { StoryID, EpisodeNumber, TextURL, AudioURL} = req.body;
@@ -83,11 +86,11 @@ router.post('/episodes', (req, res) => {
 });
 
 router.put('/episodes/:eid', (req, res) => {
-  // Pull relevant data out of the request object
+  // Pull episode ID out of the URL params
   const { eid } = req.params;
-  const { StoryID, EpisodeNumber, TextURL, AudioURL} = req.body;
+  // Pull relevant data out of the request object
+  const { EpisodeNumber, TextURL, AudioURL} = req.body;
   const changes = {
-    StoryID: StoryID,
     EpisodeNumber: EpisodeNumber,
     TextURL: TextURL,
     AudioURL: AudioURL
