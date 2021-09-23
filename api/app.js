@@ -9,6 +9,8 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const jsdocConfig = require('../config/jsdoc');
 const dotenv = require('dotenv');
 const config_result = dotenv.config();
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 // const scheduler = require('./cronTasks/scheduler');
 require('./cronTasks/notificationScheduler.js');
 if (process.env.NODE_ENV != 'production' && config_result.error) {
@@ -58,6 +60,24 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Auth0 verification
+app.use(
+  jwt({
+    // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+    }),
+    // Validate the audience and the issuer.
+    audience: process.env.AUTH0_CLIENT_ID,
+    issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+    algorithms: ['RS256'],
+    requestProperty: 'auth0User',
+  })
+);
 
 // application routes
 app.use('/', indexRouter);
