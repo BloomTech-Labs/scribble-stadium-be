@@ -18,21 +18,21 @@ const add = (story) => {
  * @returns {Promise} a promise that resolves to story object of the given story ID
  */
 const getById = async (ID) => {
-  const stories = await db('Stories-New').where('Stories-New.ID', ID);
+  const story = await db('Stories-New').where('Stories-New.ID', ID);
   const episodes = await getEpisodesByStoryID(ID);
   const episodesArray = [];
   let i = 0;
   for (i; i < episodes.length; i++) {
     episodesArray.push(episodes[i]);
   }
-  const storiesWithEpisodes = {
-    ID: stories[0].ID,
-    Title: stories[0].Title,
-    Description: stories[0].Description,
-    Author: stories[0].Author,
+  const storyWithEpisodes = {
+    ID: story[0].ID,
+    Title: story[0].Title,
+    Description: story[0].Description,
+    Author: story[0].Author,
     Episodes: episodesArray,
   };
-  return [storiesWithEpisodes];
+  return [storyWithEpisodes];
 };
 
 /**
