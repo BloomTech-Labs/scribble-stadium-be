@@ -9,6 +9,8 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const jsdocConfig = require('../config/jsdoc');
 const dotenv = require('dotenv');
 const config_result = dotenv.config();
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 // const scheduler = require('./cronTasks/scheduler');
 require('./cronTasks/notificationScheduler.js');
 if (process.env.NODE_ENV != 'production' && config_result.error) {
@@ -26,11 +28,10 @@ const parentRouter = require('./parent/parentRouter');
 const profileRouter = require('./profile/profileRouter');
 const childRouter = require('./child/childRouter');
 const storyRouter = require('./stories/storyRouter');
-const newStoryRouter = require('./stories/newStoryRouter');
+const storyNewRouter = require('./stories/storyNewRouter');
 const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const submissionRouter = require('./submission/submissionRouter');
-const oktaRouter = require('./okta/oktaRouter');
 const modRouter = require('./mod/modRouter');
 const gameRouter = require('./game/gameRouter');
 const resetRouter = require('./reset/resetRouter');
@@ -60,18 +61,35 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//Auth0 verification
+app.use(
+  jwt({
+    // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+    }),
+    // Validate the audience and the issuer.
+    audience: process.env.AUTH0_CLIENT_ID,
+    issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+    algorithms: ['RS256'],
+    requestProperty: 'auth0User',
+  })
+);
+
 // application routes
 app.use('/', indexRouter);
 app.use(['/parent', '/parents'], parentRouter);
 app.use(['/profile', '/profiles'], profileRouter);
 app.use(['/child', '/children'], childRouter);
 app.use(['/story', '/stories'], storyRouter);
-app.use(['/newStory', '/newStories'], newStoryRouter);
+app.use(['/storyNew', '/storiesNew'], storyNewRouter);
 app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use(['/submit', '/submission', '/submissions'], submissionRouter);
 app.use('/mod', modRouter);
-app.use('/register', oktaRouter);
 app.use('/game', gameRouter);
 app.use('/reset', resetRouter);
 app.use('/leaderboard', leadBoard);

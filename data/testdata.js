@@ -128,6 +128,33 @@ module.exports = {
         'Draw a scene from your favorite of the alternate timelines.',
     },
   ],
+
+  episodes: [
+    {
+      TextURL:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      AudioURL:
+        'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
+    },
+    {
+      TextURL:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      AudioURL:
+        'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
+    },
+  ],
+  storiesNew: [
+    {
+      Title: 'Remedial Chaos Theory',
+      Description: 'Action',
+      Author: 'SS',
+    },
+    {
+      Title: 'Zoom & Boom',
+      Description: 'Horror',
+      Author: 'Aly',
+    },
+  ],
   badRequest: { bad: 'field' },
   submission: {
     ID: 1,
