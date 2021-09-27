@@ -31,21 +31,6 @@ router.delete('/:id', (req, res) => {
   crudOperationsManager.update(res, Stories.remove, 'Story', id);
 });
 
-//This endpoint is in progress to be merged with GET /storyNew by the new cohort.
-router.get('/:id/episodes', async (req, res, next) => {
-  try {
-    const getEpisodes = await Stories.getEpisodesByStoryID(req.params.id);
-    if (getEpisodes.length <= 0) {
-      res.status(404).json({
-        message: 'StoryNotFound',
-      });
-    }
-    res.json(getEpisodes);
-  } catch (err) {
-    next(err);
-  }
-});
-
 //Does not get episode if reading/writing prompts do not exist.
 router.get('/episodes/:eid', async (req, res) => {
   try {
