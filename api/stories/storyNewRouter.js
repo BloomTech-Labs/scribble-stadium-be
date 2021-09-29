@@ -32,6 +32,10 @@ router.delete('/:id', (req, res) => {
 });
 
 //Does not get episode if reading/writing prompts do not exist.
+// plans for this branch include using functionality from below endpoint to
+// return drawing & writing prompts with a single model function which will be called
+// from the 'getStoryById' function and add them iteratively to each episode object,
+// before attaching them to the 'story' return object
 router.get('/episodes/:eid', async (req, res) => {
   try {
     // Pull episode ID out of the URL params
