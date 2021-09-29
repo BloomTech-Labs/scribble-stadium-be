@@ -21,10 +21,16 @@ const getById = async (ID) => {
   const story = await db('Stories-New').where('Stories-New.ID', ID);
   const episodes = await getEpisodesByStoryID(ID);
   const episodesArray = [];
-  let i = 0;
-  for (i; i < episodes.length; i++) {
+  for (let i = 0; i < episodes.length; i++) {
     episodesArray.push(episodes[i]);
   }
+  for (let i = 0; i < episodesArray.length; i++) {
+    let prompts = await getPromptsByEpisodeID(episodesArray[i].ID);
+    console.log(prompts);
+    episodesArray[i].WritingPrompt = prompts[0].WritingPrompt.Prompt;
+    episodesArray[i].DrawingPrompt = prompts[0].DrawingPrompt.Prompt;
+  }
+  // console.log(episodesArray);
   const storyWithEpisodes = {
     ID: story[0].ID,
     Title: story[0].Title,
@@ -105,6 +111,28 @@ const getDrawingByEpisodeID = (episodeID) => {
 };
 
 /**
+ * Queries the database for a specific drawing prompt with given episode ID
+ * @param {number} episodeID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to drawing prompt object of the given episode ID
+ */
+const getPromptsByEpisodeID = async (episodeID) => {
+  let writing = await db('Story-Prompts as sp')
+    .where('sp.EpisodeID', episodeID)
+    .andWhere('sp.Type', 'Writing')
+    .select('sp.Prompt');
+  let drawing = await db('Story-Prompts as sp')
+    .where('sp.EpisodeID', episodeID)
+    .andWhere('sp.Type', 'Drawing')
+    .select('sp.Prompt');
+
+  let episodePrompts = {
+    WritingPrompt: writing[0],
+    DrawingPrompt: drawing[0],
+  };
+
+  return [episodePrompts];
+};
+/**
  * Queries the database to attempt to add a new episode
  * @param {Object} episode the episode to be added to the database
  * @param {string} episode.StoryID the id of the story
@@ -151,4 +179,5 @@ module.exports = {
   updateEpisode,
   getWritingByEpisodeID,
   getDrawingByEpisodeID,
+  getPromptsByEpisodeID,
 };
