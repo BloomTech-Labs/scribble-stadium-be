@@ -48,7 +48,7 @@ module.exports = () => {
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ ID: 1, ...storiesNew[0] });
       });
-
+      // test needed for episodes
       test('should return a 404 if story does not exist', async () => {
         const res = await request(server).get('/storyNew/4');
 
