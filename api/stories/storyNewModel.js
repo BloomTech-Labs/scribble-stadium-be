@@ -15,7 +15,8 @@ const add = (story) => {
 /**
  * Queries the database for a specific story with given ID
  * @param {number} ID the ID to search for in the database
- * @returns {Promise} a promise that resolves to story object of the given story ID
+ * @returns {Promise} a promise that resolves to story object of the
+ * given story ID with all episodes and drawing/writing prompts
  */
 const getById = async (ID) => {
   const story = await db('Stories-New').where('Stories-New.ID', ID);
@@ -26,11 +27,9 @@ const getById = async (ID) => {
   }
   for (let i = 0; i < episodesArray.length; i++) {
     let prompts = await getPromptsByEpisodeID(episodesArray[i].ID);
-    console.log(prompts);
     episodesArray[i].WritingPrompt = prompts[0].WritingPrompt.Prompt;
     episodesArray[i].DrawingPrompt = prompts[0].DrawingPrompt.Prompt;
   }
-  // console.log(episodesArray);
   const storyWithEpisodes = {
     ID: story[0].ID,
     Title: story[0].Title,
@@ -84,30 +83,6 @@ const getEpisodeByID = (episodeID) => {
   return db('Episodes as e')
     .where('e.ID', episodeID)
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
-};
-
-/**
- * Queries the database for a specific writing prompt with given episode ID
- * @param {number} episodeID the ID to search for in the database
- * @returns {Promise} a promise that resolves to episode object of the given episode ID
- */
-const getWritingByEpisodeID = (episodeID) => {
-  return db('Story-Prompts as sp')
-    .where('sp.EpisodeID', episodeID)
-    .andWhere('sp.Type', 'Writing')
-    .select('sp.Prompt');
-};
-
-/**
- * Queries the database for a specific drawing prompt with given episode ID
- * @param {number} episodeID the ID to search for in the database
- * @returns {Promise} a promise that resolves to drawing prompt object of the given episode ID
- */
-const getDrawingByEpisodeID = (episodeID) => {
-  return db('Story-Prompts as sp')
-    .where('sp.EpisodeID', episodeID)
-    .andWhere('sp.Type', 'Drawing')
-    .select('sp.Prompt');
 };
 
 /**
@@ -177,7 +152,5 @@ module.exports = {
   addEpisode,
   removeEpisode,
   updateEpisode,
-  getWritingByEpisodeID,
-  getDrawingByEpisodeID,
   getPromptsByEpisodeID,
 };
