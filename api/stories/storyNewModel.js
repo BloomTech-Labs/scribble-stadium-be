@@ -86,7 +86,7 @@ const getEpisodeByID = (episodeID) => {
 };
 
 /**
- * Queries the database for a specific drawing prompt with given episode ID
+ * Queries the database for a specific prompts with given episode ID
  * @param {number} episodeID the ID to search for in the database
  * @returns {Promise} a promise that resolves to drawing prompt object of the given episode ID
  */
