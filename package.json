@@ -19,6 +19,7 @@
     "knex": "npx knex --knexfile knexfile.js",
     "knex:test": "cross-env NODE_ENV=test npx knex --knexfile knexfile.js",
     "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile knexfile.js",
+    "create_test_db": "NODE_ENV=test node ./data/create_test_db.js",
     "test": "cross-env NODE_ENV=test npx jest --watch --runInBand -- testRunner",
     "tests": "cross-env NODE_ENV=test npx jest --forceExit --coverage --runInBand -- testRunner",
     "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit -- testRunner"
