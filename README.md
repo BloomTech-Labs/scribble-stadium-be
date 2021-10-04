@@ -14,6 +14,10 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
 
 ## Getting Started
 
+### Glossary of Scribble Stadium Terms
+
+There is a glossary of standard terms that are to be used when discussing Scribble Stadium and when writing code available here - [Glossary](https://docs.google.com/document/d/1I2dtnjUtSmGxIfcuUWKrIRBhrCAFlmQ0RnJ3DZJIy4g/edit). Using the agreed upon terms will help developers to be understood and maintain consistency.
+
 ### Environment Variables
 
 - `PORT` - API port (optional, but helpful with FE running as well)
