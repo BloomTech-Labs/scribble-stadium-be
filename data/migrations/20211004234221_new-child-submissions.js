@@ -31,8 +31,8 @@ exports.up = function (knex) {
         
         t.integer('Complexity');
         t.boolean('LowConfidence').defaultTo(false);
-        t.timestamp('CreatedAt');
-        t.timestamp('UpdatedAt');
+        t.timestamp('CreatedAt').defaultTo(knex.fn.now());
+        t.timestamp('UpdatedAt').defaultTo(knex.fn.now());
 
         t.timestamp("StoryRead");
         t.timestamp('WritingPrompt');
@@ -72,6 +72,6 @@ exports.up = function (knex) {
     return knex.schema
     //   .dropTableIfExists('Drawing')
     //   .dropTableIfExists('Writing')
-      .dropTableIfExists('Submissions');
+      .dropTableIfExists('NewSubmissions');
   };
   
