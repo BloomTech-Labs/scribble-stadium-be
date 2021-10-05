@@ -1,3 +1,4 @@
+// Aaron forced me to comment this
 exports.up = function (knex) {
   return knex.schema
     .createTable('Submissions', (t) => {
