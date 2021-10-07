@@ -2,7 +2,7 @@
 
 // Creates a mock timestamp for CreatedAt and UpdatedAt
 const getTimeStamp = () => {
-  return Date.now()
+  return new Date().toISOString().replace('Z','').replace('T', ' ');
 }
 
 const cohortIDer = (idx) => {
@@ -21,7 +21,7 @@ const cohortIDer = (idx) => {
 const submissions1 = [...new Array(24)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 1,
-  EpisodeStartDate: 2021-01-03,
+  EpisodeStartDate: '2021-01-03',
   // ModerationStatus replaced Status in previous seed 
   ModerationStatus: "PENDING",
   // HasRead, HasWritten, and HasDrawn are all booleans to keep as check marks on what the child has done.
@@ -39,7 +39,7 @@ const submissions1 = [...new Array(24)].map((i, idx) => ({
 const submissions2 = [...new Array(16)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 2,
-  EpisodeStartDate: 2021-01-10,
+  EpisodeStartDate: '2021-01-10',
   ModerationStatus: "PENDING",
   HasRead: true,
   HasWritten: true,
@@ -54,7 +54,7 @@ const submissions2 = [...new Array(16)].map((i, idx) => ({
 const submissions3 = [...new Array(16)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 3,
-  EpisodeStartDate: 2021-01-17,
+  EpisodeStartDate: '2021-01-17',
   ModerationStatus: "PENDING",
   HasRead: true,
   HasWritten: true,
@@ -69,7 +69,7 @@ const submissions3 = [...new Array(16)].map((i, idx) => ({
 const submissions4 = [...new Array(8)].map((i, idx) => ({
   ChildID: `${idx + 1}`,
   StoryID: 4,
-  EpisodeStartDate: 2021-01-24,
+  EpisodeStartDate: '2021-01-24',
   ModerationStatus: "PENDING",
   HasRead: true,
   HasWritten: true,
