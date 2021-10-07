@@ -14,13 +14,7 @@ exports.up = function (knex) {
             .references('Stories.ID')
             .onUpdate('CASCADE')
             .onDelete('RESTRICT');
-        t.integer('CohortId')
-            .references('Cohorts.ID')
-            .notNullable()
-            .unsigned()
-            .onUpdate('CASCADE')
-            .onDelete('RESTRICT');
-        t.date('EpisodeEndDate')
+        t.date('EpisodeStartDate')
             .notNullable()
             .unsigned();
         t.string('ModerationStatus');
@@ -33,15 +27,6 @@ exports.up = function (knex) {
         t.boolean('LowConfidence').defaultTo(false);
         t.timestamp('CreatedAt').defaultTo(knex.fn.now());
         t.timestamp('UpdatedAt').defaultTo(knex.fn.now());
-
-        t.timestamp("StoryRead");
-        t.timestamp('WritingPrompt');
-        t.timestamp('DrawingPrompt');
-
-        t.boolean('MeetsDeadline').defaultTo(false);
-        t.boolean('PublicDisplayed').defaultTo(true);
-
-        t.unique(['ChildID', 'StoryID']);
       })
     //   .createTable('Writing', (t) => {
     //     t.increments('ID');
