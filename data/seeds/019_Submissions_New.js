@@ -5,17 +5,6 @@ const getTimeStamp = () => {
   return new Date().toISOString().replace('Z','').replace('T', ' ');
 }
 
-const cohortIDer = (idx) => {
-  if (idx < 8) {
-    return 1;
-  } else if (idx < 16) {
-    return 2;
-  } else if (idx < 24) {
-    return 3;
-  } else if (idx < 32) {
-    return 4;
-  }
-};
 //FYI, each submission number here represents a week that was completed by a number of students.
 //So, cohorts 1,2&3 finished week1. 3 cohorts of 8 students = 24 items in this batch
 const submissions1 = [...new Array(24)].map((i, idx) => ({
