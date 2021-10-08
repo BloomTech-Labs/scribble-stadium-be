@@ -1,13 +1,9 @@
 const router = require('express').Router();
 
-const {
-  authRequired,
-  fileUpload,
-  validateUpdateAllTasksParams,
-} = require('../middleware');
+const { authRequired } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 
-const Submissions = require('./submissionModel');
+const Submissions = require('./submissionNewModel');
 
 /**
  * Schemas for submission data types.
@@ -17,108 +13,43 @@ const Submissions = require('./submissionModel');
  *    SubmissionStatus:
  *      type: object
  *      properties:
- *        ID:
+ *        id:
  *          type: integer
- *        ChildID:
+ *        childId:
  *          type: integer
- *        StoryID:
+ *        storyId:
  *          type: integer
- *        CohortID:
+ *        episodeId:
  *          type: integer
- *        HasRead:
- *          type: boolean
- *        HasWritten:
- *          type: boolean
- *        HasDrawn:
- *          type: boolean
- *        Complexity:
- *          type: integer
- *        LowConfidence:
- *          type: boolean
- *        Status:
+ *        episodeStartDate:
+ *          type: date
+ *        moderationStatus:
  *          type: string
- *          enum:
- *            - CLEAR
- *            - PENDING
- *            - ACCEPTED
- *            - REJECTED
+ *        startedReadingAt:
+ *          type: timestamp
+ *        finishedReadingAt:
+ *          type: timestamp
+ *        complexity:
+ *          type: integer
+ *        lowConfidence:
+ *          type: boolean
+ *        createdAt:
+ *          type: timestamp
+ *        updatedAt:
+ *          type: timestamp
  *      example:
  *        ID: 1
- *        ChildID: 1
- *        StoryID: 1
- *        CohortID: 1
- *        HasRead: false
- *        HasWritten: false
- *        HasDrawn: false
- *        Complexity: null
- *        Status: PENDING
- *    DrawnSubmission:
- *      type: object
- *      properties:
- *        URL:
- *          type: string
- *        checksum:
- *          type: string
- *      example:
- *        URL: http://someurl.com
- *        checksum: '25ef9314704f5f68b7e04513c1ca13c9146328ee14a38e1d7c99789ab11fae31e1c0238425d58581b3ac4941884cd389b7bea3f8e658f533adc7cf934bb130f8'
- *
- *    WrittenSubmission:
- *      allOf:
- *        - $ref: '#/components/schemas/DrawnSubmission'
- *        - type: object
- *          properties:
- *            PageNum:
- *              type: integer
- *          example:
- *            PageNum: 1
- *    GetDrawnSubmission:
- *      type: object
- *      properties:
- *        ID:
- *          type: integer
- *        URL:
- *          type: string
- *        SubmissionID:
- *          type: integer
- *      example:
- *        ID: 1
- *        URL: 'http://someurl.com'
- *        SubmissionID: 1
- *    GetWrittenSubmission:
- *      allOf:
- *        - $ref: '#/components/schemas/GetDrawnSubmission'
- *        - type: object
- *          properties:
- *            PageNum:
- *              type: integer
- *          example:
- *            PageNum: 1
- *    FullSubmission:
- *      type: object
- *      properties:
- *        ID:
- *          type: integer
- *        ChildId:
- *          type: integer
- *        StoryId:
- *          type: integer
- *        CohortId:
- *          type: integer
- *        HasRead:
- *          type: boolean
- *        HasWritten:
- *          type: boolean
- *        HasDrawn:
- *          type: boolean
- *        Complexity:
- *          type: integer
- *        pages:
- *          type: array
- *          items:
- *            $ref: '#/components/schemas/GetWrittenSubmission'
- *        image:
- *          $ref: '#/components/schemas/GetDrawnSubmission'
+ *        childId: 1
+ *        storyId: 1
+ *        episodeId: 1
+ *        episodeStartDate: '2021-01-03'
+ *        moderationStatus: not received
+ *        startedReadingAt: null
+ *        finishedReadingAt: null
+ *        complexity: 1
+ *        lowConfidence: false
+ *        createdAt: 2021-10-08 19:13:54.822+00
+ *        updatedAt: 2021-10-08 19:13:54.822+00
  *
  *  parameters:
  *    submissionId:
@@ -217,280 +148,6 @@ router.get('/child/:id', authRequired, async (req, res) => {
   crudOperationsManager.getAll(
     res,
     Submissions.getAllSubmissionsByChild,
-    'Submission',
-    id
-  );
-});
-
-/**
- * @swagger
- * /submit/read/{id}:
- *  put:
- *    summary: Attempts to mark the submission with the given ID as 'read'
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.put('/read/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of URL parameter
-  const { id } = req.params;
-
-  crudOperationsManager.update(res, Submissions.markAsRead, 'Submission', id);
-});
-
-/**
- * @swagger
- * /submit/write/{id}:
- *  post:
- *    summary: Attempts to upload pages for the submission with the given ID
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *      - in: formData
- *        name: pages
- *        type: file
- *        description: Image of the written page(s) to upload
- *    responses:
- *      201:
- *        description: Returns an array of all uploaded pages.
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/WrittenSubmission'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      403:
- *        $ref: '#/components/responses/DuplicateError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      409:
- *        $ref: '#/components/responses/UploadFailed'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.post('/write/:id', authRequired, fileUpload, async (req, res) => {
-  // Pull relevant data out of the request object
-  const { id } = req.params;
-  const storyId = req.body.storyId;
-  const pages = req.body.pages;
-
-  // Callback function to pass into map that formats the data properly
-  const cb = (x, i) => ({
-    URL: x.Location,
-    PageNum: i + 1,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  });
-
-  crudOperationsManager.submission(
-    res,
-    Submissions.submitWritingTransaction,
-    'Submission',
-    pages,
-    cb,
-    id,
-    storyId
-  );
-});
-
-/**
- * @swagger
- * /submit/draw/{id}:
- *  post:
- *    summary: Attempts to upload a drawing for the submission with the given ID
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *      - in: formData
- *        name: drawing
- *        type: file
- *        description: Image of the drawing to upload
- *    responses:
- *      201:
- *        description: Returns the newly uploaded drawing.
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/DrawnSubmission'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      403:
- *        $ref: '#/components/responses/DuplicateError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      409:
- *        $ref: '#/components/responses/UploadFailed'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
-  // Pull relevant data out of the request object
-  const { id } = req.params;
-  const data = req.body.drawing;
-
-  // Callback function to pass into map that formats the data properly
-  const cb = (x) => ({
-    URL: x.Location,
-    SubmissionID: id,
-    checksum: x.Checksum,
-  });
-
-  crudOperationsManager.submission(
-    res,
-    Submissions.submitDrawingTransaction,
-    'Submission',
-    data,
-    cb,
-    id
-  );
-});
-
-/**
- * @swagger
- * /submit/update-all/{id}:
- *  put:
- *    summary: Attempts to mark the submission with the given ID as hasRead as 'false', hasWritten as 'false', hasDrawn as 'false'
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *      - in: formData
- *        name: hasRead
- *        type: boolean
- *        description: boolean to set users task hasRead to
- *      - in: formData
- *        name: hasDrawn
- *        type: boolean
- *        description: boolean to set users task hasDrawn to
- *      - in: formData
- *        name: hasWritten
- *        type: boolean
- *        description: boolean to set users task hasWritten to
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      400:
- *        description: Invalid request missing/invalid arguments
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  type: string
- *                  description: Required inputs hasRead, hasDrawn, and hasWritten must be of boolean type
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.put(
-  '/update-all/:id',
-  authRequired,
-  validateUpdateAllTasksParams,
-  async (req, res) => {
-    const { id } = req.params;
-    const { hasRead, hasDrawn, hasWritten } = req.body;
-
-    return crudOperationsManager.update(
-      res,
-      Submissions.updateAll,
-      'Submission',
-      id,
-      hasRead,
-      hasDrawn,
-      hasWritten
-    );
-  }
-);
-
-/**
- * @swagger
- * /submission/write/{id}:
- *  delete:
- *    summary: Attempts to delete the writing submission with the specified submission ID.
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.delete('/write/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of the URL parameter
-  const { id } = req.params;
-
-  crudOperationsManager.update(
-    res,
-    Submissions.deleteWritingSubmission,
-    'Submission',
-    id
-  );
-});
-
-/**
- * @swagger
- * /submission/write/{id}:
- *  delete:
- *    summary: Attempts to delete the drawn submission with the specified submission ID.
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.delete('/draw/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of the URL parameter
-  const { id } = req.params;
-
-  crudOperationsManager.update(
-    res,
-    Submissions.deleteDrawingSubmission,
     'Submission',
     id
   );
