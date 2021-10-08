@@ -10,6 +10,7 @@ const getTimeStamp = () => {
 const submissions1 = [...new Array(24)].map((i, idx) => ({
   childId: `${idx + 1}`,
   storyId: 1,
+  episodeId: 1,
   episodeStartDate: '2021-01-03',
   // moderationStatus replaced Status in previous seed
   moderationStatus: 'PENDING',
@@ -26,6 +27,7 @@ const submissions1 = [...new Array(24)].map((i, idx) => ({
 const submissions2 = [...new Array(16)].map((i, idx) => ({
   childId: `${idx + 1}`,
   storyId: 1,
+  episodeId: 2,
   episodeStartDate: '2021-01-10',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,
@@ -40,6 +42,7 @@ const submissions2 = [...new Array(16)].map((i, idx) => ({
 const submissions3 = [...new Array(16)].map((i, idx) => ({
   childId: `${idx + 1}`,
   storyId: 1,
+  episodeId: 3,
   episodeStartDate: '2021-01-17',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,
@@ -54,6 +57,7 @@ const submissions3 = [...new Array(16)].map((i, idx) => ({
 const submissions4 = [...new Array(8)].map((i, idx) => ({
   childId: `${idx + 1}`,
   storyId: 1,
+  episodeId: 4,
   episodeStartDate: '2021-01-24',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,

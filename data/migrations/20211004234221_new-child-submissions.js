@@ -13,6 +13,12 @@ exports.up = function (knex) {
       .references('Stories-New.ID')
       .onUpdate('CASCADE')
       .onDelete('RESTRICT');
+    t.integer('episodeId')
+      .notNullable()
+      .unsigned()
+      .references('Episodes.ID')
+      .onUpdate('CASCADE')
+      .onDelete('RESTRICT');
     t.date('episodeStartDate').notNullable().unsigned();
     t.string('moderationStatus');
 
