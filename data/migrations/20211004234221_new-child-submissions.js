@@ -10,7 +10,7 @@ exports.up = function (knex) {
     t.integer('storyId')
       .notNullable()
       .unsigned()
-      .references('Stories.ID')
+      .references('Stories-New.ID')
       .onUpdate('CASCADE')
       .onDelete('RESTRICT');
     t.date('episodeStartDate').notNullable().unsigned();
