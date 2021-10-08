@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.createTable('submissionsNew', (t) => {
+  return knex.schema.createTable('Submissions-New', (t) => {
     t.increments('id');
     t.integer('childId')
       .notNullable()
@@ -33,5 +33,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('submissionsNew');
+  return knex.schema.dropTableIfExists('Submissions-New');
 };
