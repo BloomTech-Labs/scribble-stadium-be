@@ -25,7 +25,7 @@ const submissions1 = [...new Array(24)].map((i, idx) => ({
 //So, groups 1&2 finished week2. 2 groups of 8 students = 16 items in this batch
 const submissions2 = [...new Array(16)].map((i, idx) => ({
   childId: `${idx + 1}`,
-  storyId: 2,
+  storyId: 1,
   episodeStartDate: '2021-01-10',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,
@@ -39,7 +39,7 @@ const submissions2 = [...new Array(16)].map((i, idx) => ({
 //So, groups 1&2 finished week3. 2 groups of 8 students = 16 items in this batch
 const submissions3 = [...new Array(16)].map((i, idx) => ({
   childId: `${idx + 1}`,
-  storyId: 3,
+  storyId: 1,
   episodeStartDate: '2021-01-17',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,
@@ -53,7 +53,7 @@ const submissions3 = [...new Array(16)].map((i, idx) => ({
 //Only groups 1 finished week4. 1 groups of 8 students = 8 items in this batch
 const submissions4 = [...new Array(8)].map((i, idx) => ({
   childId: `${idx + 1}`,
-  storyId: 4,
+  storyId: 1,
   episodeStartDate: '2021-01-24',
   moderationStatus: 'PENDING',
   startedReadingAt: `${getTimeStamp()}` + 60000,
