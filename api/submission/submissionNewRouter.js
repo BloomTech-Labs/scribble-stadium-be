@@ -69,9 +69,9 @@ const Submissions = require('./submissionNewModel');
  *    summary: Queries the database for information for the given submission.
  *    description: Attempts to query the database to find a submission entry at the intersection
  *      of the given Child ID and Story ID. If none is found, one will be created and initialized
- *      with all false/null values.
+ *      with a childId, storyId, episodeId, episodeStartDate, and createdAt timestamp.
  *    security:
- *      - okta: []
+ *      - auth0: []
  *    tags:
  *      - Submissions
  *    parameters:
@@ -87,6 +87,24 @@ const Submissions = require('./submissionNewModel');
  *          type: integer
  *        required: true
  *        description: numeric ID of story
+ *      - in: query
+ *        name: episodeId
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: numeric ID of episode
+ *      - in: query
+ *        name: episodeStartDate
+ *        schema:
+ *          type: date
+ *        required: true
+ *        description: start date of current episode
+ *      - in: query
+ *        name: createdAt
+ *        schema:
+ *          type: timestamp
+ *        required: true
+ *        description: when the submission record was created
  *    responses:
  *      200:
  *        description: Returns an object containing the data for the requested submission
@@ -122,7 +140,7 @@ router.get('/', authRequired, async (req, res) => {
  *  get:
  *    summary: Attempts to get all data for every submission by a given child
  *    security:
- *      - okta: []
+ *      - auth0: []
  *    tags:
  *      - Submissions
  *    parameters:
