@@ -1,6 +1,7 @@
 const db = require('../../data/db-config');
 const _omit = require('lodash.omit');
 const { dsApi } = require('../../lib');
+const { json } = require('express');
 
 /**
  * This function checks to see if a submission exists at the given child/story intersection,
@@ -22,7 +23,7 @@ const getOrInitSubmission = async (
   if (foundSubmission.length > 0) {
     return foundSubmission[0];
   } else {
-    const newSubmission = await db('submissionsNew')
+    const newSubmission = await db('Submissions-New')
       .insert({ childId, storyId, episodeId, episodeStartDate })
       .returning('*');
     return newSubmission[0];
@@ -44,7 +45,13 @@ const getAllSubmissionsByChild = (childId) => {
   });
 };
 
+const updateSubmissionsBySubId = async (id, changes) => {
+  const updatedSub = await db('Submissions-New').where({ id }).update(changes);
+  return updatedSub;
+};
+
 module.exports = {
   getOrInitSubmission,
   getAllSubmissionsByChild,
+  updateSubmissionsBySubId,
 };

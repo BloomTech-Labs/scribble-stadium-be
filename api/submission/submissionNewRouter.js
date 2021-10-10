@@ -171,4 +171,16 @@ router.get('/child/:id', authRequired, async (req, res) => {
   );
 });
 
+router.put('/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body);
+  const changes = req.body;
+  crudOperationsManager.update(
+    res,
+    Submissions.updateSubmissionsBySubId,
+    'Submission',
+    id,
+    changes
+  );
+});
 module.exports = router;
