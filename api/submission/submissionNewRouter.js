@@ -171,9 +171,9 @@ router.get('/child/:id', authRequired, async (req, res) => {
   );
 });
 
-router.put('/:id', authRequired, async (req, res) => {
+router.put('/update/:id', authRequired, async (req, res) => {
+  //Pull submission ID out of URL parameter
   const { id } = req.params;
-  console.log(req.body);
   const changes = req.body;
   crudOperationsManager.update(
     res,

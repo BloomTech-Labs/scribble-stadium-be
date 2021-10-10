@@ -90,7 +90,10 @@ app.use(['/storyNew', '/storiesNew'], storyNewRouter);
 app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use(['/submit', '/submission', '/submissions'], submissionRouter);
-app.use('/submissionNew', submissionNewRouter);
+app.use(
+  ['/submitNew', '/submissionNew', '/submissionsNew'],
+  submissionNewRouter
+);
 app.use('/mod', modRouter);
 app.use('/game', gameRouter);
 app.use('/reset', resetRouter);
