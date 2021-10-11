@@ -1,7 +1,4 @@
 const db = require('../../data/db-config');
-const _omit = require('lodash.omit');
-const { dsApi } = require('../../lib');
-const { json } = require('express');
 
 /**
  * This function checks to see if a submission exists at the given child/story intersection,
