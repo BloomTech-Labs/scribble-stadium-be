@@ -10,21 +10,17 @@ const { json } = require('express');
  * @param {number} storyId the ID of the story the submission is for
  * @returns {Promise} returns a promise that resolves to a submission object
  */
-const getOrInitSubmission = async (
-  childId,
-  storyId,
-  episodeId,
-  episodeStartDate
-) => {
-  const foundSubmission = await db('submissionsNew').where({
+const getOrInitSubmission = async (childId, storyId, episodeId) => {
+  const foundSubmission = await db('Submissions-New').where({
     childId,
     storyId,
+    episodeId,
   });
   if (foundSubmission.length > 0) {
     return foundSubmission[0];
   } else {
     const newSubmission = await db('Submissions-New')
-      .insert({ childId, storyId, episodeId, episodeStartDate })
+      .insert({ childId, storyId, episodeId })
       .returning('*');
     return newSubmission[0];
   }

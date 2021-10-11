@@ -123,14 +123,15 @@ const Submissions = require('./submissionNewModel');
  */
 router.get('/', authRequired, async (req, res) => {
   // Pull intersection IDs out of the URL querystring
-  const { childId, storyId } = req.query;
+  const { childId, storyId, episodeId } = req.query;
 
   crudOperationsManager.getAll(
     res,
     Submissions.getOrInitSubmission,
-    'Submission',
+    'Submissions',
     childId,
-    storyId
+    storyId,
+    episodeId
   );
 });
 
