@@ -121,17 +121,15 @@ const Submissions = require('./submissionNewModel');
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
-router.get('/', authRequired, async (req, res) => {
-  // Pull intersection IDs out of the URL querystring
-  const { childId, storyId, episodeId } = req.query;
+router.get('/:id', authRequired, async (req, res) => {
+  //Pull submission ID out of URL parameter
+  const { id } = req.params;
 
   crudOperationsManager.getAll(
     res,
-    Submissions.getOrInitSubmission,
+    Submissions.getSubmission,
     'Submissions',
-    childId,
-    storyId,
-    episodeId
+    id
   );
 });
 
@@ -171,9 +169,18 @@ router.get('/child/:id', authRequired, async (req, res) => {
     id
   );
 });
+router.post('/child/:id/submissions', authRequired, (req, res) => {
+  //childId, storyId, episodeId, episodeStartDate required in body from front-end
+  const newSubmission = req.body;
 
+  crudOperationsManager.post(
+    res,
+    Submissions.addSubmission,
+    'Submission',
+    newSubmission
+  );
+});
 router.put('/:id', authRequired, async (req, res) => {
-  //Pull submission ID out of URL parameter
   const { id } = req.params;
   const changes = req.body;
 
@@ -188,6 +195,7 @@ router.put('/:id', authRequired, async (req, res) => {
 
 //Delete route for dev/admin purposes
 router.delete('/:id', authRequired, async (req, res) => {
+  //Pull submission ID out of URL parameter
   const { id } = req.params;
 
   crudOperationsManager.update(

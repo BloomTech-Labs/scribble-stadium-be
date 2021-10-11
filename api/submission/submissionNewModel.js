@@ -7,20 +7,11 @@ const db = require('../../data/db-config');
  * @param {number} storyId the ID of the story the submission is for
  * @returns {Promise} returns a promise that resolves to a submission object
  */
-const getOrInitSubmission = async (childId, storyId, episodeId) => {
+const getSubmission = async (id) => {
   const foundSubmission = await db('Submissions-New').where({
-    childId,
-    storyId,
-    episodeId,
+    id,
   });
-  if (foundSubmission.length > 0) {
-    return foundSubmission[0];
-  } else {
-    const newSubmission = await db('Submissions-New')
-      .insert({ childId, storyId, episodeId })
-      .returning('*');
-    return newSubmission[0];
-  }
+  return foundSubmission;
 };
 
 /**
@@ -38,6 +29,10 @@ const getAllSubmissionsByChild = (childId) => {
   });
 };
 
+const addSubmission = (submission) => {
+  return db('Submissions-New').insert(submission);
+};
+
 const updateSubmissionsBySubId = async (id, changes) => {
   const updatedSub = await db('Submissions-New').where({ id }).update(changes);
   return updatedSub;
@@ -47,8 +42,9 @@ const removeSubmission = (ID) => {
   return db('Submissions-New').where({ ID }).del();
 };
 module.exports = {
-  getOrInitSubmission,
+  getSubmission,
   getAllSubmissionsByChild,
+  addSubmission,
   updateSubmissionsBySubId,
   removeSubmission,
 };
