@@ -50,8 +50,12 @@ const updateSubmissionsBySubId = async (id, changes) => {
   return updatedSub;
 };
 
+const removeSubmission = (ID) => {
+  return db('Submissions-New').where({ ID }).del();
+};
 module.exports = {
   getOrInitSubmission,
   getAllSubmissionsByChild,
   updateSubmissionsBySubId,
+  removeSubmission,
 };

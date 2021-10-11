@@ -171,10 +171,11 @@ router.get('/child/:id', authRequired, async (req, res) => {
   );
 });
 
-router.put('/update/:id', authRequired, async (req, res) => {
+router.put('/:id', authRequired, async (req, res) => {
   //Pull submission ID out of URL parameter
   const { id } = req.params;
   const changes = req.body;
+
   crudOperationsManager.update(
     res,
     Submissions.updateSubmissionsBySubId,
@@ -183,4 +184,17 @@ router.put('/update/:id', authRequired, async (req, res) => {
     changes
   );
 });
+
+//Delete route for dev/admin purposes
+router.delete('/:id', authRequired, async (req, res) => {
+  const { id } = req.params;
+
+  crudOperationsManager.update(
+    res,
+    Submissions.removeSubmission,
+    'Submission',
+    id
+  );
+});
+
 module.exports = router;
