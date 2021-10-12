@@ -32,7 +32,6 @@ const storyNewRouter = require('./stories/storyNewRouter');
 const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
 const submissionRouter = require('./submission/submissionRouter');
-const submissionNewRouter = require('./submission/submissionNewRouter');
 const modRouter = require('./mod/modRouter');
 const gameRouter = require('./game/gameRouter');
 const resetRouter = require('./reset/resetRouter');
@@ -90,10 +89,6 @@ app.use(['/storyNew', '/storiesNew'], storyNewRouter);
 app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
 app.use(['/submit', '/submission', '/submissions'], submissionRouter);
-app.use(
-  ['/submitNew', '/submissionNew', '/submissionsNew'],
-  submissionNewRouter
-);
 app.use('/mod', modRouter);
 app.use('/game', gameRouter);
 app.use('/reset', resetRouter);
