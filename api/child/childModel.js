@@ -115,13 +115,7 @@ const getComplexityList = (ChildID) => {
     .select(['ID', 'Complexity']);
 };
 
-/**
- * This function checks to see if a submission exists at the given child/story intersection,
- * and will create one if it does not.
- * @param {number} childId the ID of the child who is submitting
- * @param {number} storyId the ID of the story the submission is for
- * @returns {Promise} returns a promise that resolves to a submission object
- */
+//Will return a single submission
 const getSubmissionBySubId = async (id) => {
   const foundSubmission = await db('Submissions-New').where({
     id,
