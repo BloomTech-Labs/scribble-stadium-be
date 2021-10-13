@@ -425,6 +425,8 @@ router.delete('/:id', authRequired, (req, res) => {
  *      500:
  *        $ref: '#/components/responses/DatabaseError'
  */
+
+//A GET all submissions route intended for dev/admin purposes.
 router.get('/:id/submissions', authRequired, async (req, res) => {
   // Pull child ID out of URL parameter
   const { id } = req.params;
@@ -437,6 +439,7 @@ router.get('/:id/submissions', authRequired, async (req, res) => {
   );
 });
 
+//To return a single submission
 router.get('/:id/submissions/:id', authRequired, async (req, res) => {
   //Pull submission ID out of URL parameter
   const { id } = req.params;
@@ -449,8 +452,9 @@ router.get('/:id/submissions/:id', authRequired, async (req, res) => {
   );
 });
 
+//To create the initial submission record when the child accepts the mission.
 router.post('/:id/submissions', authRequired, (req, res) => {
-  //childId, storyId, episodeId, episodeStartDate required in body from front-end
+  //childId, storyId, episodeId, episodeStartDate are not nullable and required in body from front-end
   const newSubmission = req.body;
 
   crudOperationsManager.post(
@@ -460,6 +464,8 @@ router.post('/:id/submissions', authRequired, (req, res) => {
     newSubmission
   );
 });
+
+//To update the submission record, for example when the child has finished reading or moderation status changes.
 router.put('/:id/submissions/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
