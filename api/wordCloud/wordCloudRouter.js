@@ -7,7 +7,7 @@ const wordCloudRouter = require('express').Router();
  *  get:
  *   summary: Attemps to get the wordcloud gif from the data science API.
  *   security:
- *     - okta: []
+ *     - Auth0: []
  *   tags:
  *     - Word Cloud
  *   responses:
@@ -18,7 +18,7 @@ const wordCloudRouter = require('express').Router();
  *           schema:
  *             type: array
  *             items:
- *               $ref: '#/components/schemas/WordCloud'
+ *              type: string
  *     401:
  *       description: Unauthorized.
  */
