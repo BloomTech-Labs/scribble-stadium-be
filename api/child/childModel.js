@@ -116,20 +116,16 @@ const getComplexityList = (ChildID) => {
 };
 
 //Will return a single submission
-const getSubmissionBySubId = async (id) => {
-  const submission = await db('Submissions-New').where({
-    id,
+const getSubmissionBySubId = async (childId, id) => {
+  console.log('childId:', childId, 'id:', id);
+  const submission = await db('Submissions-New as SN').where({
+    'SN.childId': childId,
+    'SN.id': id,
   });
   const pages = await getPagesBySubmissionId(id);
-  const pagesArray = [];
-  for (let i = 0; i < pages.length; i++) {
-    pagesArray.push(pages[i]);
-  }
-  const submissionWithPages = {
-    ...submission,
-    pages: pagesArray[0],
-  };
-  return [submissionWithPages];
+  console.log('pages:', pages, 'submission:', submission);
+  submission[0].pages = pages;
+  return submission[0];
 };
 
 /**
@@ -140,6 +136,10 @@ const getSubmissionBySubId = async (id) => {
 const getAllSubmissions = (childId) => {
   return db.transaction(async (trx) => {
     const subs = await trx('Submissions-New').where({ childId });
+    for (let i = 0; i < subs.length; i++) {
+      let pages = await getPagesBySubmissionId(subs[i].id);
+      subs[i].pages = pages;
+    }
     const res = subs.map((sub) => ({
       ...sub,
     }));
@@ -150,7 +150,7 @@ const getAllSubmissions = (childId) => {
 const getPagesBySubmissionId = (submissionId) => {
   return db.transaction(async (trx) => {
     const pages = await trx('Pages').where({ submissionId });
-    const res = pages.map((page) => ({
+    const res = pages.map((pages) => ({
       ...pages,
     }));
     return res;

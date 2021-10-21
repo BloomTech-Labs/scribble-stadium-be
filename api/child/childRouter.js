@@ -440,14 +440,15 @@ router.get('/:id/submissions', authRequired, async (req, res) => {
 });
 
 //To return a single submission
-router.get('/:id/submissions/:id', authRequired, async (req, res) => {
+router.get('/:childId/submissions/:id', authRequired, async (req, res) => {
   //Pull submission ID out of URL parameter
-  const { id } = req.params;
+  const { childId, id } = req.params;
 
   crudOperationsManager.getAll(
     res,
     Children.getSubmissionBySubId,
     'Submissions',
+    childId,
     id
   );
 });
