@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
   crudOperationsManager.post(res, Stories.add, 'Story', newStory);
 });
 
-//This endpoint returns all stories from 'Stories-New' table with corresponding Episodes attached
+//This endpoint returns all stories from 'Stories-New' table with corresponding 'Episodes' attached
 router.get('/', (req, res) => {
   crudOperationsManager.getAll(res, Stories.getAllStories, 'allStories');
 });
