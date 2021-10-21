@@ -118,9 +118,9 @@ const getComplexityList = (ChildID) => {
 //Will return a single submission
 const getSubmissionBySubId = async (childId, id) => {
   console.log('childId:', childId, 'id:', id);
-  const submission = await db('Submissions-New as SN').where({
-    'SN.childId': childId,
-    'SN.id': id,
+  const submission = await db('Submissions-New').where({
+    childId: childId,
+    id: id,
   });
   const pages = await getPagesBySubmissionId(id);
   console.log('pages:', pages, 'submission:', submission);
@@ -165,8 +165,10 @@ const addPage = (page) => {
   return db('Pages').insert(page);
 };
 
-const updateSubmissionBySubId = async (id, changes) => {
-  const updatedSub = await db('Submissions-New').where({ id }).update(changes);
+const updateSubmissionBySubId = async (childId, id, changes) => {
+  const updatedSub = await db('Submissions-New')
+    .where({ childId: childId, id: id })
+    .update(changes);
   return updatedSub;
 };
 
