@@ -117,10 +117,19 @@ const getComplexityList = (ChildID) => {
 
 //Will return a single submission
 const getSubmissionBySubId = async (id) => {
-  const foundSubmission = await db('Submissions-New').where({
+  const submission = await db('Submissions-New').where({
     id,
   });
-  return foundSubmission;
+  const pages = await getPagesBySubmissionId(id);
+  const pagesArray = [];
+  for (let i = 0; i < pages.length; i++) {
+    pagesArray.push(pages[i]);
+  }
+  const submissionWithPages = {
+    ...submission,
+    pages: pagesArray[0],
+  };
+  return [submissionWithPages];
 };
 
 /**
@@ -138,7 +147,7 @@ const getAllSubmissions = (childId) => {
   });
 };
 
-const getPages = (submissionId) => {
+const getPagesBySubmissionId = (submissionId) => {
   return db.transaction(async (trx) => {
     const pages = await trx('Pages').where({ submissionId });
     const res = pages.map((page) => ({
@@ -185,7 +194,7 @@ module.exports = {
   addSubmission,
   updateSubmissionBySubId,
   removeSubmission,
-  getPages,
+  getPagesBySubmissionId,
   addPage,
   updatePage,
   removePage,
