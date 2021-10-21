@@ -117,13 +117,11 @@ const getComplexityList = (ChildID) => {
 
 //Will return a single submission
 const getSubmissionBySubId = async (childId, id) => {
-  console.log('childId:', childId, 'id:', id);
   const submission = await db('Submissions-New').where({
     childId: childId,
     id: id,
   });
   const pages = await getPagesBySubmissionId(id);
-  console.log('pages:', pages, 'submission:', submission);
   submission[0].pages = pages;
   return submission[0];
 };
