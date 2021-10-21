@@ -138,8 +138,22 @@ const getAllSubmissions = (childId) => {
   });
 };
 
+const getPages = (submissionId) => {
+  return db.transaction(async (trx) => {
+    const pages = await trx('Pages').where({ submissionId });
+    const res = pages.map((page) => ({
+      ...pages,
+    }));
+    return res;
+  });
+};
+
 const addSubmission = (submission) => {
   return db('Submissions-New').insert(submission);
+};
+
+const addPage = (page) => {
+  return db('Pages').insert(page);
 };
 
 const updateSubmissionBySubId = async (id, changes) => {
@@ -147,10 +161,18 @@ const updateSubmissionBySubId = async (id, changes) => {
   return updatedSub;
 };
 
+const updatePage = async (id, changes) => {
+  const updatedPage = await db('Pages').where({ id }).update(changes);
+  return updatedPage;
+};
+
 const removeSubmission = (id) => {
   return db('Submissions-New').where({ id }).del();
 };
 
+const removePage = (id) => {
+  return db('Pages').where({ id }).del();
+};
 module.exports = {
   getAll,
   getById,
@@ -163,4 +185,8 @@ module.exports = {
   addSubmission,
   updateSubmissionBySubId,
   removeSubmission,
+  getPages,
+  addPage,
+  updatePage,
+  removePage,
 };
