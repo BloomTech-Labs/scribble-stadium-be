@@ -13,6 +13,19 @@ const add = (story) => {
 };
 
 /**
+ * Queries the database for all stories
+ * @returns {Promise} a promise that resolves to an array of story
+ * objects with corresponding episodes
+ */
+const getAllStories = async () => {
+  const stories = await db('Stories-New');
+  for (let i = 0; i < stories.length; i++) {
+    let episodes = await getEpisodesByStoryID(stories[i].ID);
+    stories[i].Episodes = episodes;
+  }
+  return stories;
+};
+/**
  * Queries the database for a specific story with given ID
  * @param {number} ID the ID to search for in the database
  * @returns {Promise} a promise that resolves to story object of the
@@ -144,6 +157,7 @@ const removeEpisode = (episodeID) => {
 
 module.exports = {
   add,
+  getAllStories,
   getById,
   update,
   remove,
