@@ -440,14 +440,15 @@ router.get('/:id/submissions', authRequired, async (req, res) => {
 });
 
 //To return a single submission
-router.get('/:id/submissions/:id', authRequired, async (req, res) => {
-  //Pull submission ID out of URL parameter
-  const { id } = req.params;
+router.get('/:childId/submissions/:id', authRequired, async (req, res) => {
+  //Pull childID & submission ID out of URL parameter
+  const { childId, id } = req.params;
 
   crudOperationsManager.getAll(
     res,
     Children.getSubmissionBySubId,
     'Submissions',
+    childId,
     id
   );
 });
@@ -455,7 +456,9 @@ router.get('/:id/submissions/:id', authRequired, async (req, res) => {
 //To create the initial submission record when the child accepts the mission.
 router.post('/:id/submissions', authRequired, (req, res) => {
   //childId, storyId, episodeId, episodeStartDate are not nullable and required in body from front-end
+  const { id } = req.params;
   const newSubmission = req.body;
+  newSubmission.childId = id;
 
   crudOperationsManager.post(
     res,
@@ -465,31 +468,59 @@ router.post('/:id/submissions', authRequired, (req, res) => {
   );
 });
 
+//To create new page record when a child accepts either drawing or writing prompt
+router.post('/submissions/:id/pages', authRequired, (req, res) => {
+  // submissionId & type ('drawing' or 'writing') not nullable
+  const { sid } = req.params;
+  const newPage = req.body;
+  newPage.submissionId = sid;
+  crudOperationsManager.post(res, Children.addPage, 'Page', newPage);
+});
+
 //To update the submission record, for example when the child has finished reading or moderation status changes.
-router.put('/:id/submissions/:id', authRequired, async (req, res) => {
-  const { id } = req.params;
+router.put('/:childId/submissions/:id', authRequired, async (req, res) => {
+  const { childId, id } = req.params;
   const changes = req.body;
 
   crudOperationsManager.update(
     res,
     Children.updateSubmissionBySubId,
     'Submission',
+    childId,
     id,
     changes
   );
 });
 
-//Delete route for dev/admin purposes
-router.delete('/:id/submissions/:id', authRequired, async (req, res) => {
-  //Pull submission ID out of URL parameter
+//To update the Page record once a drawing or writing `type` record is complete (successful upload)
+router.put('/submissions/pages/:id', authRequired, async (req, res) => {
   const { id } = req.params;
+  // 'changes' object from request body must update `updatedAt` property
+  const changes = req.body;
+
+  crudOperationsManager.update(res, Children.updatePage, id, changes);
+});
+
+//Delete route for dev/admin purposes
+router.delete('/:childId/submissions/:id', authRequired, async (req, res) => {
+  //Pull submission ID out of URL parameter
+  const { childId, id } = req.params;
 
   crudOperationsManager.update(
     res,
     Children.removeSubmission,
     'Submission',
+    childId,
     id
   );
+});
+
+//Delete route for dev/admin
+router.delete('/submissions/pages/:id', authRequired, async (req, res) => {
+  // Pulls page id from URL parameters
+  const { id } = req.params;
+
+  crudOperationsManager.update(res, Children.removePage, 'Page', id);
 });
 
 module.exports = router;

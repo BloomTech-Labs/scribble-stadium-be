@@ -116,11 +116,14 @@ const getComplexityList = (ChildID) => {
 };
 
 //Will return a single submission
-const getSubmissionBySubId = async (id) => {
-  const foundSubmission = await db('Submissions-New').where({
-    id,
+const getSubmissionBySubId = async (childId, id) => {
+  const submission = await db('Submissions-New').where({
+    childId: childId,
+    id: id,
   });
-  return foundSubmission;
+  const pages = await getPagesBySubmissionId(id);
+  submission[0].pages = pages;
+  return submission[0];
 };
 
 /**
@@ -131,8 +134,22 @@ const getSubmissionBySubId = async (id) => {
 const getAllSubmissions = (childId) => {
   return db.transaction(async (trx) => {
     const subs = await trx('Submissions-New').where({ childId });
+    for (let i = 0; i < subs.length; i++) {
+      let pages = await getPagesBySubmissionId(subs[i].id);
+      subs[i].pages = pages;
+    }
     const res = subs.map((sub) => ({
       ...sub,
+    }));
+    return res;
+  });
+};
+
+const getPagesBySubmissionId = (submissionId) => {
+  return db.transaction(async (trx) => {
+    const pages = await trx('Pages').where({ submissionId });
+    const res = pages.map((pages) => ({
+      ...pages,
     }));
     return res;
   });
@@ -142,15 +159,29 @@ const addSubmission = (submission) => {
   return db('Submissions-New').insert(submission);
 };
 
-const updateSubmissionBySubId = async (id, changes) => {
-  const updatedSub = await db('Submissions-New').where({ id }).update(changes);
+const addPage = (page) => {
+  return db('Pages').insert(page);
+};
+
+const updateSubmissionBySubId = async (childId, id, changes) => {
+  const updatedSub = await db('Submissions-New')
+    .where({ childId: childId, id: id })
+    .update(changes);
   return updatedSub;
+};
+
+const updatePage = async (id, changes) => {
+  const updatedPage = await db('Pages').where({ id }).update(changes);
+  return updatedPage;
 };
 
 const removeSubmission = (id) => {
   return db('Submissions-New').where({ id }).del();
 };
 
+const removePage = (id) => {
+  return db('Pages').where({ id }).del();
+};
 module.exports = {
   getAll,
   getById,
@@ -163,4 +194,8 @@ module.exports = {
   addSubmission,
   updateSubmissionBySubId,
   removeSubmission,
+  getPagesBySubmissionId,
+  addPage,
+  updatePage,
+  removePage,
 };
