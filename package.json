@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": false,
   "license": "MIT",
-  "engines":{
-    "node":">=14.0.0"
+  "engines": {
+    "node": ">=14.0.0"
   },
   "repository": {
-    "type":"git",
-    "url":"https://github.com/Lambda-School-Labs/scribbles-stadium-be.git"
+    "type": "git",
+    "url": "https://github.com/Lambda-School-Labs/scribbles-stadium-be.git"
   },
-   "scripts": {
+  "scripts": {
     "start": "node server.js",
     "watch:dev": "nodemon",
     "lint": "npx eslint .",
@@ -19,7 +19,7 @@
     "knex": "npx knex --knexfile knexfile.js",
     "knex:test": "cross-env NODE_ENV=test npx knex --knexfile knexfile.js",
     "knex:ci": "cross-env NODE_ENV=ci npx knex --knexfile knexfile.js",
-    "create_test_db":"NODE_ENV=test node ./data/create_test_db.js",
+    "create_test_db": "NODE_ENV=test node ./data/create_test_db.js",
     "test": "cross-env NODE_ENV=test npx jest --watch --runInBand -- testRunner",
     "tests": "cross-env NODE_ENV=test npx jest --forceExit --coverage --runInBand -- testRunner",
     "coverage": "CI=true npx jest --runInBand --coverage --detectOpenHandles --forceExit -- testRunner"

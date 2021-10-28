@@ -23,8 +23,7 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
     - 8080
 - `DS_API_URL` - URL to a data science api. (eg. <https://ds-bw-test.herokuapp.com/>)
 - `DS_API_TOKEN` - authorization header token for data science api (eg. SUPERSECRET)
-- `DATABASE_URL` - connection string for postgres database
-using the knex url format
+-`DATABASE_URL` - connection string for postgres database using the knex url format
 - `TEST_DATABASE_URL` - connection string for postgres test database using the knex url format
 - `NODE_ENV` - The environment to use for knex scripts, should be development on local and production on live server
 - `AWS_ACCESS_KEY_ID` - A special access key from AWS
