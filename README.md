@@ -14,6 +14,10 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
 
 ## Getting Started
 
+### Glossary of Scribble Stadium Terms
+
+There is a glossary of standard terms that are to be used when discussing Scribble Stadium and when writing code available here - [Glossary](https://docs.google.com/document/d/1I2dtnjUtSmGxIfcuUWKrIRBhrCAFlmQ0RnJ3DZJIy4g/edit). Using the agreed upon terms will help developers to be understood and maintain consistency.
+
 ### Environment Variables
 
 - `PORT` - API port (optional, but helpful with FE running as well)
@@ -23,8 +27,8 @@ Labs teams must follow all [Labs Engineering Standards](https://labs.lambdaschoo
     - 8080
 - `DS_API_URL` - URL to a data science api. (eg. <https://ds-bw-test.herokuapp.com/>)
 - `DS_API_TOKEN` - authorization header token for data science api (eg. SUPERSECRET)
-- `DATABASE_URL` - connection string for postgres database
-- `TEST_DATABASE_URL` - the URL of the testing database
+- `DATABASE_URL` - connection string for postgres database using the knex url format
+- `TEST_DATABASE_URL` - connection string for postgres test database using the knex url format
 - `NODE_ENV` - The environment to use for knex scripts, should be development on local and production on live server
 - `AWS_ACCESS_KEY_ID` - A special access key from AWS
 - `AWS_SECRET_ACCESS_KEY` - A secret AWS access key that should not be shared with anyone

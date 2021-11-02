@@ -9,6 +9,11 @@ router.post('/', (req, res) => {
   crudOperationsManager.post(res, Stories.add, 'Story', newStory);
 });
 
+//This endpoint returns all stories from 'Stories-New' table with corresponding 'Episodes' attached
+router.get('/', (req, res) => {
+  crudOperationsManager.getAll(res, Stories.getAllStories, 'allStories');
+});
+
 router.get('/:id', (req, res) => {
   // Pull story ID out of the URL params
   const { id } = req.params;
@@ -32,21 +37,21 @@ router.delete('/:id', (req, res) => {
 });
 
 //Does not get episode if reading/writing prompts do not exist.
+
 router.get('/episodes/:eid', async (req, res) => {
   try {
     // Pull episode ID out of the URL params
     const { eid } = req.params;
     const episode = await Stories.getEpisodeByID(eid);
-    const writing = await Stories.getWritingByEpisodeID(eid);
-    const drawing = await Stories.getDrawingByEpisodeID(eid);
+    const prompts = await Stories.getPromptsByEpisodeID(eid);
     const data = {
       ID: episode[0].ID,
       StoryID: episode[0].StoryID,
       EpisodeNumber: episode[0].EpisodeNumber,
       TextURL: episode[0].TextURL,
       AudioURL: episode[0].AudioURL,
-      WritingPrompt: writing[0].Prompt,
-      DrawingPrompt: drawing[0].Prompt,
+      WritingPrompt: prompts[0].WritingPrompt.Prompt,
+      DrawingPrompt: prompts[0].DrawingPrompt.Prompt,
     };
     res.status(200).json(data);
   } catch (error) {

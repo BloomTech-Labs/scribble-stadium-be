@@ -115,6 +115,73 @@ const getComplexityList = (ChildID) => {
     .select(['ID', 'Complexity']);
 };
 
+//Will return a single submission
+const getSubmissionBySubId = async (childId, id) => {
+  const submission = await db('Submissions-New').where({
+    childId: childId,
+    id: id,
+  });
+  const pages = await getPagesBySubmissionId(id);
+  submission[0].pages = pages;
+  return submission[0];
+};
+
+/**
+ * This will query the database for a list of all of a child's submissions.
+ * @param {number} childId integer key of the requested child
+ * @returns {Array} a list of submission objects
+ */
+const getAllSubmissions = (childId) => {
+  return db.transaction(async (trx) => {
+    const subs = await trx('Submissions-New').where({ childId });
+    for (let i = 0; i < subs.length; i++) {
+      let pages = await getPagesBySubmissionId(subs[i].id);
+      subs[i].pages = pages;
+    }
+    const res = subs.map((sub) => ({
+      ...sub,
+    }));
+    return res;
+  });
+};
+
+const getPagesBySubmissionId = (submissionId) => {
+  return db.transaction(async (trx) => {
+    const pages = await trx('Pages').where({ submissionId });
+    const res = pages.map((pages) => ({
+      ...pages,
+    }));
+    return res;
+  });
+};
+
+const addSubmission = (submission) => {
+  return db('Submissions-New').insert(submission);
+};
+
+const addPage = (page) => {
+  return db('Pages').insert(page);
+};
+
+const updateSubmissionBySubId = async (childId, id, changes) => {
+  const updatedSub = await db('Submissions-New')
+    .where({ childId: childId, id: id })
+    .update(changes);
+  return updatedSub;
+};
+
+const updatePage = async (id, changes) => {
+  const updatedPage = await db('Pages').where({ id }).update(changes);
+  return updatedPage;
+};
+
+const removeSubmission = (id) => {
+  return db('Submissions-New').where({ id }).del();
+};
+
+const removePage = (id) => {
+  return db('Pages').where({ id }).del();
+};
 module.exports = {
   getAll,
   getById,
@@ -122,4 +189,13 @@ module.exports = {
   update,
   remove,
   getComplexityList,
+  getSubmissionBySubId,
+  getAllSubmissions,
+  addSubmission,
+  updateSubmissionBySubId,
+  removeSubmission,
+  getPagesBySubmissionId,
+  addPage,
+  updatePage,
+  removePage,
 };
