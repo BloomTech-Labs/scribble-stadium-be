@@ -164,37 +164,4 @@ router.delete('/write/:id', authRequired, async (req, res) => {
   );
 });
 
-/**
- * @swagger
- * /submission/write/{id}:
- *  delete:
- *    summary: Attempts to delete the drawn submission with the specified submission ID.
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.delete('/draw/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of the URL parameter
-  const { id } = req.params;
-
-  crudOperationsManager.update(
-    res,
-    Submissions.deleteDrawingSubmission,
-    'Submission',
-    id
-  );
-});
-
 module.exports = router;
