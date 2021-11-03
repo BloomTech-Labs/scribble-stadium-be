@@ -133,34 +133,6 @@ const Submissions = require('./submissionModel');
 
 /**
  * @swagger
- * /submit/read/{id}:
- *  put:
- *    summary: Attempts to mark the submission with the given ID as 'read'
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.put('/read/:id', authRequired, async (req, res) => {
-  // Pull submission ID out of URL parameter
-  const { id } = req.params;
-
-  crudOperationsManager.update(res, Submissions.markAsRead, 'Submission', id);
-});
-
-/**
- * @swagger
  * /submit/write/{id}:
  *  post:
  *    summary: Attempts to upload pages for the submission with the given ID
@@ -275,69 +247,6 @@ router.post('/draw/:id', authRequired, fileUpload, async (req, res) => {
     id
   );
 });
-
-/**
- * @swagger
- * /submit/update-all/{id}:
- *  put:
- *    summary: Attempts to mark the submission with the given ID as hasRead as 'false', hasWritten as 'false', hasDrawn as 'false'
- *    security:
- *      - okta: []
- *    tags:
- *      - Submissions
- *    parameters:
- *      - $ref: '#/components/parameters/submissionId'
- *      - in: formData
- *        name: hasRead
- *        type: boolean
- *        description: boolean to set users task hasRead to
- *      - in: formData
- *        name: hasDrawn
- *        type: boolean
- *        description: boolean to set users task hasDrawn to
- *      - in: formData
- *        name: hasWritten
- *        type: boolean
- *        description: boolean to set users task hasWritten to
- *    responses:
- *      204:
- *        $ref: '#/components/responses/EmptySuccess'
- *      400:
- *        description: Invalid request missing/invalid arguments
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  type: string
- *                  description: Required inputs hasRead, hasDrawn, and hasWritten must be of boolean type
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.put(
-  '/update-all/:id',
-  authRequired,
-  validateUpdateAllTasksParams,
-  async (req, res) => {
-    const { id } = req.params;
-    const { hasRead, hasDrawn, hasWritten } = req.body;
-
-    return crudOperationsManager.update(
-      res,
-      Submissions.updateAll,
-      'Submission',
-      id,
-      hasRead,
-      hasDrawn,
-      hasWritten
-    );
-  }
-);
 
 /**
  * @swagger
