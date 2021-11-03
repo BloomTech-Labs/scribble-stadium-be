@@ -6,7 +6,6 @@ const parents = ['Alice', 'Barbara', 'Christopher', 'David'].map(
   })
 );
 
-
 exports.seed = function (knex) {
   // Inserts seed entries
   return knex('Parents').insert(parents);
