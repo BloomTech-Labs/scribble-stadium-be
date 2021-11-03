@@ -60,6 +60,10 @@ module.exports = {
         name: 'Achievements',
         description: 'Operations for Achievements Data',
       },
+      {
+        name: 'Word Cloud', // new end point
+        description: 'Word Cloud endpoints',
+      },
     ],
     externalDocs: {
       description: 'Data Science scaffold service docs',
