@@ -2,8 +2,6 @@ const router = require('express').Router();
 
 const {
   authRequired,
-  fileUpload,
-  validateUpdateAllTasksParams,
 } = require('../middleware');
 const { crudOperationsManager } = require('../../lib');
 
