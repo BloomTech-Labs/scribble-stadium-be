@@ -1,3 +1,5 @@
+const faker = require('faker');
+
 const parents = ['Alice', 'Barbara', 'Christopher', 'David'].map(
   (parentName, idx) => ({
     Name: parentName,
@@ -8,6 +10,15 @@ const parents = ['Alice', 'Barbara', 'Christopher', 'David'].map(
 
 exports.seed = function (knex) {
   // Inserts seed entries
-  return knex('Parents').insert(parents);
+  return knex('Parents').insert(parents)
+  .then(function(){
+    return knex('Parents').insert([
+      {ID:1,
+       Name:`${faker.name.lastName("McVirtual")} `,
+       PIN:"0000",
+       Email:`${faker.internet.email()}`},
+      
+    ])
+  })
    
 };
