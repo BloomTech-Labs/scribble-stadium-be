@@ -74,7 +74,6 @@ const TestStorySquadAPI = () => {
     ModTests('PRE');
     ChildTests();
 
-    SubmissionTests();
     ModTests();
 
     GameTests();
