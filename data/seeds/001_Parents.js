@@ -13,7 +13,7 @@ exports.seed = function (knex) {
   return knex('Parents').insert(parents)
   .then(function(){
     return knex('Parents').insert([
-      {ID:1,
+      {ID:5,
        Name:`${faker.name.lastName("McVirtual")} `,
        PIN:"0000",
        Email:`${faker.internet.email()}`},

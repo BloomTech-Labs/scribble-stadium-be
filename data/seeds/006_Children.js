@@ -110,7 +110,7 @@ exports.seed = function (knex) {
       { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
-      ParentID: `${(idx % 4) + 1}`,
+      ParentID: 5,
       AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
       GradeLevelID: `${faker.datatype.number({ min: 1, max: 6 })}`,
       CohortID: 3,
@@ -118,8 +118,8 @@ exports.seed = function (knex) {
       // Wins: `${faker.datatype.number({min:1, max: 10})}`,
       // Losses: `${faker.datatype.number({min:1, max: 10})}`,
       // Attempting to have wins & losses combine to equal 1 (1 less than the cohort's StoryID, which should be how many weeks/rounds they've finished). Check table to see if it works.
-      Wins: `${idx % 2}`, // 0,1,2,3,4,0
-      Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
+     // Wins: `${idx % 2}`, // 0,1,2,3,4,0
+      //Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
       Total_Points: `${faker.datatype.number({ min: 0, max: 400 }) * 1}`,
       Email: `${faker.internet.email()}`,
       CharacterName: `${faker.hacker
@@ -132,7 +132,7 @@ exports.seed = function (knex) {
       { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
-      ParentID: `${(idx % 4) + 1}`,
+      ParentID: 5,
       AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
       GradeLevelID: `${faker.datatype.number({ min: 1, max: 6 })}`,
       CohortID: 3,
@@ -140,8 +140,8 @@ exports.seed = function (knex) {
       // Wins: `${faker.datatype.number({min:1, max: 10})}`,
       // Losses: `${faker.datatype.number({min:1, max: 10})}`,
       // Attempting to have wins & losses combine to equal 1 (1 less than the cohort's StoryID, which should be how many weeks/rounds they've finished). Check table to see if it works.
-      Wins: `${idx % 2}`, // 0,1,2,3,4,0
-      Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
+      //Wins: `${idx % 2}`, // 0,1,2,3,4,0
+      //Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
       Total_Points: `${faker.datatype.number({ min: 0, max: 400 }) * 1}`,
       Email: `${faker.internet.email()}`,
       CharacterName: `${faker.hacker
@@ -154,7 +154,7 @@ exports.seed = function (knex) {
       { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
-      ParentID: `${(idx % 4) + 1}`,
+      ParentID: 5,
       AvatarID: `${faker.datatype.number({ min: 1, max: 10 })}`,
       GradeLevelID: `${faker.datatype.number({ min: 1, max: 6 })}`,
       CohortID: 3,
@@ -162,8 +162,8 @@ exports.seed = function (knex) {
       // Wins: `${faker.datatype.number({min:1, max: 10})}`,
       // Losses: `${faker.datatype.number({min:1, max: 10})}`,
       // Attempting to have wins & losses combine to equal 1 (1 less than the cohort's StoryID, which should be how many weeks/rounds they've finished). Check table to see if it works.
-      Wins: `${idx % 2}`, // 0,1,2,3,4,0
-      Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
+      //Wins: `${idx % 2}`, // 0,1,2,3,4,0
+     // Losses: `${(99 - idx) % 2}`, // 4,3,2,1,0,4
       Total_Points: `${faker.datatype.number({ min: 0, max: 400 }) * 1}`,
       Email: `${faker.internet.email()}`,
       CharacterName: `${faker.hacker
