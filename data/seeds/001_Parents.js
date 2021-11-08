@@ -8,13 +8,14 @@ const parents = ['Alice', 'Barbara', 'Christopher', 'David'].map(
   })
 );
 
+
 exports.seed = function (knex) {
   // Inserts seed entries
   return knex('Parents').insert(parents)
   .then(function(){
     return knex('Parents').insert([
       {ID:5,
-       Name:`${faker.name.lastName("McVirtual")} `,
+       Name:`${faker.name.firstName()}  "McVirtual"`,
        PIN:"0000",
        Email:`${faker.internet.email()}`},
       

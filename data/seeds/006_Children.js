@@ -1,6 +1,7 @@
 const faker = require('faker');
 
 // so much to check in db....
+
 const children1 = [...new Array(8)].map((i, idx) => ({
   Name: `${faker.name.firstName()} (Cohort1)`,
   PIN: `0000`,
@@ -107,7 +108,7 @@ exports.seed = function (knex) {
   return knex('Children').insert(children)
   .then(function(){
     return knex('Children').insert([
-      { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
+      { Name: `${faker.name.firstName()} "McVirtual"(Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
       ParentID: 5,
@@ -129,7 +130,7 @@ exports.seed = function (knex) {
         .type()
         .trim()
         .replace(/^\w/, (c) => c.toUpperCase())}`,},
-      { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
+      { Name: `${faker.name.firstName()} "McVirtual"(Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
       ParentID: 5,
@@ -151,7 +152,7 @@ exports.seed = function (knex) {
         .type()
         .trim()
         .replace(/^\w/, (c) => c.toUpperCase())}`,},
-      { Name: `${faker.name.lastName("McVirtual")} (Cohort3)`,
+      { Name: `${faker.name.firstName()} "McVirtual"(Cohort3)`,
       PIN: `0000`,
       // ParentID: `${Math.floor((idx + 4) / 4)}`,
       ParentID: 5,
