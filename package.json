@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Lambda-School-Labs/scribbles-stadium-be.git"
+    "url": "https://github.com/Lambda-School-Labs/scribble-stadium-be.git"
   },
   "scripts": {
     "start": "node server.js",

@@ -40,6 +40,7 @@ const achievements = require('./Achievements/achieveRouter');
 const streaks = require('./Streaks/streaksRouter');
 const gallery = require('./Gallery/GalleryRouter');
 const singleplayerRouter = require('./singleplayer/singleplayerRouter');
+const wordCloudRouter = require('./wordCloud/wordCloudRouter');
 
 const app = express();
 
@@ -97,6 +98,7 @@ app.use('/achievements', achievements);
 app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
 app.use('/singleplayer', singleplayerRouter);
+app.use('/wordcloud', wordCloudRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
