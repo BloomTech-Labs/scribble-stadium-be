@@ -27,7 +27,6 @@ const indexRouter = require('./index/indexRouter');
 const parentRouter = require('./parent/parentRouter');
 const profileRouter = require('./profile/profileRouter');
 const childRouter = require('./child/childRouter');
-const storyRouter = require('./stories/storyRouter');
 const storyNewRouter = require('./stories/storyNewRouter');
 const avatarRouter = require('./avatar/avatarRouter');
 const gradeLevelRouter = require('./gradeLevel/gradeLevelRouter');
