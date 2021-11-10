@@ -84,7 +84,6 @@ app.use('/', indexRouter);
 app.use(['/parent', '/parents'], parentRouter);
 app.use(['/profile', '/profiles'], profileRouter);
 app.use(['/child', '/children'], childRouter);
-app.use(['/story', '/stories'], storyRouter);
 app.use(['/storyNew', '/storiesNew'], storyNewRouter);
 app.use(['/avatar', '/avatars'], avatarRouter);
 app.use(['/gradelevel', '/gradelevels'], gradeLevelRouter);
