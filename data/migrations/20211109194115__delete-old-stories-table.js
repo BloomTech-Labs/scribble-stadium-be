@@ -1,7 +1,8 @@
 exports.up = function (knex) {
-  return knex.schema.dropTable('Stories', () => {});
+  return knex.schema.dropTableIfExists('Stories', () => {});
 };
 
-// exports.down = function (knex) {
-//   return knex.schema.dropTableIfExists('Story-Prompts');
-// };
+exports.down = function () {
+  // This is a destructive migration that cannot be rolled back.
+  // return knex.schema.dropTableIfExists('Stories');
+};
