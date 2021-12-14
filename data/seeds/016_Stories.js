@@ -1,10 +1,10 @@
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex('Stories-New')
+  return knex('Stories')
     .del()
     .then(function () {
       // Inserts seed entries
-      return knex('Stories-New').insert([
+      return knex('Stories').insert([
         {
           ID: 1,
           Title: 'Zoom & Boom',
