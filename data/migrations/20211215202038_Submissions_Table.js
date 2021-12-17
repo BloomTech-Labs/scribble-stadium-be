@@ -6,20 +6,18 @@ exports.up = function (knex) {
     t.timestamp('writeAt');
     t.timestamp('squadUpAt');
     t.timestamp('voteAt');
-
     t.string('gameMode').notNullable();
   });
 };
 
 exports.down = function (knex) {
-  knex.schema.alterTable('Submissions-New', (t) => {
+  return knex.schema.alterTable('Submissions-New', (t) => {
     t.dropColumn('startAt');
     t.dropColumn('readAt');
     t.dropColumn('drawAt');
     t.dropColumn('writeAt');
     t.dropColumn('squadUpAt');
     t.dropColumn('voteAt');
-
     t.dropColumn('gameMode');
   });
 };
