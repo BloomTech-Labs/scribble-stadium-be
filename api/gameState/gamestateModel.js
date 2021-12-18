@@ -1,6 +1,7 @@
 const db = require('../../data/db-config');
 
 // get game state by KID ID
+
 const getGameStateTimesbyID = (ID) => {
     return db('Submissions-New as SN')
       .where('SN.ID', ID)
@@ -15,6 +16,9 @@ const getGameStateTimesbyID = (ID) => {
       ]);
   };
 
+
+
+  //pull
   const addGameStateTimesbyID = (ID, Data) => {
     return db('Submissions-New as SN')
       .where('SN.ID', ID)
