@@ -3,15 +3,14 @@ const Game = require('./gamestateModel');
 const { crudOperationsManager } = require('../../lib');
 const { authRequired, emojiValidation } = require('../middleware');
 
-
 //get state table by childID
 
-router.get('/', authRequired, (req, res) => {
-  const childId = req.query.childId;
+router.get('/:id', authRequired, (req, res) => {
+  const childId = req.params.id;
 
   crudOperationsManager.getById(
     res,
-    Game.getSquadIDFromChildID,
+    Game.getGameStateTimesbyID,
     'Child',
     childId
   );
