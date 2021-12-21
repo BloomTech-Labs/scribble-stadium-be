@@ -1,9 +1,19 @@
-/* istanbul ignore file */
+// /* istanbul ignore file */
+// module.exports = {
+//   s3: {
+//     config: {
+//       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//     },
+//   },
+// };
+
+
 module.exports = {
   s3: {
     config: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.AWSAccessKeyId,
+      secretAccessKey: process.env.AWSSecretKey,
     },
   },
 };
