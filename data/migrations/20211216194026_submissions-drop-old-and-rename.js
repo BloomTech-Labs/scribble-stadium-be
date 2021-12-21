@@ -73,40 +73,48 @@ exports.down = function(knex) {
         .onDelete('RESTRICT')
         .defaultsTo(1);
         t.dropUnique(['ChildID', 'StoryID']);
-        t.unique(['ChildID', 'StoryID', 'CohortID']);
     })
-    .alterTable("Writing", t=>{
-        t.dropForeign('SubmissionID');
-        t.foreign('SubmissionID')
-        .references('Submissions.ID');
-    })
-    .alterTable("Drawing", t=>{
-        t.dropForeign('SubmissionID');
-        t.foreign('SubmissionID')
-        .references('Submissions.ID');
-    })
-    .alterTable("Flags", t=>{
-        t.dropForeign('SubmissionID');
-        t.foreign('SubmissionID')
-        .references('Submissions.ID');
-    })
-    .alterTable("Members", t=>{
-        t.dropForeign('SubmissionID');
-        t.foreign('SubmissionID')
-        .references('Submissions.ID');
-    })
-    .alterTable("Points", t=>{
-        t.dropForeign('SubmissionID');
-        t.foreign('SubmissionID')
-        .references('Submissions.ID');
-    })
-    .alterTable("Faceoffs", t=>{
-        t.dropForeign('SubmissionID1')
-        t.foreign('SubmissionID1')
-        .references('Submissions.ID');
-        
-        t.dropForeign('SubmissionID2')
-        t.foreign('SubmissionID2')
-        .references('Submissions.ID');
-    })
+    .then(()=>knex("Submissions-New").select("*"))
+    .then((rows)=>knex("Submissions").insert(rows.map(({childId,storyId})=>{
+        return {
+            ChildID:childId,
+            StoryID:storyId,
+        }
+    })))
+    .then(()=>knex.schema
+        .alterTable("Writing", t=>{
+            t.dropForeign('SubmissionID');
+            t.foreign('SubmissionID')
+            .references('Submissions.ID');
+        })
+        .alterTable("Drawing", t=>{
+            t.dropForeign('SubmissionID');
+            t.foreign('SubmissionID')
+            .references('Submissions.ID');
+        })
+        .alterTable("Flags", t=>{
+            t.dropForeign('SubmissionID');
+            t.foreign('SubmissionID')
+            .references('Submissions.ID');
+        })
+        .alterTable("Members", t=>{
+            t.dropForeign('SubmissionID');
+            t.foreign('SubmissionID')
+            .references('Submissions.ID');
+        })
+        .alterTable("Points", t=>{
+            t.dropForeign('SubmissionID');
+            t.foreign('SubmissionID')
+            .references('Submissions.ID');
+        })
+        .alterTable("Faceoffs", t=>{
+            t.dropForeign('SubmissionID1')
+            t.foreign('SubmissionID1')
+            .references('Submissions.ID');
+            
+            t.dropForeign('SubmissionID2')
+            t.foreign('SubmissionID2')
+            .references('Submissions.ID');
+        })
+    )
 };
