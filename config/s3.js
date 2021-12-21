@@ -6,6 +6,7 @@ import {promisify} from "util"
 const randomBytes = promisify(crypto.randomBytes)
 dotenv.config()
 
+//s3 bucket setup
 const region = "Us-east-1";
 const s3Name= "scribble-stadium-assets-stage";
 const accessKeyId = process.env.AWSAccessKeyId;
@@ -18,6 +19,10 @@ const s3 = new aws.S3({
     secretAccessKey,
     signatureVersion: 'v4'
 })
+
+/*function to generate an URL, it creates a unique random image name.
+Params specifies the bucket and image name and for how many seconds
+the url is valid. */
 
 module.exports =  async function generateUpURL(){
     const rawBytes = await randomBytes(16)
