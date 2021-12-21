@@ -21,7 +21,6 @@ const submissions1 = [...new Array(24)].map((i, idx) => ({
   // Timestamps for createdAt, and updatedAt to capture data of when activity was last seen
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
-  gameMode:"single player"
 }));
 
 //So, groups 1&2 finished week2. 2 groups of 8 students = 16 items in this batch
@@ -37,7 +36,6 @@ const submissions2 = [...new Array(16)].map((i, idx) => ({
   lowConfidence: false,
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
-  gameMode:"single player"
 }));
 
 //So, groups 1&2 finished week3. 2 groups of 8 students = 16 items in this batch
@@ -53,7 +51,6 @@ const submissions3 = [...new Array(16)].map((i, idx) => ({
   lowConfidence: false,
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
-  gameMode:"single player"
 }));
 
 //Only groups 1 finished week4. 1 groups of 8 students = 8 items in this batch
@@ -69,7 +66,6 @@ const submissions4 = [...new Array(8)].map((i, idx) => ({
   lowConfidence: false,
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
-  gameMode:"single player"
 }));
 
 const submissions = submissions1.concat(
