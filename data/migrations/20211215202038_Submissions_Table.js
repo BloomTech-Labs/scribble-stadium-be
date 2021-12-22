@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.alterTable('Submissions-New', (t) => {
+  return knex.schema.alterTable('Submissions', (t) => {
     t.timestamp('startAt');
     t.timestamp('readAt');
     t.timestamp('drawAt');
@@ -11,7 +11,7 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.alterTable('Submissions-New', (t) => {
+  return knex.schema.alterTable('Submissions', (t) => {
     t.dropColumn('startAt');
     t.dropColumn('readAt');
     t.dropColumn('drawAt');
