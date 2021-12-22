@@ -39,11 +39,11 @@ the url is valid. */
 // upload file to s3
 function uploadFile(file) {
     const fileStream = fs.createReadStream(file.path)
-
+    const filename = process.env.NODE_ENV + "/" + file.filename
     const uploadParams = {
         Bucket: bucketName,
         Body: fileStream,
-        Key: file.filename
+        Key: filename
 
     }
     return s3.upload(uploadParams).promise()
