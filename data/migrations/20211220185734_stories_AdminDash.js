@@ -3,6 +3,7 @@ exports.up = function(knex) {
   // part of the admin dashboard, stories table
   return knex.schema.createTable( 'Stories', (t) =>{
       t.increments('id')
+      // Episodes schema not created yet
         .references('Episodes.storyId')
         .onUpdate('CASCADE')
         .onDelete('Restrict')
