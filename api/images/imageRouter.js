@@ -9,7 +9,8 @@ const upload = multer({ dest: 'uploads/' })
 
 const { uploadFile, fetchFileStream } = require('../../config/s3')
 
-
+//These End points were to test S3 functionality.
+//Will need to submit the actual uploads as part of the submission/pages records.
 //gets images from the s3 bucket based on the key that it was stored under.
 router.get('/:key', (req, res) => {
     console.log(req.params)
@@ -24,7 +25,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     console.log(file)
 
     // we can modify the files if need be here.
-
+    // This can be implemented in the correct endpoint as needed.
     const result = await uploadFile(file)
 
     // unlinkFile deletes the images stored on the BE server once they're uploaded to the S3 bucket.
