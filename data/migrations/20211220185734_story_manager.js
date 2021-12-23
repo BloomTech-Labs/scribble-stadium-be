@@ -1,23 +1,22 @@
 
 exports.up = function(knex) {
-  // part of the admin dashboard
-  return knex.schema.createTable( 'Story-Manager', (t) =>{
+  // part of the admin dashboard, stories table
+  return knex.schema.createTable( 'Stories', (t) =>{
       t.increments('id')
-      t.integer('storyId')
+        .references('Episodes.storyId')
+        .onUpdate('CASCADE')
+        .onDelete('Restrict')
+      t.string('Title')
         .notNullable()
         .unsigned()
       t.string('Description')
         .notNullable()
       t.string("Author")
-        .notNullable()
-        .references('Children.ID')
-        .onUpdate('CASCADE')
-        .onDelete('Restrict')
-            
+        .notNullable()       
   })
 };
 
 exports.down = function(knex) {
   return knex.schema
-  .dropTableIfExists('Story-Manager')
+  .dropTableIfExists('Stories')
 };
