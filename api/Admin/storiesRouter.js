@@ -13,7 +13,20 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get(':id', (req, res) => {
+    Stories.getById(req.params.id)
+    .then(stories => {
+        if(stories){
+            res.status(200).json({stories})
+        }
+        else{
+            res.status(404).json({
+                message: 'stories not found'
+            })
+        }
+    })
 
+})
 
 
 
