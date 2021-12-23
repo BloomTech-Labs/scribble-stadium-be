@@ -98,7 +98,7 @@ app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
 app.use('/singleplayer', singleplayerRouter);
 app.use('/wordcloud', wordCloudRouter);
-app.use('/images', imagesRouter)
+app.use('/images', imagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
