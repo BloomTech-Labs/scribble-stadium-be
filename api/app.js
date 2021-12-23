@@ -40,7 +40,7 @@ const streaks = require('./Streaks/streaksRouter');
 const gallery = require('./Gallery/GalleryRouter');
 const singleplayerRouter = require('./singleplayer/singleplayerRouter');
 const wordCloudRouter = require('./wordCloud/wordCloudRouter');
-const imagesRouter = require('./images/imageRouter')
+const imagesRouter = require('./images/imageRouter');
 
 const app = express();
 
