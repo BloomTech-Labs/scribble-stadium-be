@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
-const fs = require('fs')
-const util = require('util')
-const unlinkFile = util.promisify(fs.unlink)
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
-const { uploadFile, fetchFileStream } = require('../../config/s3')
+const { uploadFile, fetchFileStream } = require('../../config/s3');
 
 //These End points were to test S3 functionality.
 //Will need to submit the actual uploads as part of the submission/pages records.
