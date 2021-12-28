@@ -25,6 +25,7 @@ exports.up = function (knex) {
     .renameTable('Submissions-New', 'Submissions');
 };
 
+// Due to the nature of this migration, the following down migration requires existing data to be deleted.
 exports.down = function (knex) {
   return knex.schema
     .renameTable('Submissions', 'Submissions-New')
