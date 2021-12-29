@@ -40,7 +40,7 @@ const streaks = require('./Streaks/streaksRouter');
 const gallery = require('./Gallery/GalleryRouter');
 const singleplayerRouter = require('./singleplayer/singleplayerRouter');
 const wordCloudRouter = require('./wordCloud/wordCloudRouter');
-const adminRouter = require('./Admin/storiesRouter')
+const adminStoriesRouter = require('./Admin/storiesRouter')
 
 const app = express();
 
@@ -98,7 +98,7 @@ app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
 app.use('/singleplayer', singleplayerRouter);
 app.use('/wordcloud', wordCloudRouter);
-app.use('/admin', adminRouter)
+app.use('/adminstories', adminStoriesRouter)
 
 
 // catch 404 and forward to error handler
