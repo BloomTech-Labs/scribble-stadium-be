@@ -1,5 +1,5 @@
 const db = require('../../data/db-config')
-// returns all 
+// created beginning crud commands for the admin dashboard for Stories
 const getAll = () => {
     return db('Stories')
 }
@@ -11,8 +11,30 @@ const getById = (id) => {
     
 }
 
+const update =( id, changes) => {
+    return db('Stories')
+        .where({id})
+        .update(changes, '*')
+
+}
+
+const add = async (newStory) => {
+   const [id] = await db('Stories')
+        .insert(newStory)
+
+ return getById(id)
+}
+
+const remove = (id) => {
+    return db('Stories')
+        .where({id})
+        .del()
+}
 
 module.exports = {
     getAll,
-    getById
+    getById,
+    add,
+    update,
+    remove
 }
