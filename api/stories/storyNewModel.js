@@ -9,7 +9,7 @@ const db = require('../../data/db-config');
  * @returns {Promise} a promise that resolves to the ID of the new story
  */
 const add = (story) => {
-  return db('Stories-New').insert(story).returning('ID');
+  return db('Stories').insert(story).returning('ID');
 };
 
 /**
@@ -18,7 +18,7 @@ const add = (story) => {
  * objects with corresponding episodes
  */
 const getAllStories = async () => {
-  const stories = await db('Stories-New');
+  const stories = await db('Stories');
   for (let i = 0; i < stories.length; i++) {
     let episodes = await getEpisodesByStoryID(stories[i].ID);
     stories[i].Episodes = episodes;
@@ -32,7 +32,7 @@ const getAllStories = async () => {
  * given story ID with all episodes and drawing/writing prompts
  */
 const getById = async (ID) => {
-  const story = await db('Stories-New').where('Stories-New.ID', ID);
+  const story = await db('Stories').where('Stories.ID', ID);
   const episodes = await getEpisodesByStoryID(ID);
   const episodesArray = [];
   for (let i = 0; i < episodes.length; i++) {
@@ -63,7 +63,7 @@ const getById = async (ID) => {
  * @returns {Promise} a promise that resolves to number of rows updated
  */
 const update = (ID, changes) => {
-  return db('Stories-New').where({ ID }).update(changes);
+  return db('Stories').where({ ID }).update(changes);
 };
 
 /**
@@ -72,7 +72,7 @@ const update = (ID, changes) => {
  * @returns {Promise} a promise that resolves to the number of rows deleted
  */
 const remove = (ID) => {
-  return db('Stories-New').where({ ID }).del();
+  return db('Stories').where({ ID }).del();
 };
 
 /**
@@ -82,7 +82,7 @@ const remove = (ID) => {
  */
 const getEpisodesByStoryID = (storyID) => {
   return db('Episodes as e')
-    .join('Stories-New as s', 'e.StoryID', 's.ID')
+    .join('Stories as s', 'e.StoryID', 's.ID')
     .where('s.ID', storyID)
     .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
 };

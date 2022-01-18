@@ -76,5 +76,5 @@ const submissions = submissions1.concat(
 
 exports.seed = function (knex) {
   // Inserts seed entries
-  return knex('Submissions-New').insert(submissions);
+  return knex('Submissions').insert(submissions);
 };

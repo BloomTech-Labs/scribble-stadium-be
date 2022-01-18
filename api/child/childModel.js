@@ -117,7 +117,7 @@ const getComplexityList = (ChildID) => {
 
 //Will return a single submission
 const getSubmissionBySubId = async (childId, id) => {
-  const submission = await db('Submissions-New').where({
+  const submission = await db('Submissions').where({
     childId: childId,
     id: id,
   });
@@ -133,7 +133,7 @@ const getSubmissionBySubId = async (childId, id) => {
  */
 const getAllSubmissions = (childId) => {
   return db.transaction(async (trx) => {
-    const subs = await trx('Submissions-New').where({ childId });
+    const subs = await trx('Submissions').where({ childId });
     for (let i = 0; i < subs.length; i++) {
       let pages = await getPagesBySubmissionId(subs[i].id);
       subs[i].pages = pages;
@@ -156,7 +156,7 @@ const getPagesBySubmissionId = (submissionId) => {
 };
 
 const addSubmission = (submission) => {
-  return db('Submissions-New').insert(submission);
+  return db('Submissions').insert(submission);
 };
 
 const addPage = (page) => {
@@ -164,7 +164,7 @@ const addPage = (page) => {
 };
 
 const updateSubmissionBySubId = async (childId, id, changes) => {
-  const updatedSub = await db('Submissions-New')
+  const updatedSub = await db('Submissions')
     .where({ childId: childId, id: id })
     .update(changes);
   return updatedSub;
@@ -176,7 +176,7 @@ const updatePage = async (id, changes) => {
 };
 
 const removeSubmission = (id) => {
-  return db('Submissions-New').where({ id }).del();
+  return db('Submission').where({ id }).del();
 };
 
 const removePage = (id) => {
