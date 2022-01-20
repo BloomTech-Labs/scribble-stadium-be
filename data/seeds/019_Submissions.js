@@ -18,6 +18,7 @@ const submissions1 = [...new Array(24)].map((i, idx) => ({
   finishedReadingAt: `${getTimeStamp()}` + 15 * 60000,
   complexity: 30,
   lowConfidence: false,
+  gameMode: 'SINGLE_PLAYER',
   // Timestamps for createdAt, and updatedAt to capture data of when activity was last seen
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
@@ -34,6 +35,7 @@ const submissions2 = [...new Array(16)].map((i, idx) => ({
   finishedReadingAt: `${getTimeStamp()}` + 15 * 60000,
   complexity: 30,
   lowConfidence: false,
+  gameMode: 'MULTI_PLAYER',
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
 }));
@@ -49,6 +51,7 @@ const submissions3 = [...new Array(16)].map((i, idx) => ({
   finishedReadingAt: `${getTimeStamp()}` + 15 * 60000,
   complexity: 30,
   lowConfidence: false,
+  gameMode: 'SINGLE_PLAYER',
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
 }));
@@ -64,6 +67,7 @@ const submissions4 = [...new Array(8)].map((i, idx) => ({
   finishedReadingAt: `${getTimeStamp()}` + 15 * 60000,
   complexity: 30,
   lowConfidence: false,
+  gameMode: 'SINGLE_PLAYER',
   createdAt: `${getTimeStamp()}`,
   updatedAt: `${getTimeStamp()}`,
 }));
