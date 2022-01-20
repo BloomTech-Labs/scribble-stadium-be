@@ -96,7 +96,7 @@ app.use(['/streaks', 'streak'], streaks);
 app.use('/gallery', gallery);
 app.use('/singleplayer', singleplayerRouter);
 app.use('/wordcloud', wordCloudRouter);
-app.use('/adminstories', adminStoriesRouter)
+app.use('/admin/stories', adminStoriesRouter)
 
 
 // catch 404 and forward to error handler
