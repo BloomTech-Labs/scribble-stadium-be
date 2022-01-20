@@ -1,18 +1,19 @@
-const db = require('../../data/db-config')
+const db = require('../../data/db-config');
 // created beginning crud commands for the admin dashboard for Stories
 const getAll = () => {
-    return db('Stories')
-}
+    return db('Stories'); 
+};
 
 const getById = (id) => {
     return db('Stories')
-    .where({id})
-};
+    .where({id});
+    
+}
 
 const update =( id, changes) => {
     return db('Stories')
         .where({id})
-        .update(changes, '*')
+        .update(changes, '*');
 
 }
 
