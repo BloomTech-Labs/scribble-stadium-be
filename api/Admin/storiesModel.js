@@ -7,9 +7,7 @@ const getAll = () => {
 const getById = (id) => {
     return db('Stories')
     .where({id})
-
-    
-}
+};
 
 const update =( id, changes) => {
     return db('Stories')
