@@ -95,7 +95,7 @@ const getEpisodesByStoryID = (storyID) => {
 };
 
 /**
- * Queries the database for a specific episode with given ID
+ * Queries the database for a specific episode with given ID 
  * @param {number} episodeID the ID to search for in the database
  * @returns {Promise} a promise that resolves to episode object of the given story ID
  */
