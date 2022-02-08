@@ -84,7 +84,14 @@ const getEpisodesByStoryID = (storyID) => {
   return db('Episodes as e')
     .join('Stories as s', 'e.StoryID', 's.ID')
     .where('s.ID', storyID)
-    .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
+    .select(
+      'e.ID',
+      'e.StoryID',
+      'e.EpisodeNumber',
+      'e.TextURL',
+      'e.AudioURL',
+      'e.Content'
+    );
 };
 
 /**
@@ -95,7 +102,14 @@ const getEpisodesByStoryID = (storyID) => {
 const getEpisodeByID = (episodeID) => {
   return db('Episodes as e')
     .where('e.ID', episodeID)
-    .select('e.ID', 'e.StoryID', 'e.EpisodeNumber', 'e.TextURL', 'e.AudioURL');
+    .select(
+      'e.ID',
+      'e.StoryID',
+      'e.EpisodeNumber',
+      'e.TextURL',
+      'e.AudioURL',
+      'e.Content'
+    );
 };
 
 /**
