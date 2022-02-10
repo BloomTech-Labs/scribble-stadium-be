@@ -9,7 +9,6 @@ const getfaceOffData = (conn) => {
       'F.SubmissionID2',
       'F.SquadID',
       'F.VotesCasted',
-      'S.CohortID',
     ]);
 };
 
@@ -90,7 +89,6 @@ const incrementVotesCasted = (squads, ID, FO) => {
         SubmissionID2: s.SubmissionID2,
         SquadID: s.SquadID,
         VotesCasted: newVoteCount,
-        CohortID: s.CohortID,
       };
       newArr.push(newObject);
     } else {
