@@ -82,9 +82,6 @@ const calculateResultsForTheWeek = () => {
 
 module.exports = {
   clusterGeneration,
-  getCohorts,
-  addCohort,
-  getSubmissionsByCohort,
   moderatePost,
   generateFaceoffs,
   calculateResultsForTheWeek,
