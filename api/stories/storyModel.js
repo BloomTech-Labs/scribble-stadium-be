@@ -1,18 +1,6 @@
 const db = require('../../data/db-config');
 
 /**
- * Returns the current week's story for the given cohort
- * @param {number} CohortID the id of the cohort to search on
- * @returns {Promise} a promise that resolves to a story object
- */
-const getByCohortId = (CohortID) => {
-  return db('Stories AS S')
-    .join('Cohorts AS C', 'S.ID', 'C.StoryID')
-    .where('C.ID', CohortID)
-    .select('S.*');
-};
-
-/**
  * Queries the database for a specific story with given ID
  * @param {number} ID the ID to search for in the database
  * @returns {Promise} a promise that resolves to a story object
@@ -58,7 +46,6 @@ const remove = (ID) => {
 };
 
 module.exports = {
-  getByCohortId,
   getById,
   add,
   update,
