@@ -80,7 +80,6 @@ const getProfilesByEmail = async (Email) => {
       'C.Email AS ChildEmail',
       'C.CharacterName AS ChildCharacterName',
       'C.IsDyslexic',
-      'C.CohortID',
       'G.GradeLevel',
       'A.AvatarURL',
       'C.AvatarID',
