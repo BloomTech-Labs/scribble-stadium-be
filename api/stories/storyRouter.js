@@ -76,37 +76,6 @@ const Stories = require('./storyModel');
 
 /**
  * @swagger
- * /story?cohortId={id}:
- *  get:
- *    summary: Returns the story for the given cohort.
- *    security:
- *      - okta: []
- *    tags:
- *      - Stories
- *    parameters:
- *      - $ref: '#/components/parameters/cohortQuery'
- *    responses:
- *      200:
- *        description: Returns the current story for the given cohort.
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/GetStory'
- *      401:
- *        $ref: '#/components/responses/UnauthorizedError'
- *      404:
- *        $ref: '#/components/responses/NotFound'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.get('/', authRequired, async (req, res) => {
-  const cohortId = req.query.cohortId;
-
-  crudOperationsManager.getById(res, Stories.getByCohortId, 'Story', cohortId);
-});
-
-/**
- * @swagger
  * /stories/{id}:
  *  get:
  *    summary: Attempts to query the database for a story with the given ID.
