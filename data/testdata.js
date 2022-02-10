@@ -92,7 +92,6 @@ module.exports = {
       AvatarID: 1,
       ParentID: 1,
       GradeLevelID: 1,
-      CohortID: 1,
       IsDyslexic: true,
     },
     {
@@ -101,7 +100,6 @@ module.exports = {
       AvatarID: 2,
       ParentID: 1,
       GradeLevelID: 2,
-      CohortID: 1,
       IsDyslexic: false,
     },
   ],
@@ -165,8 +163,7 @@ module.exports = {
     HasDrawn: false,
     Complexity: null,
     LowConfidence: null,
-    Status: 'CLEAR',
-    CohortID: 1,
+    Status: 'CLEAR'
   },
   cohort: {
     StoryID: 1,
