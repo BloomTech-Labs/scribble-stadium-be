@@ -7,7 +7,6 @@ const fields = [
   'AvatarID',
   'GradeLevelID',
   'IsDyslexic',
-  'CohortID',
   'Total_Points',
   'Wins',
   'Losses',
