@@ -37,8 +37,6 @@ const clusterGeneration = () => {
       for (let { ID } of cohorts) {
         // For every squad returned in each cohort from data science, where squad is an array of 4 submission IDs
         for (let squad of clusters[ID]) {
-          // Create a squad in the database for the current cohort
-          const [SquadID] = await addSquad(trx, ID);
           // Create two teams for the newly created squad
           const [t1, t2] = await addTeams(trx, SquadID);
           // Create 4 new team member entries for the database
@@ -92,16 +90,6 @@ const clusterGeneration = () => {
 };
 
 // Helper functions for storing clusters in the database
-
-/**
- * Adds a new cluster (squad) to the database for foreign key references.
- * @param {Object} conn a knex client instance
- * @param {number} CohortID the integer representation of the cohort
- * @returns {Promise} returns a promise resolving to an array with the newly generated squad ID inside
- */
-const addSquad = (conn, CohortID) => {
-  return conn('Squads').insert({ CohortID }).returning('ID');
-};
 
 /**
  * Adds two new teams to the database for the same squad
