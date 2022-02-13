@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { crudOperationsManager } = require('../../lib');
-const Stories = require('./storyNewModel');
+const Stories = require('./storyModel');
 
 router.post('/', (req, res) => {
   // Pull relevant data out of the request object
