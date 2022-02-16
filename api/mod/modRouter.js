@@ -38,24 +38,6 @@ const Mod = require('./modModel');
 
 /**
  * @swagger
- * /mod/clusters:
- *  put:
- *    summary: This endpoint triggers a query to the DSAPI that sends submissions,
- *      receives clusters, and stores clusters in our database.
- *    tags:
- *      - Moderation
- *    responses:
- *      200:
- *        $ref: '#/components/responses/EmptySuccess'
- *      500:
- *        $ref: '#/components/responses/DatabaseError'
- */
-router.put('/clusters', async (req, res) => {
-  crudOperationsManager.getAll(res, Mod.clusterGeneration, 'Cluster');
-});
-
-/**
- * @swagger
  * /mod/faceoffs:
  *  put:
  *    summary: An endpoint that triggers a transaction on the server that generates
