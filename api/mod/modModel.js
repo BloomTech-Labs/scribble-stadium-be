@@ -1,6 +1,6 @@
 const db = require('../../data/db-config');
 const faceoff = require('./faceoffGeneration');
-const { result, clusterGeneration } = require('./modHelpers');
+const { result } = require('./modHelpers');
 const ballot = require('./BallotGeneration');
 //const Children = require('../child/childModel');
 
@@ -81,7 +81,6 @@ const calculateResultsForTheWeek = () => {
 };
 
 module.exports = {
-  clusterGeneration,
   moderatePost,
   generateFaceoffs,
   calculateResultsForTheWeek,
