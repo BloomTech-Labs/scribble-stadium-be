@@ -9,4 +9,12 @@ exports.up = function (knex) {
     .dropTableIfExists('Admins');
 };
 
-exports.down = function (knex) {};
+exports.down = function (knex) {
+  return knex.schema
+    .createTable('Admins', (t) => {
+      t.increments('ID');
+      t.string('Email').notNullable().unique();
+      t.string('Name');
+    })
+    .dropTableIfExists('Profiles');
+};
