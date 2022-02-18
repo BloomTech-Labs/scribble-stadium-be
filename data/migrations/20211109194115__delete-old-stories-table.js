@@ -3,6 +3,9 @@ exports.up = function (knex) {
     .alterTable('Submissions', (t) => {
       t.dropForeign('StoryID');
     })
+    .alterTable('Cohorts', (t) => {
+      t.dropForeign('StoryID');
+    })
     .dropTableIfExists('Stories', () => {})
     .renameTable('Stories-New', 'Stories');
 };
@@ -19,6 +22,9 @@ exports.down = function (knex) {
       t.string('Audiofile').nullable();
     })
     .alterTable('Submissions', (t) => {
+      t.foreign('StoryID').references('Stories.ID');
+    })
+    .alterTable('Cohorts', (t) => {
       t.foreign('StoryID').references('Stories.ID');
     });
 };
