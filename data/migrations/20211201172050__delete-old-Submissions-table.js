@@ -49,8 +49,7 @@ exports.down = function (knex) {
         existingType: true,
         useNative: true,
       }).defaultsTo('CLEAR');
-      t.integer('CohortID').notNullable().unsigned().defaultsTo(1);
-      t.unique(['ChildID', 'StoryID', 'CohortID']);
+      t.unique(['ChildID', 'StoryID']);
     })
 
     .alterTable('Writing', (t) => {
