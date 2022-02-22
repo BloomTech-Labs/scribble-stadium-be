@@ -150,11 +150,12 @@ const addEpisode = (episode) => {
 
 /**
  * Queries the database to update row matching ID with the given changes
- * @param {number} episodeID the unique row ID to update
- * @param {Object} changes the episode to be added to the database
- * @param {string} changes.EpisodeNumber the description of the story
- * @param {string} changes.TextURL the author of the story
- * @param {string} changes.AudioURL the author of the story
+ * @param {number} episodeID the id of the episode
+ * @param {Object} changes the changes to be applied to the episode
+ * @param {string} changes.EpisodeNumber episode number
+ * @param {string} changes.TextURL text url of episode
+ * @param {string} changes.AudioURL audio url of episode
+ * @param {string} changes.Content text content of episode
  * @returns {Promise} a promise that resolves to the ID of the new story
  */
 const updateEpisode = (episodeID, changes) => {

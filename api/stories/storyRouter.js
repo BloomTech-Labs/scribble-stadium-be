@@ -80,11 +80,12 @@ router.put('/episodes/:eid', (req, res) => {
   // Pull episode ID out of the URL params
   const { eid } = req.params;
   // Pull relevant data out of the request object
-  const { EpisodeNumber, TextURL, AudioURL } = req.body;
+  const { EpisodeNumber, TextURL, AudioURL, Content } = req.body;
   const changes = {
     EpisodeNumber: EpisodeNumber,
     TextURL: TextURL,
     AudioURL: AudioURL,
+    Content: Content,
   };
 
   crudOperationsManager.update(
