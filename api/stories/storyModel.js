@@ -141,6 +141,7 @@ const getPromptsByEpisodeID = async (episodeID) => {
  * @param {string} episode.EpisodeNumber episode number
  * @param {string} episode.TextURL text url of episode
  * @param {string} episode.AudioURL audio url of episode
+ * @param {string} epsiode.Content text content of episode
  * @returns {Promise} a promise that resolves to the ID of the new episode
  */
 const addEpisode = (episode) => {

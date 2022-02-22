@@ -62,14 +62,16 @@ router.get('/episodes/:eid', async (req, res) => {
 });
 
 //Work in progress by next cohort to add constraint to EpisodeNumber to be unique per story ID
+//Added Content field so an episode can be uploaded with Content
 router.post('/episodes', (req, res) => {
   // Pull relevant data out of the request object
-  const { StoryID, EpisodeNumber, TextURL, AudioURL } = req.body;
+  const { StoryID, EpisodeNumber, TextURL, AudioURL, Content } = req.body;
   const newEpisode = {
     StoryID: StoryID,
     EpisodeNumber: EpisodeNumber,
     TextURL: TextURL,
     AudioURL: AudioURL,
+    Content: Content,
   };
   crudOperationsManager.post(res, Stories.addEpisode, 'Story', newEpisode);
 });
