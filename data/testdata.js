@@ -163,7 +163,7 @@ module.exports = {
     HasDrawn: false,
     Complexity: null,
     LowConfidence: null,
-    Status: 'CLEAR'
+    Status: 'CLEAR',
   },
   cohort: {
     StoryID: 1,
