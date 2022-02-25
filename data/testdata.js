@@ -111,8 +111,7 @@ module.exports = {
   stories: [
     {
       Title: 'Studies in Modern Movement',
-      URL:
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      URL: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       WritingPrompt:
         "Explain the symbolism of the juxtaposition of Kiss From a Rose with Pierce's Hallucination and Britta and Shirley's hitchhiker.",
       DrawingPrompt:
@@ -120,8 +119,7 @@ module.exports = {
     },
     {
       Title: 'Remedial Chaos Theory',
-      URL:
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      URL: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       WritingPrompt:
         'Explain the importance of the alternate timelines to the main storyline, as well as the significance of the darkest timeline moving forward.',
       DrawingPrompt:
